@@ -1,3 +1,4 @@
+var marker;
 (function($) {
 	$(function() {
 		$('.geocode_button').live("click", function() {
@@ -23,10 +24,37 @@
 					if($long.siblings('span.readonly').length) {
 						$long.siblings('span.readonly').text(loc[1]);
 					}
+                                        
+                                        //update map
+                                        var point = new GLatLng($lat.val(), $long.val());
+                                        marker.setPoint(point);
+                                        map.setCenter(point,16);
 
 				}
 			);
 			return false;
 		});
+                var $t = $('.geocode_button');
+                var $lat = $('[name='+$t.metadata().lat+']');
+                var $long = $('[name='+$t.metadata().long+']');
+                var center = new GLatLng($lat.val(), $long.val());
+                marker = new GMarker(center, {draggable: true});
+                map.setCenter(center,16);
+                map.addOverlay(marker);
+                GEvent.addListener(marker, "dragend", function(overlay, point) {
+                    var point = marker.getLatLng();
+                    map.setCenter(point);
+                    var $lat = $('[name='+$t.metadata().lat+']');
+                    var $long = $('[name='+$t.metadata().long+']');
+                    $lat.val(point.y);
+                    $long.val(point.x);
+                    if($lat.siblings('span.readonly').length) {
+                            $lat.siblings('span.readonly').text(point.y);
+                    }
+                    if($long.siblings('span.readonly').length) {
+                            $long.siblings('span.readonly').text(point.x);
+                    }
+
+                });
 	});
 })(jQuery);

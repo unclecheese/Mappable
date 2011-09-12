@@ -43,6 +43,13 @@ class LatLongField extends FieldGroup {
 		$this->FieldSet()->push(new LiteralField('geocode_'.$this->id(), sprintf('<a class="geocode_button {\'aFields\': \'%s\',\'lat\': \'%s\', \'long\': \'%s\'}" href="'.$this->Link('geocode').'">'.
 							$this->buttonText.
 						'</a>', implode(',',$this->addressFields), $this->latField, $this->longField)));
+                $map = GoogleMapUtil::instance();
+                $map->setDivId('geocode_map_'.$this->id());
+                $map->setEnableAutomaticCenterZoom(false);
+
+                $mapHtml = $map->forTemplate();
+
+                $this->FieldSet()->push(new LiteralField ('geocode_map_field'.$this->id(),$mapHtml));
 		return parent::FieldHolder();
 	}
 	
