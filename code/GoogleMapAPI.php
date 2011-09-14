@@ -468,7 +468,7 @@ class GoogleMapAPI extends ViewableData
      */
     public function addMarkerAsObject(ViewableData $obj) {    
     	if($obj instanceof Mappable) {
-        	if(($obj->getLatitude() > 0) || ($obj->getLongitude() > 0)) {
+        	if($obj->getLatitude() || $obj->getLongitude()) { {
         		$cat = $obj->hasMethod('getMapCategory') ? $obj->getMapCategory() : "default";
 		        $this->addMarkerByCoords($obj->getLatitude(), $obj->getLongitude(), $obj->getMapContent(), $cat, $obj->getMapPin());
 	        }
