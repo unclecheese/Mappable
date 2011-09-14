@@ -50,6 +50,11 @@ class GoogleMapUtil
 	 * @var boolean Show the marker fields on the map
 	 */
 	public static $hide_marker = false;
+
+	/**
+	 * @var boolean Show the marker fields on the map
+	 */
+	public static $map_type = 'G_NORMAL_MAP';
 	
 	
 	
@@ -74,7 +79,18 @@ class GoogleMapUtil
 		self::$map_height = $height;
 	}
 	
-	
+        /**
+          * Set the type of the gmap
+          *
+          * @param string $mapType ( can be 'G_NORMAL_MAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
+          *
+          * @return void
+          */
+
+        public function set_map_type($mapType)
+        {
+            self::$map_type = $mapType;
+        }	
 	
 	/**
 	 * Get a new GoogleMapAPI object and load it with the default settings
@@ -89,7 +105,8 @@ class GoogleMapUtil
 		$gmap->setEnableAutomaticCenterZoom(self::$automatic_center);
 		$gmap->setDisplayDirectionFields(self::$direction_fields);
 		$gmap->setSize(self::$map_width, self::$map_height);
-		$gmap->setDefaultHideMarker(self::$hide_marker);		
+		$gmap->setDefaultHideMarker(self::$hide_marker);
+                $gmap->setMapType(self::$map_type);
 		return $gmap;
 	}
 
