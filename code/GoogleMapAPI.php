@@ -584,7 +584,7 @@ class GoogleMapAPI extends ViewableData
         // JS variable init
         $this->content .= "\t".'<script type="text/javascript">'."\n";
         $this->content .= "\t".'var map;'."\n";
-        $this->content .= "\t".'var gmarkers = [""];'."\n";
+        $this->content .= "\t".'var gmarkers = [];'."\n";
         $this->content .= "\t".'var gicons = [];'."\n";
         $this->content .= "\t".'var clusterer = null;'."\n";
         $this->content .= "\t".'var current_lat = 0;'."\n";
