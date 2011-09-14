@@ -38,7 +38,9 @@ class GoogleMapAPI extends ViewableData
     /** Icon height of the gmarker **/
    protected $iconHeight = 24;
 
-    /** Infowindow width of the gmarker **/
+    /**
+     * @var int Infowindow width of the gmarker
+     **/
    protected $infoWindowWidth = 250;
     
     /** Default zoom of the gmap **/
@@ -635,7 +637,7 @@ class GoogleMapAPI extends ViewableData
         }
 
 
-        $this->content .= "\t\t".'html = \'<div style="float:left;text-align:left;width:'.$this->infoWindowWidth.';">\'+html+\'</div>\''."\n";
+        $this->content .= "\t\t".'html = \'<div style="float:left;text-align:left;width:'.$this->infoWindowWidth.'px;">\'+html+\'</div>\''."\n";
         $this->content .= "\t\t".'GEvent.addListener(marker,"click",function() { ';
 		
 		// Enable the zoom when you click on a marker
