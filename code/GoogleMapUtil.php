@@ -27,6 +27,11 @@ class GoogleMapUtil
 	 */
 	public static $map_height = 400;
 
+        /** @var int Icon width of the gmarker **/
+        public static $iconWidth = 24;
+
+        /** @var int Icon height of the gmarker **/
+        public static $iconHeight = 24;
 		
 	/**
 	 * @var int Prefix for the div ID of the map
@@ -55,7 +60,17 @@ class GoogleMapUtil
 	 * @var boolean Show the marker fields on the map
 	 */
 	public static $map_type = 'G_NORMAL_MAP';
-	
+
+        /**
+         * @var string $center Center of map (adress)
+         */
+	public static $center = 'Paris, France';
+
+        /**
+         * @var int info_window_width Width of info window
+         */
+
+        public static $info_window_width = 250;
 	
 	
 	/**
@@ -86,12 +101,49 @@ class GoogleMapUtil
           *
           * @return void
           */
-
         public function set_map_type($mapType)
         {
             self::$map_type = $mapType;
-        }	
-	
+        }
+
+        /**
+          * Set the with of the gmap infowindow (on marker clik)
+          *
+          * @param int $info_window_width GoogleMap info window width
+          *
+          * @return void
+          */
+        public function set_info_window_width($info_window_width)
+        {
+            self::$info_window_width = $info_window_width;
+        }
+
+        /**
+          * Set the center of the gmap (an address)
+          *
+          * @param string $center GoogleMap  center (an address)
+          *
+          * @return void
+          */
+        public function set_center($center)
+        {
+            self::$center = $center;
+        }
+
+        /**
+          * Set the size of the icon markers
+          *
+          * @param int $iconWidth GoogleMap  marker icon width
+          * @param int $iconHeight GoogleMap  marker icon height
+          *
+          * @return void
+          */
+
+        public function set_icon_size($iconWidth,$iconHeight)
+        {
+            self::$iconWidth = $iconWidth;
+            self::$iconHeight = $iconHeight;
+        }
 	/**
 	 * Get a new GoogleMapAPI object and load it with the default settings
 	 *
@@ -107,6 +159,9 @@ class GoogleMapUtil
 		$gmap->setSize(self::$map_width, self::$map_height);
 		$gmap->setDefaultHideMarker(self::$hide_marker);
                 $gmap->setMapType(self::$map_type);
+                $gmap->setInfoWindowWidth(self::$info_window_width);
+                $gmap->setCenter(self::$center);
+                $gmap->setIconSize(self::$iconWidth, self::$iconHeight);
 		return $gmap;
 	}
 
