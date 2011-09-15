@@ -38,7 +38,9 @@ class GoogleMapAPI extends ViewableData
     /** Icon height of the gmarker **/
    protected $iconHeight = 24;
 
-    /** Infowindow width of the gmarker **/
+    /**
+     * @var int Infowindow width of the gmarker
+     **/
    protected $infoWindowWidth = 250;
     
     /** Default zoom of the gmap **/
@@ -56,7 +58,17 @@ class GoogleMapAPI extends ViewableData
     /**Center of the gmap **/
    protected $center = 'Paris, France';
 
-	protected $latLongCenter = null;
+    protected $latLongCenter = null;
+
+    /**
+     * Type of the gmap, can be:
+     *  'G_NORMAL_MAP' (roadmap),
+     *  'G_SATELLITE_MAP' (sattelite)
+     *  'G_HYBRID_MAP' (hybrid)
+     *  'G_PHYSICAL_MAP' (terrain)
+     */
+
+    protected $mapType = 'G_NORMAL_MAP';
 	
     /** Content of the HTML generated **/
    protected $content = '';
@@ -300,6 +312,21 @@ class GoogleMapAPI extends ViewableData
     {
         $this->center = $center;
     }
+
+    /**
+      * Set the type of the gmap
+      *
+      * @param string $mapType ( can be 'G_NORMAL_MAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
+      *
+      * @return void
+      */
+
+    public function setMapType($mapType)
+    {
+        $this->mapType = $mapType;
+    }
+
+
 
     public function setLatLongCenter($center) 
     {
@@ -610,7 +637,7 @@ class GoogleMapAPI extends ViewableData
         }
 
 
-        $this->content .= "\t\t".'html = \'<div style="float:left;text-align:left;width:'.$this->infoWindowWidth.';">\'+html+\'</div>\''."\n";
+        $this->content .= "\t\t".'html = \'<div style="float:left;text-align:left;width:'.$this->infoWindowWidth.'px;">\'+html+\'</div>\''."\n";
         $this->content .= "\t\t".'GEvent.addListener(marker,"click",function() { ';
 		
 		// Enable the zoom when you click on a marker
@@ -704,7 +731,7 @@ class GoogleMapAPI extends ViewableData
 		} else {
 			$this->content .= "\t\t\t".'map.setCenter(new GLatLng('.$latlngCentre.'),'.$this->zoom.');'."\n";
 		}
-		
+        $this->content .= "\t\t\t".'map.setMapType('.$this->mapType.');'."\n";
         $this->content .= "\t\t\t".'map.setUIToDefault();'."\n";
         $this->content .= "\t\t\t".'GEvent.addListener(map,"click",function(overlay,latlng) { if (latlng) { current_lat=latlng.lat();current_lng=latlng.lng(); }}) ;'."\n";
 
