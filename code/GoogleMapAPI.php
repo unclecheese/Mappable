@@ -158,7 +158,7 @@ class GoogleMapAPI extends ViewableData
           * @return void
           */
 
-    public function setClusterer($useClusterer,$gridSize=100,$maxZoom=9,$clustererLibraryPath='markerclusterer_packed.js') 
+    public function setClusterer($useClusterer,$gridSize=100,$maxZoom=9,$clustererLibraryPath='mappable/javascript/clusterer.js') 
     {
         $this->useClusterer = $useClusterer;
         $this->gridSize = $gridSize;
@@ -611,7 +611,7 @@ class GoogleMapAPI extends ViewableData
         // JS variable init
         $this->content .= "\t".'<script type="text/javascript">'."\n";
         $this->content .= "\t".'var map;'."\n";
-        $this->content .= "\t".'var gmarkers = [""];'."\n";
+        $this->content .= "\t".'var gmarkers = [];'."\n";
         $this->content .= "\t".'var gicons = [];'."\n";
         $this->content .= "\t".'var clusterer = null;'."\n";
         $this->content .= "\t".'var current_lat = 0;'."\n";
