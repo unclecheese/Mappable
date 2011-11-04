@@ -3,12 +3,6 @@
 class GoogleMapUtil
 {
 
-	/**
-	 * @var string The Google Maps API key
-	 */
-	protected static $api_key;
-	
-	
 	
 	/**
 	 * @var int Number of active {@see GoogleMapsAPI} instances (for the HTML ID)
@@ -72,15 +66,6 @@ class GoogleMapUtil
 
         public static $info_window_width = 250;
 	
-	
-	/**
-	 * Set the API key for Google Maps
-	 *
-	 * @param string $key 
-	 */
-	public static function set_api_key($key) {
-		self::$api_key = $key;
-	}
 	
 	
 	/**
@@ -152,16 +137,10 @@ class GoogleMapUtil
 	public static function instance()
 	{
 		self::$instances++;
-		$gmap = new GoogleMapAPI(self::$api_key);
-		$gmap->setDivId(self::$div_id."_".self::$instances);
-		$gmap->setEnableAutomaticCenterZoom(self::$automatic_center);
-		$gmap->setDisplayDirectionFields(self::$direction_fields);
-		$gmap->setSize(self::$map_width, self::$map_height);
-		$gmap->setDefaultHideMarker(self::$hide_marker);
-                $gmap->setMapType(self::$map_type);
-                $gmap->setInfoWindowWidth(self::$info_window_width);
-                $gmap->setCenter(self::$center);
-                $gmap->setIconSize(self::$iconWidth, self::$iconHeight);
+		$gmap = new GoogleMapAPI(self::$div_id."_".self::$instances);
+		$gmap->setWidth(self::$map_width);
+		$gmap->setHeight(self::$map_height);
+        $gmap->setMapType(self::$map_type);
 		return $gmap;
 	}
 
@@ -170,10 +149,13 @@ class GoogleMapUtil
 	 * Sanitize a string of HTML content for safe inclusion in the JavaScript
 	 * for a Google Map
 	 *
+	 * DEPRECATED
+	 *
 	 * @return string
 	 */
 	public static function sanitize($content) {
-		return addslashes(str_replace(array("\n","\r"),array("",""),$content));	
+		return $content;
+		//return addslashes(str_replace(array("\n","\r"),array("",""),$content));	
 	}
 	
 	
@@ -193,5 +175,50 @@ class GoogleMapUtil
 		}
 		return $gmap;	
 	}
+
+
+    /**
+     * get distance between to geocoords using great circle distance formula
+     * 
+     * @param float $lat1
+     * @param float $lat2
+     * @param float $lon1
+     * @param float $lon2
+     * @param float $unit   M=miles, K=kilometers, N=nautical miles, I=inches, F=feet
+     * @return float
+     */
+    public static function geo_geo_distance($lat1,$lon1,$lat2,$lon2,$unit='M') {
+        
+      // calculate miles
+      $M =  69.09 * rad2deg(acos(sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($lon1 - $lon2)))); 
+
+      switch(strtoupper($unit))
+      {
+        case 'K':
+          // kilometers
+          return $M * 1.609344;
+          break;
+        case 'N':
+          // nautical miles
+          return $M * 0.868976242;
+          break;
+        case 'F':
+          // feet
+          return $M * 5280;
+          break;            
+        case 'I':
+          // inches
+          return $M * 63360;
+          break;            
+        case 'M':
+        default:
+          // miles
+          return $M;
+          break;
+      }
+      
+    }    
+
+
 		
 }

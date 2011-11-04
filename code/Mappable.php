@@ -48,7 +48,7 @@ interface Mappable {
 	
 	/**
 	 * An accessor method that returns the content for the map bubble popup.
-	 * It is best to use the {@see ViewableData::renderWith()} method to take advantaging
+	 * It is best to use the {@see ViewableData::renderWith()} method to take advantage
 	 * of templating syntax when rendering the object's content.
 	 *
 	 * Note: it is critical that the content be sanitized for safe inclusino in the rendered
@@ -62,5 +62,29 @@ interface Mappable {
 	 * @return string
 	 */	
 	public function getMapContent();
+
+
+	/**
+	 * An accessor method for the title of the info window popup.
+	 * @example
+	 * <code>
+	 * return $this->Title;
+	 * </code>
+	 *
+	 * @return string
+	 */
+	public function getMapTitle();
+
+
+	/**
+	 * An accessor method for the title of the info window popup.
+	 * @example
+	 * <code>
+	 * return $this->obj('Description')->FirstSentence();
+	 * </code>
+	 *
+	 * @return string
+	 */
+	public function getMapTooltip();
 
 }

@@ -12,7 +12,8 @@ class MappableDataObjectSet extends Extension {
 		$gmap = GoogleMapUtil::get_map($this->owner);
 		$w = $width ? $width : GoogleMapUtil::$map_width;
 		$h = $height ? $height : GoogleMapUtil::$map_height;
-		$gmap->setSize($w,$h);
+		$gmap->setWidth($w);
+		$gmap->setHeight($h);
 		return $gmap;
 	}
 	
