@@ -21,11 +21,11 @@ class LatLongField extends FieldGroup {
 		parent::__construct($children);	
 		$this->addressFields = $addressFields;
 		$this->buttonText = $buttonText ? $buttonText : _t('LatLongField.LOOKUP','Look up');
-		$this->latField = $children[0]->Name();
-		$this->longField = $children[1]->Name();
+		$this->latField = $children[0]->getName();
+		$this->longField = $children[1]->getName();
 		$name = "";
 		foreach($children as $field) {
-			$name .= $field->Name();
+			$name .= $field->getName();
 		}
 
 
@@ -35,12 +35,12 @@ class LatLongField extends FieldGroup {
 	
 	public function hasData() {return true;}
 	
-	public function FieldHolder() {
+	public function FieldHolder($properties = array()) {
 		Requirements::javascript(THIRDPARTY_DIR.'/jquery/jquery.js');
 		Requirements::javascript(THIRDPARTY_DIR.'/jquery-metadata/jquery.metadata.js');
 		Requirements::javascript('mappable/javascript/lat_long_field.js');
-		Requirements::css('mappable/css/lat_long_field.css');
-		$this->FieldSet()->push(new LiteralField('geocode_'.$this->id(), sprintf('<a class="geocode_button {\'aFields\': \'%s\',\'lat\': \'%s\', \'long\': \'%s\'}" href="'.$this->Link('geocode').'">'.
+		Requirements::css(MAPPABLE_MODULE_PATH.'/css/lat_long_field.css');
+		$this->FieldList()->push(new LiteralField('geocode_'.$this->id(), sprintf('<a class="geocode_button {\'aFields\': \'%s\',\'lat\': \'%s\', \'long\': \'%s\'}" href="'.$this->Link('geocode').'">'.
 							$this->buttonText.
 						'</a>', implode(',',$this->addressFields), $this->latField, $this->longField)));
                 $map = GoogleMapUtil::instance();
@@ -49,7 +49,7 @@ class LatLongField extends FieldGroup {
 
                 $mapHtml = $map->forTemplate();
 
-                $this->FieldSet()->push(new LiteralField ('geocode_map_field'.$this->id(),$mapHtml));
+                $this->FieldList()->push(new LiteralField ('geocode_map_field'.$this->id(),$mapHtml));
 		return parent::FieldHolder();
 	}
 	
