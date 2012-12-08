@@ -59,7 +59,7 @@ class GoogleMapUtil
 	/**
 	 * @var boolean Show the marker fields on the map
 	 */
-	public static $map_type = 'G_NORMAL_MAP';
+	public static $map_type = 'google.maps.MapTypeId.ROADMAP';
 
         /**
          * @var string $center Center of map (adress)
@@ -97,7 +97,7 @@ class GoogleMapUtil
         /**
           * Set the type of the gmap
           *
-          * @param string $mapType ( can be 'G_NORMAL_MAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
+          * @param string $mapType ( can be 'google.maps.MapTypeId.ROADMAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
           *
           * @return void
           */
@@ -152,7 +152,23 @@ class GoogleMapUtil
 	public static function instance()
 	{
 		self::$instances++;
-		$gmap = new GoogleMapAPI(self::$api_key);
+
+		$url = Director::absoluteBaseURL();
+
+		// remove http and https
+		$url = str_replace('http://', '', $url);
+		$url = str_replace('https://', '', $url);
+		$parts = explode('/', $url);
+		$host = $parts[0];
+	
+		$key = self::$api_key;
+
+		// if an array, get the key by an array keyed by host
+		if (is_array($key)) {
+			$key = $key[$host];
+		}
+
+		$gmap = new GoogleMapAPI($key);
 		$gmap->setDivId(self::$div_id."_".self::$instances);
 		$gmap->setEnableAutomaticCenterZoom(self::$automatic_center);
 		$gmap->setDisplayDirectionFields(self::$direction_fields);

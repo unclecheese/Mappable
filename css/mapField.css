@@ -1,0 +1,7 @@
+.geocodedSearchResults li {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 120%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

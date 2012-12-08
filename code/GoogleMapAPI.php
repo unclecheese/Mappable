@@ -26,6 +26,9 @@ class GoogleMapAPI extends ViewableData
     /** GoogleMap  Direction ID for the HTML DIV **/
    protected $googleMapDirectionId = 'route';
 
+   /* Additional CSS classes to use when rendering the map */
+   protected $set_additional_css_classes = '';
+
     /** Width of the gmap **/
    protected $width = 800;
 
@@ -33,10 +36,10 @@ class GoogleMapAPI extends ViewableData
    protected $height = 600;
 
     /** Icon width of the gmarker **/
-   protected $iconWidth = 24;
+   protected $iconWidth = 20;
 
     /** Icon height of the gmarker **/
-   protected $iconHeight = 24;
+   protected $iconHeight = 34;
 
     /**
      * @var int Infowindow width of the gmarker
@@ -58,17 +61,76 @@ class GoogleMapAPI extends ViewableData
     /**Center of the gmap **/
    protected $center = 'Paris, France';
 
-    protected $latLongCenter = null;
+   /*
+   Additional CSS classes to render as a class attribute for the div of the map.  Use this if you want more
+   fine grained control over your map using CSS.  If blank it will be ignored
+   */
+   protected $additional_css_classes = '';
+
+
+   /* Decided whether or not to show the inline map css style on div creation */
+   protected $show_inline_map_div_style = true;
+
+  protected $latLongCenter = null;
+
+
+    /*
+    Map styles for google maps, ignored if null
+    <pre>
+var styles = [
+       {
+               featureType: 'water',
+               elementType: 'all',
+               stylers: [
+                       { hue: '#B6C5CF' },
+                       { saturation: -54 },
+                       { lightness: 1 },
+                       { visibility: 'on' }
+               ]
+       },{
+               featureType: 'landscape',
+               elementType: 'all',
+               stylers: [
+                       { hue: '#D9D4C8' },
+                       { saturation: -32 },
+                       { lightness: -8 },
+                       { visibility: 'on' }
+               ]
+       },{
+               featureType: 'road',
+               elementType: 'all',
+               stylers: [
+                       { hue: '#A69D97' },
+                       { saturation: -92 },
+                       { lightness: -3 },
+                       { visibility: 'on' }
+               ]
+       },{
+               featureType: 'poi',
+               elementType: 'all',
+               stylers: [
+                       { hue: '#E7E6DB' },
+                       { saturation: -53 },
+                       { lightness: 47 },
+                       { visibility: 'on' }
+               ]
+       }
+];
+    </pre>
+    */
+  protected $jsonMapStyles = null;
+
+  protected $delayLoadMapFunction = false;
 
     /**
      * Type of the gmap, can be:
-     *  'G_NORMAL_MAP' (roadmap),
+     *  'google.maps.MapTypeId.ROADMAP' (roadmap),
      *  'G_SATELLITE_MAP' (sattelite)
      *  'G_HYBRID_MAP' (hybrid)
      *  'G_PHYSICAL_MAP' (terrain)
      */
 
-    protected $mapType = 'G_NORMAL_MAP';
+    protected $mapType = 'google.maps.MapTypeId.ROADMAP';
 	
     /** Content of the HTML generated **/
    protected $content = '';
@@ -143,6 +205,26 @@ class GoogleMapAPI extends ViewableData
     public function setKey($googleMapKey) 
     {
         $this->googleMapKey = $googleMapKey;
+    }
+
+
+    public function setShowInlineMapDivStyle($new_show_inline_map_div_style) {
+      $this->show_inline_map_div_style = $new_show_inline_map_div_style;
+    }
+
+    public function setAdditionalCSSClasses($new_additional_css_classes) {
+      $this->additional_css_classes = $new_additional_css_classes;
+    }
+
+
+    public function setMapStyles($newStyles) {
+      $this->jsonMapStyles = $newStyles;
+    }
+
+
+
+    public function setDelayLoadMapFunction($newDelay) {
+      $this->delayLoadMapFunction = $newDelay;
     }
 
     /**
@@ -316,7 +398,7 @@ class GoogleMapAPI extends ViewableData
     /**
       * Set the type of the gmap
       *
-      * @param string $mapType ( can be 'G_NORMAL_MAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
+      * @param string $mapType ( can be 'google.maps.MapTypeId.ROADMAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
       *
       * @return void
       */
@@ -437,6 +519,7 @@ class GoogleMapAPI extends ViewableData
 
     public function addMarkerByCoords($lat,$lng,$html='',$category='',$icon='') 
     {
+
 		// Save the lat/lon to enable the automatic center/zoom
 		$this->maxLng = (float) max((float)$lng, $this->maxLng);
         $this->minLng = (float) min((float)$lng, $this->minLng);
@@ -495,10 +578,10 @@ class GoogleMapAPI extends ViewableData
      */
     public function addMarkerAsObject(ViewableData $obj) {    
     	if($obj instanceof Mappable) {
-        	if(($obj->getLatitude() > 0) || ($obj->getLongitude() > 0)) {
+        	//if(($obj->getMappableLatitude() > 0) || ($obj->getMappableLongitude() > 0)) {
         		$cat = $obj->hasMethod('getMapCategory') ? $obj->getMapCategory() : "default";
-		        $this->addMarkerByCoords($obj->getLatitude(), $obj->getLongitude(), $obj->getMapContent(), $cat, $obj->getMapPin());
-	        }
+		        $this->addMarkerByCoords($obj->getMappableLatitude(), $obj->getMappableLongitude(), $obj->getMapContent(), $cat, $obj->getMapPin());
+	        //}
         }    
     }
     
@@ -512,8 +595,8 @@ class GoogleMapAPI extends ViewableData
      */
     public function connectPoints(ViewableData $one, ViewableData $two, $color = "#FF3300") {
 		$this->addLine(
-			array($one->getLatitude(), $one->getLongitude()),
-			array($two->getLatitude(), $two->getLongitude()),
+			array($one->getMappableLatitude(), $one->getMappableLongitude()),
+			array($two->getMappableLatitude(), $two->getMappableLongitude()),
 			$color
 		);    
     }
@@ -580,7 +663,7 @@ class GoogleMapAPI extends ViewableData
 
 
 	public function addLine($from = array(), $to = array(), $color = "#FF3300") {
-		$this->contentLines .= "var points = [new GLatLng({$from[0]},{$from[1]}), new GLatLng({$to[0]},{$to[1]})];\n";
+		$this->contentLines .= "var points = [new google.maps.LatLng({$from[0]},{$from[1]}), new google.maps.LatLng({$to[0]},{$to[1]})];\n";
 		$this->contentLines .= "map.addOverlay(new GPolyline(points,'{$color}',4,0.6));\n";
 	}
     /**
@@ -592,7 +675,7 @@ class GoogleMapAPI extends ViewableData
 	public function includeGMapsJS() {
 		if(self::$jsIncluded) return;
         // Google map JS
-        $this->content .= '<script src="http://maps.google.com/maps?hl='. $this->lang.'&file=api&amp;v=2&amp;key='.$this->googleMapKey.'" type="text/javascript">';
+        $this->content .= '<script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false&amp;hl='. $this->lang.'" type="text/javascript">';
         $this->content .= '</script>'."\n";
         
         // Clusterer JS
@@ -621,31 +704,64 @@ class GoogleMapAPI extends ViewableData
         $this->content .= "\t".'var trafficInfo = null;'."\n";
         $this->content .= "\t".'var directions = null;'."\n";
         $this->content .= "\t".'var geocoder = null;'."\n";
+        $this->content .= "\tvar infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 300 });";
+
 
         // JS public function to add a marker to the map
-        $this->content .= "\t".'function createMarker(lat,lng,html,category,icon) {'."\n";
+        $this->content .= "\n\n\t".'function createMarker(lat,lng,html,category,icon) {'."\n";
+        /*
         $this->content .= "\t\t".'if (icon=="") gicon = new GIcon(G_DEFAULT_ICON);'."\n";
         $this->content .= "\t\t".'else { gicon = new GIcon(G_DEFAULT_ICON,icon); gicon.iconSize = new GSize('. $this->iconWidth.','. $this->iconHeight.'); gicon.shadowSize  = new GSize(0,0); }'."\n";
-        $this->content .= "\t\t".'var marker = new GMarker(new GLatLng(lat,lng),gicon);'."\n";
+       
+    var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+    var myOptions = {
+      zoom: 4,
+      center: myLatlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    
+    var marker = new google.maps.Marker({
+        position: myLatlng, 
+        map: map,
+        title:"Hello World!"
+    });  
+        */
+
+          
+        
+        $this->content .= "\n\t\t".'var marker = new google.maps.Marker();'."\n";
+        $this->content .= "\t\tmarker.setPosition(new google.maps.LatLng(lat,lng));\n";
+        
         $this->content .= "\t\t".'marker.mycategory = category;'."\n";
+
+        $this->content .= "\t\t\tif (icon != '') {";
+
+        $this->content .= "\t\t\t\t".'var image = new google.maps.MarkerImage(icon);';
+        $this->content .= "\t\t\t\t".'marker.setIcon(image);'."\n";
+        $this->content .= "\t\t\t};\n";
 
         // Use clusterer optimisation or not
         if ($this->useClusterer==true) {
 			// nothing
         } else {
-            $this->content .= "\t\t".'map.addOverlay(marker);'."\n";
+            $this->content .= "\t\t".'marker.setMap(map);'."\n";
         }
 
+       
 
         $this->content .= "\t\t".'html = \'<div style="float:left;text-align:left;width:'.$this->infoWindowWidth.'px;">\'+html+\'</div>\''."\n";
-        $this->content .= "\t\t".'GEvent.addListener(marker,"click",function() { ';
+        $this->content .= "\t\t".'google.maps.event.addListener(marker,"click",function() { ';
 		
 		// Enable the zoom when you click on a marker
 		if ($this->enableWindowZoom==true) {
-			$this->content .= 'map.setCenter(new GLatLng(lat,lng),'.$this->infoWindowZoom.'); ';
+			$this->content .= 'map.setCenter(new google.maps.LatLng(lat,lng),'.$this->infoWindowZoom.'); ';
 		}
 		
-		$this->content .= 'marker.openInfoWindowHtml(html); });'."\n"; 
+		//$this->content .= 'marker.openInfoWindowHtml(html); });'."\n"; 
+      $this->content .= "\n\t\t".'infoWindow.setContent(html);';
+      $this->content .= "\t\t".'infoWindow.open(map, this);';
+      $this->content .= ' });'."\n"; 
         $this->content .= "\t\t".'gmarkers.push(marker);'."\n";
 
         // Hide marker by default
@@ -656,17 +772,17 @@ class GoogleMapAPI extends ViewableData
         $this->content .= "\t".'}'."\n";
         
         // JS public function to get current Lat & Lng
-        $this->content .= "\t".'function getCurrentLat() {'."\n";
+        $this->content .= "\n\t".'function getCurrentLat() {'."\n";
         $this->content .= "\t\t".'return current_lat;'."\n";
         $this->content .= "\t".'}'."\n";
-        $this->content .= "\t".'function getCurrentLng() {'."\n";
+        $this->content .= "\n\t".'function getCurrentLng() {'."\n";
         $this->content .= "\t\t".'return current_lng;'."\n";
         $this->content .= "\t".'}'."\n";
 
 
 		
 		// JS public function to center the gmaps dynamically
-        $this->content .= "\t".'function showAddress(address) {'."\n";
+        $this->content .= "\n\t".'function showAddress(address) {'."\n";
         $this->content .= "\t\t".'if (geocoder) {'."\n";
         $this->content .= "\t\t\t".'geocoder.getLatLng('."\n";
         $this->content .= "\t\t\t\t".'address,'."\n";
@@ -683,7 +799,18 @@ class GoogleMapAPI extends ViewableData
         $this->content .=  "\t".'</script>'."\n";
 
         // Google map DIV
-        $this->content .= "\t".'<div id="'.$this->googleMapId.'" style="width:'.$this->width.'px;height:'.$this->height.'px"></div>'."\n";
+        $this->content .= "\t".'<div id="'.$this->googleMapId.'"';
+
+        if ($this->show_inline_map_div_style) {
+          $this->content .= 'style="width:'.$this->width.'px;height:'.$this->height.'px"';
+        }
+
+        if ($this->additional_css_classes != '') {
+          $this->content .= ' class="'.$this->additional_css_classes.'"';
+        }
+
+
+        $this->content .= "></div>\n";
     }
 
     /**
@@ -697,7 +824,7 @@ class GoogleMapAPI extends ViewableData
 
         $this->init();
 
-        $this->content .=  "\t".'</script>'."\n";
+      // THIS SEEMS ROGUE  $this->content .=  "\t".'</script>'."\n";
 
         // Center of the GMap
 		  $geocodeCentre = ($this->latLongCenter) ? $this->latLongCenter : $this->geocoding($this->center);
@@ -710,14 +837,31 @@ class GoogleMapAPI extends ViewableData
 
         $this->content .= "\t".'<script type="text/javascript">'."\n";
         $this->content .= "\t".'function load() {'."\n";
-        $this->content .= "\t\t".'if (GBrowserIsCompatible()) {'."\n";
-        $this->content .= "\t\t\t".'map = new GMap2(document.getElementById("'.$this->googleMapId.'"));'."\n";
-        $this->content .= "\t\t\t".'geocoder = new GClientGeocoder();'."\n";
+        $this->content .= "\t\t".'//if (GBrowserIsCompatible()) {'."\n";
+        $this->content .= "\t\t\t".'map = new google.maps.Map(document.getElementById("'.$this->googleMapId.'"));'."\n";
+
+        if ($this->jsonMapStyles) {
+          $this->content .="var mappableStyles=".$this->jsonMapStyles."\n";
+         // $this->content .="\nvar styledMapType = new google.maps.StyledMapType(styles, { name: 'Styled' });\n";
+        //  $this->content .="\nmap.mapTypes.set('Styled', styledMapType);\n";
+          $this->content .= 'map.setOptions({styles: mappableStyles});
+'."\n";
+        }
+
+
+        /*
+
+        */
+        $this->content .= "\t\t\t".'geocoder = new google.maps.Geocoder();'."\n";
 
 		
 		if ($this->enableAutomaticCenterZoom==true) {
+
 			$latlngCentre = $this->centerLat.",".$this->centerLng;
-			$this->content .= "\t\t\t".'map.setCenter(new GLatLng('.$latlngCentre.'),'.$this->zoom.');'."\n";
+
+      error_log("LAT LONG CENTRE");
+      error_log(print_r($latlngCentre,1));
+			$this->content .= "\t\t\t".'map.setCenter(new google.maps.LatLng('.$latlngCentre.'),'.$this->zoom.');'."\n";
 			
 			$lenLng = $this->maxLng - $this->minLng;
             $lenLat = $this->maxLat - $this->minLat;
@@ -726,14 +870,21 @@ class GoogleMapAPI extends ViewableData
             $this->minLat -= $lenLat * $this->coordCoef;
             $this->maxLat += $lenLat * $this->coordCoef;
 
-            $this->content .= "\t\t\t".'var bds = new GLatLngBounds(new GLatLng('.$this->minLat.','.$this->minLng.'),new GLatLng('.$this->maxLat.','.$this->maxLng.'));'."\n";
-            $this->content .= "\t\t\t".'map.setZoom(map.getBoundsZoomLevel(bds));'."\n";
+            $this->content .= "\t\t\t".'var bds = new google.maps.LatLngBounds(new google.maps.LatLng('.$this->minLat.','.$this->minLng.'),new google.maps.LatLng('.$this->maxLat.','.$this->maxLng.'));'."\n";
+            $this->content .= "\t\t\t".'map.setZoom(map.fitBounds(bds));'."\n";
 		} else {
-			$this->content .= "\t\t\t".'map.setCenter(new GLatLng('.$latlngCentre.'),'.$this->zoom.');'."\n";
+
+			$this->content .= "\t\t\t".'map.setCenter(new google.maps.LatLng('.$latlngCentre.'));'."\n";
+      $this->content .= "\t\t\t".'map.setZoom('.$this->zoom.');'."\n";
+
 		}
-        $this->content .= "\t\t\t".'map.setMapType('.$this->mapType.');'."\n";
-        $this->content .= "\t\t\t".'map.setUIToDefault();'."\n";
-        $this->content .= "\t\t\t".'GEvent.addListener(map,"click",function(overlay,latlng) { if (latlng) { current_lat=latlng.lat();current_lng=latlng.lng(); }}) ;'."\n";
+
+
+
+    
+        $this->content .= "\t\t\t".'map.setMapTypeId('.$this->mapType.');'."\n";
+       // $this->content .= "\t\t\t".'map.setUIToDefault();'."\n";
+        $this->content .= "\t\t\t".'google.maps.event.addListener(map,"click",function(overlay,latlng) { if (latlng) { current_lat=latlng.lat();current_lng=latlng.lng(); }}) ;'."\n";
 
 
         // add all the markers
@@ -742,9 +893,15 @@ class GoogleMapAPI extends ViewableData
         // add the lines
         $this->content .= $this->contentLines;
         
-        $this->content .= "\t\t".'}'."\n";
-        $this->content .= "\t".'}'."\n";
-        $this->content .= "\t".'load();'."\n";
+        $this->content .= "\t\t" . '}'."\n";
+
+        /*
+        If you wish to control when the load method for maps is called use
+    GoogleMapAPI::setDelayLoadMaps(true);
+        */
+        if (!$this->delayLoadMapFunction) {
+          $this->content .= "\t".'load();'."\n";
+        }
  
         if ($this->useClusterer==true) {
             $this->content .= "\t".'var markerCluster = new MarkerClusterer(map, gmarkers,{gridSize: '.$this->gridSize.', maxZoom: '.$this->maxZoom.'});'."\n";

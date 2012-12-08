@@ -18,7 +18,7 @@ interface Mappable {
 	 *
 	 * @return string
 	 */
-	public function getLatitude();
+	public function getMappableLatitude();
 	
 
 	/**
@@ -30,7 +30,7 @@ interface Mappable {
 	 *
 	 * @return string
 	 */
-	public function getLongitude();
+	public function getMappableLongitude();
 	
 	
 	/**

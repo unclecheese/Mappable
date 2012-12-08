@@ -11,6 +11,8 @@ class LatLongField extends FieldGroup {
 	protected $latField;
 	
 	protected $longField;
+
+	protected $zoomField;
 			
 	protected $buttonText;
 	
@@ -20,9 +22,14 @@ class LatLongField extends FieldGroup {
 		}
 		parent::__construct($children);	
 		$this->addressFields = $addressFields;
-		$this->buttonText = $buttonText ? $buttonText : _t('LatLongField.LOOKUP','Look up');
+
+		$this->buttonText = $buttonText ? $buttonText : _t('LatLongField.LOOKUP','Search');
 		$this->latField = $children[0]->getName();
 		$this->longField = $children[1]->getName();
+
+		if (sizeof($children) == 3) {
+			$this->zoomField = $children[2]->getName();
+		}
 		$name = "";
 		foreach($children as $field) {
 			$name .= $field->getName();
@@ -37,19 +44,27 @@ class LatLongField extends FieldGroup {
 	
 	public function FieldHolder($properties = array()) {
 		Requirements::javascript(THIRDPARTY_DIR.'/jquery/jquery.js');
+		Requirements::javascript(THIRDPARTY_DIR.'jquery-livequery/jquery.livequery.js');
+
 		Requirements::javascript(THIRDPARTY_DIR.'/jquery-metadata/jquery.metadata.js');
 		Requirements::javascript('mappable/javascript/lat_long_field.js');
-		Requirements::css(MAPPABLE_MODULE_PATH.'/css/lat_long_field.css');
-		$this->FieldList()->push(new LiteralField('geocode_'.$this->id(), sprintf('<a class="geocode_button {\'aFields\': \'%s\',\'lat\': \'%s\', \'long\': \'%s\'}" href="'.$this->Link('geocode').'">'.
-							$this->buttonText.
-						'</a>', implode(',',$this->addressFields), $this->latField, $this->longField)));
-                $map = GoogleMapUtil::instance();
-                $map->setDivId('geocode_map_'.$this->id());
-                $map->setEnableAutomaticCenterZoom(false);
+				Requirements::css(MAPPABLE_MODULE_PATH.'/css/lat_long_field.css');
 
-                $mapHtml = $map->forTemplate();
 
-                $this->FieldList()->push(new LiteralField ('geocode_map_field'.$this->id(),$mapHtml));
+		//Requirements::css('mappable/css/lat_long_field.css');
+		
+		$this->FieldList()->push(new MapField('GoogleMap','GoogleMap'));
+
+		 $content = '<div id="mapSearch">
+		 <input name="location_search" id="location_search" size=80/>
+    	<button class="action" id="searchLocationButton">Search Location Name</button>
+      		<div id="mapSearchResults">
+      	</div>
+    </div>
+    ';
+
+    	$this->FieldList()->push(new LiteralField('mapSearch', $content));
+
 		return parent::FieldHolder();
 	}
 	
