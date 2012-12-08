@@ -30,7 +30,7 @@ class MapField extends DatalessField {
         parent::__construct($name, $title, null, $allowHTML, $form);
     }
     
-    function Field() {
+    function Field($properties = array()) {
         Requirements::javascript('sapphire/thirdparty/jquery/jquery.js');
         Requirements::javascript('sapphire/thirdparty/jquery-livequery/jquery.livequery.js');
        // Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
