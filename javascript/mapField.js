@@ -1,3 +1,15 @@
+var marker;
+
+var latFieldName = 'Lat';
+var lonFieldName = 'Lon';
+var zoomFieldName = 'ZoomLevel';
+
+ (function($) {
+      var latField = $('input[name='+latFieldName+']');
+      var lonField = $('input[name='+lonFieldName+']');
+        })(jQuery);
+   
+
    function gmloaded() {
      initLivequery();
      //initMap();
@@ -17,15 +29,21 @@
      };
 
      (function($) {
+      var latField = $('input[name='+latFieldName+']');
+      var lonField = $('input[name='+lonFieldName+']');
+      var zoomField = $('input[name='+zoomFieldName+']');
 
+  
+       myOptions.center = new google.maps.LatLng(latField.val(), lonField.val());
 
-       myOptions.center = new google.maps.LatLng($('input[name=Latitude]').val(), $('input[name=Longitude]').val());
-       if ($('input[name=Zoom]').length) {
-         myOptions['zoom'] = parseInt($('input[name=Zoom]').val());
+       if (zoomField.length) {
+          myOptions['zoom'] = parseInt(zoomField.val());
        }
+
+
        map = new google.maps.Map(document.getElementById("GoogleMap"), myOptions);
 
-       if ($('input[name=Latitude]').val() && $('input[name=Longitude]').val()) {
+       if (latField.val() && lonField.val()) {
          marker = null;
 
          setMarker(myOptions.center, true);
@@ -33,33 +51,51 @@
 
 
 
+
+
        google.maps.event.addListener(map, "rightclick", function(event) {
          var lat = event.latLng.lat();
          var lng = event.latLng.lng();
-         $('input[name=Latitude]').val(lat);
-         $('input[name=Longitude]').val(lng);
+         latField.val(lat);
+         lonField.val(lng);
          // populate yor box/field with lat, lng
          setMarker(event.latLng, false);
        });
 
 
+      
        google.maps.event.addListener(map, "zoom_changed", function(e) {
-         if ($('input[name=Zoom]').length) {
-           $('input[name=Zoom]').val(map.getZoom());
+         if ($('input[name='+zoomFieldName+']').length) {
+           $('input[name='+zoomFieldName+']').val(map.getZoom());
          }
        });
 
-     })(jQuery);
+      google.maps.event.trigger(map, 'resize');
 
-    
+      map.setZoom( map.getZoom() );
+
+
+
+
      // see http://stackoverflow.com/questions/10197128/google-maps-api-v3-not-rendering-competely-on-tabbed-page-using-twitters-bootst
      //google.maps.event.trigger(map, 'resize');
 
      $( document ).bind( "pageshow", function( event, data ){
+        alert('page show');
         google.maps.event.trigger(map, 'resize');
       });
 
-     map.setZoom(map.getZoom());
+
+     $('a[href="#Root_Location"]').click(function() {
+                google.maps.event.trigger(map, 'resize');
+
+     });
+
+     })(jQuery);
+
+    
+
+    // map.setZoom(map.getZoom());
 
 
 
@@ -91,11 +127,15 @@
    function setCoordByMarker(event) {
      (function($) {
 
-       $('input[name=Latitude]').val(event.latLng.lat());
-       $('input[name=Longitude]').val(event.latLng.lng());
+      var latField = $('input[name='+latFieldName+']');
+      var lonField = $('input[name='+lonFieldName+']');
+      var zoomField = $('input[name='+zoomFieldName+']');
 
-       if ($('input[name=Zoom]').length) {
-         $('input[name=Zoom]').val(map.getZoom());
+       latField.val(event.latLng.lat());
+       lonField.val(event.latLng.lng());
+
+       if (zoomField.length) {
+         zoomField.val(map.getZoom());
        }
 
        map.setCenter(event.latLng);
@@ -142,8 +182,8 @@
 
              $('#mapSearchResults').html(html);
 
-             // $('input[name=Latitude]').val(results[0].geometry.location.lat());
-             //  $('input[name=Longitude]').val(results[0].geometry.location.lng());
+             // latField.val(results[0].geometry.location.lat());
+             //  lonField.val(results[0].geometry.location.lng());
              //  setMarker(results[0].geometry.location.lat);
            } else {
              errorMessage("Unable to find any geocoded results");
@@ -197,6 +237,7 @@
          setMarker(latlng, true);
          return false;
        });
+
 
        $('#GoogleMap').livequery(function() {
           initMap();
