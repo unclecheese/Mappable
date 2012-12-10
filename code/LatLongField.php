@@ -47,11 +47,47 @@ class LatLongField extends FieldGroup {
 		Requirements::javascript(THIRDPARTY_DIR.'jquery-livequery/jquery.livequery.js');
 
 		Requirements::javascript(THIRDPARTY_DIR.'/jquery-metadata/jquery.metadata.js');
-		Requirements::javascript('mappable/javascript/lat_long_field.js');
-				Requirements::css(MAPPABLE_MODULE_PATH.'/css/lat_long_field.css');
+
+		/*
+		Requirements::customScript(" 
+      var latlonvars = { 
+      'latFieldName': '".$this->latField."',
+      'lonFieldName': '".$this->lonField."',
+      'zoomFieldName': '".$this->zoomField."'
+      
+      
+		};
+		alert('test inline');
+
+   "); 
+   */
+	$js = '
+		<script type="text/javascript">
+var latFieldName = "'.$this->latField.'";
+var lonFieldName = "'.$this->longField.'";
+var zoomFieldName = "'.$this->zoomField.'";
+		</script>
+	';
+
+
+
+	//	$literalFieldJS = new LiteralField('fieldNames',$js);
+	//	$this->FieldList()->push($literalFieldJS);
+
+	
+//		Requirements::css(MAPPABLE_MODULE_PATH.'/css/lat_long_field.css');
 
 
 		//Requirements::css('mappable/css/lat_long_field.css');
+
+	$fieldNames = array(
+        'LatFieldName' => $this->latField,
+        'LonFieldName' => $this->longField,
+        'ZoomFieldName' => $this->zoomField
+        );
+
+
+        Requirements::javascriptTemplate(MAPPABLE_MODULE_PATH.'/javascript/mapField.js', $fieldNames);
 		
 		$this->FieldList()->push(new MapField('GoogleMap','GoogleMap'));
 
