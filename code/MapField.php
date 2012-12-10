@@ -34,7 +34,14 @@ class MapField extends DatalessField {
         Requirements::javascript('framework/thirdparty/jquery/jquery.js');
         Requirements::javascript('framework/thirdparty/jquery-livequery/jquery.livequery.js');
        // Requirements::javascript('http://maps.google.com/maps/api/js?sensor=false');
-        Requirements::javascript('mappable/javascript/mapField.js');
+
+
+       // Requirements::javascript('mappable/javascript/mapField.js');
+
+
+        
+
+
         $attributes = array(
             'class' => 'middleColumn',
             'id' => $this->divId,
