@@ -1,13 +1,14 @@
 var marker;
 
-var latFieldName = 'Lat';
-var lonFieldName = 'Lon';
-var zoomFieldName = 'ZoomLevel';
+/*
+The following variables are set up by a literal field int he map field, as they names of these fields can of course vary
+- latFieldName: latittude field name
+- lonFieldName: longitutude field name
+- zoomFieldName:  zoom field name
+*/
 
- (function($) {
-      var latField = $('input[name='+latFieldName+']');
-      var lonField = $('input[name='+lonFieldName+']');
-        })(jQuery);
+
+
    
 
    function gmloaded() {
@@ -29,9 +30,9 @@ var zoomFieldName = 'ZoomLevel';
      };
 
      (function($) {
-      var latField = $('input[name='+latFieldName+']');
-      var lonField = $('input[name='+lonFieldName+']');
-      var zoomField = $('input[name='+zoomFieldName+']');
+      var latField = $('input[name="$LatFieldName"]');
+      var lonField = $('input[name="$LonFieldName"]');
+      var zoomField = $('input[name="$ZoomFieldName"]');
 
   
        myOptions.center = new google.maps.LatLng(latField.val(), lonField.val());
@@ -65,8 +66,8 @@ var zoomFieldName = 'ZoomLevel';
 
       
        google.maps.event.addListener(map, "zoom_changed", function(e) {
-         if ($('input[name='+zoomFieldName+']').length) {
-           $('input[name='+zoomFieldName+']').val(map.getZoom());
+         if ($('input[name="$ZoomFieldName"]').length) {
+           $('input[name="$ZoomFieldName"]').val(map.getZoom());
          }
        });
 
@@ -127,9 +128,9 @@ var zoomFieldName = 'ZoomLevel';
    function setCoordByMarker(event) {
      (function($) {
 
-      var latField = $('input[name='+latFieldName+']');
-      var lonField = $('input[name='+lonFieldName+']');
-      var zoomField = $('input[name='+zoomFieldName+']');
+      var latField = $('input[name="$LatFieldName"]');
+      var lonField = $('input[name="$LonFieldName"]');
+      var zoomField = $('input[name="$ZoomFieldName"]');
 
        latField.val(event.latLng.lat());
        lonField.val(event.latLng.lng());
@@ -182,8 +183,7 @@ var zoomFieldName = 'ZoomLevel';
 
              $('#mapSearchResults').html(html);
 
-             // latField.val(results[0].geometry.location.lat());
-             //  lonField.val(results[0].geometry.location.lng());
+
              //  setMarker(results[0].geometry.location.lat);
            } else {
              errorMessage("Unable to find any geocoded results");
@@ -224,6 +224,8 @@ var zoomFieldName = 'ZoomLevel';
        $('.geocodedSearchResults li').livequery('click', function(e) {
          // get the data needed to ask coords
          var t = $(this);
+         console.log("ENTRY CLICKED");
+         console.log(t);
          var lat = t.attr("lat");
          var lon = t.attr("lon");
          var address = t.html();
@@ -233,7 +235,16 @@ var zoomFieldName = 'ZoomLevel';
          $('#Form_EditForm_Latitude').val(lat);
          $('#Form_EditForm_Longitude').val(lon);
 
-         $('#Form_EditForm_Location').val(address);
+         var latField = $('input[name="$LatFieldName"]');
+         var lonField = $('input[name="$LonFieldName"]');
+         var zoomField = $('input[name="$ZoomFieldName"]');
+
+         latField.val(lat);
+         lonField.val(lon);
+
+         // zoom in to an appropriate level
+          map.setZoom(12);
+
          setMarker(latlng, true);
          return false;
        });
