@@ -35,6 +35,12 @@ class LatLongField extends FieldGroup {
 			$name .= $field->getName();
 		}
 
+		// hide the lat long and zoom fields from the interface
+		foreach ($this->FieldList() as $fieldToHide) {
+			$fieldToHide->addExtraClass('hide');
+		}
+
+
 
 		$this->name = $name;
 	}
