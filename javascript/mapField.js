@@ -1,3 +1,4 @@
+// FIXME avoid global
 var marker;
 
 /*
@@ -54,6 +55,7 @@ The following variables are set up by a literal field int he map field, as they 
 
 
 
+
        google.maps.event.addListener(map, "rightclick", function(event) {
          var lat = event.latLng.lat();
          var lng = event.latLng.lng();
@@ -88,7 +90,8 @@ The following variables are set up by a literal field int he map field, as they 
 
 
      $('a[href="#Root_Location"]').click(function() {
-                google.maps.event.trigger(map, 'resize');
+        google.maps.event.trigger(map, 'resize');
+       map.setCenter(marker.getPosition());
 
      });
 
