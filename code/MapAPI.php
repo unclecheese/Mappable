@@ -14,7 +14,7 @@
 *  @ version         18:13 26/05/2009
 */
 
-class GoogleMapAPI extends ViewableData
+class MapAPI extends ViewableData
 {
 
     /** GoogleMap key **/
@@ -789,7 +789,7 @@ var styles = [
         $this->content .= "\t\t\t\t".'function(point) {'."\n";
         $this->content .= "\t\t\t\t\t".'if (!point) { alert(address + " not found"); }'."\n";
         $this->content .= "\t\t\t\t\t".'else {'."\n";
-        $this->content .= "\t\t\t\t\t\t".'map.setCenter(point, '.$this->zoom.');'."\n";
+        $this->content .= "\t\t\t\t\t\t".'map.setCenter(point, '.$this->zoom.');'."//T1\n";
         $this->content .= "\t\t\t\t\t".'}'."\n";
         $this->content .= "\t\t\t\t".'}'."\n";
         $this->content .= "\t\t\t".');'."\n";
