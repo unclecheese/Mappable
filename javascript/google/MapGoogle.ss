@@ -1,13 +1,17 @@
+<pre>
+DOWNLOADJS: $DownloadJS
+</pre>
 
-
-<script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false&amp;hl='. $this->lang.'" type="text/javascript"></script>
+<% if DownloadJS %>
+*** DOWNLOADING JS ****
+<script src="http://maps.google.com/maps/api/js?sensor=false&amp;hl=$Lang" type="text/javascript"></script>
 <% if UseClusterer %>
   <script src="$ClusterLibraryPath" type="text/javascript"></script>
  <% end_if %>
-    
 
-Main JS below
-
+ <% else %>
+ no need for JS
+<% end_if %>    
 <script type="text/javascript">
     var map;
     console.log('Map template JS loaded');
@@ -61,9 +65,6 @@ Main JS below
         <% if DefaultHiderMarker %>
             marker.hide();
         <% end_if %>
-
-
-    	console.log('end of js');
     }
 
 
@@ -87,7 +88,8 @@ Main JS below
                 function(point) {
                     if (!point) { alert(address + " not found"); }
                     else {
-                        map.setCenter(point, $Zoom);
+                        map.setCenter(point);
+                        map.setZoom($Zoom);
                     }
             });
         }
@@ -102,12 +104,12 @@ Main JS below
 
     }
 
-    addAllMarkers();
 
 
 </script>
 
- <div id="$GoogleMapID">
+ <div id="$GoogleMapID" style="height:500px;width:500px">
+
 <% if ShowInlineMapDivStyle %>
   style="width:{$Width}px;{$Height}px;"';
 <% end_if %>
@@ -119,10 +121,10 @@ Main JS below
 
 
 <script type="text/javascript">
-function load() {
+function loadmaps() {
 console.log('mapping service load');
-if (GBrowserIsCompatible()) {
     map = new google.maps.Map(document.getElementById("$GoogleMapID"));
+    map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
     geocoder = new google.maps.Geocoder();
 
     <% if JsonMapStyles %>
@@ -133,7 +135,7 @@ if (GBrowserIsCompatible()) {
 
 
     <% if EnableAutomaticCenterZoom %>
-      map.setCenter(new google.maps.LatLng($LatLngCentre),$Zoom);
+      map.setCenter(new google.maps.LatLng($LatLngCentre));
       var bds = new google.maps.LatLngBounds(new google.maps.LatLng($MinLat,$MinLng),
                 new google.maps.LatLng($MaxLat,$MaxLng));
       map.setZoom(map.fitBounds(bds));
@@ -146,21 +148,38 @@ if (GBrowserIsCompatible()) {
 
     map.setMapTypeId($MapType);
     google.maps.event.addListener(map,"click",function(overlay,latlng) { 
-        if (latlng) { current_lat=latlng.lat();
+        if (latlng) { 
+            current_lat=latlng.lat();
             current_lng=latlng.lng(); 
         }
     });
 
 
-    // add all the markers
     addAllMarkers();
 
-    // add the lines
-    //$this->content .= $this->contentLines;
+    /*
+    Add lines here 
+    */
+
+    
+}
 
 
+
+    <% if UseClusterer %>
+        var markerCluster = new MarkerClusterer(map, gmarkers,{gridSize: $GridSize, maxZoom: $MaxZoom});
+    <% end_if %>
+
+
+function loadedGoogleMapsAPI() {
+    console.log('callback from google maps');
+    loadmaps();
 }
-}
+
+<% if DelayLoadMapFunction %>
+console.log('delay map loading');
+<% else %>
+console.log("adding google maps load callback");
+google.maps.event.addDomListener(window, 'load', loadedGoogleMapsAPI);
+<% end_if %>
 </script>
-
-End of main JS
