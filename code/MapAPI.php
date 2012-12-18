@@ -17,64 +17,68 @@
 class MapAPI extends ViewableData
 {
 
-    /** GoogleMap key **/
-   protected $googleMapKey = '';
+   /** GoogleMap key **/
+  protected $googleMapKey = '';
 
-    /** GoogleMap ID for the HTML DIV  **/
-   protected $googleMapId = 'googlemapapi';
-    
-    /** GoogleMap  Direction ID for the HTML DIV **/
-   protected $googleMapDirectionId = 'route';
+  /** GoogleMap ID for the HTML DIV  **/
+  protected $googleMapId = 'googlemapapi';
 
-   /* Additional CSS classes to use when rendering the map */
-   protected $set_additional_css_classes = '';
+  /** GoogleMap  Direction ID for the HTML DIV **/
+  protected $googleMapDirectionId = 'route';
 
-    /** Width of the gmap **/
-   protected $width = 800;
+  /* Additional CSS classes to use when rendering the map */
+  protected $set_additional_css_classes = '';
 
-    /** Height of the gmap **/
-   protected $height = 600;
+  /** Width of the gmap **/
+  protected $width = 800;
 
-    /** Icon width of the gmarker **/
-   protected $iconWidth = 20;
+  /** Height of the gmap **/
+  protected $height = 600;
 
-    /** Icon height of the gmarker **/
-   protected $iconHeight = 34;
+  /** Icon width of the gmarker **/
+  protected $iconWidth = 20;
 
-    /**
-     * @var int Infowindow width of the gmarker
-     **/
-   protected $infoWindowWidth = 250;
-    
-    /** Default zoom of the gmap **/
-   protected $zoom = 9;
-    
-	/** Enable the zoom of the Infowindow **/
-   protected $enableWindowZoom = false;
-   
-	/** Default zoom of the Infowindow **/
-   protected $infoWindowZoom = 13;
-   
-    /** Lang of the gmap **/
-   protected $lang = 'en';
+  /** Icon height of the gmarker **/
+  protected $iconHeight = 34;
 
-    /**Center of the gmap **/
-   protected $center = 'Paris, France';
+  /**
+   *
+   *
+   * @var int Infowindow width of the gmarker
+   * */
+  protected $infoWindowWidth = 250;
 
-   /*
+  /** Default zoom of the gmap **/
+  protected $zoom = 9;
+
+  /** Enable the zoom of the Infowindow **/
+  protected $enableWindowZoom = false;
+
+  /** Default zoom of the Infowindow **/
+  protected $infoWindowZoom = 13;
+
+  /** Lang of the gmap **/
+  protected $lang = 'en';
+
+  /**Center of the gmap **/
+  protected $center = 'Paris, France';
+
+  /*
    Additional CSS classes to render as a class attribute for the div of the map.  Use this if you want more
    fine grained control over your map using CSS.  If blank it will be ignored
    */
-   protected $additional_css_classes = '';
+  protected $additional_css_classes = '';
 
 
-   /* Decided whether or not to show the inline map css style on div creation */
-   protected $show_inline_map_div_style = true;
+  /* Decided whether or not to show the inline map css style on div creation */
+  protected $show_inline_map_div_style = true;
 
   protected $latLongCenter = null;
 
+  protected $mappingService = 'Google';
 
-    /*
+
+  /*
     Map styles for google maps, ignored if null
     <pre>
 var styles = [
@@ -122,792 +126,658 @@ var styles = [
 
   protected $delayLoadMapFunction = false;
 
-    /**
-     * Type of the gmap, can be:
-     *  'google.maps.MapTypeId.ROADMAP' (roadmap),
-     *  'G_SATELLITE_MAP' (sattelite)
-     *  'G_HYBRID_MAP' (hybrid)
-     *  'G_PHYSICAL_MAP' (terrain)
-     */
+  /**
+   * Type of the gmap, can be:
+   *  'google.maps.MapTypeId.ROADMAP' (roadmap),
+   *  'G_SATELLITE_MAP' (sattelite)
+   *  'G_HYBRID_MAP' (hybrid)
+   *  'G_PHYSICAL_MAP' (terrain)
+   */
 
-    protected $mapType = 'google.maps.MapTypeId.ROADMAP';
-	
-    /** Content of the HTML generated **/
-   protected $content = '';
+  protected $mapType = 'google.maps.MapTypeId.ROADMAP';
 
-    /** Add the direction button to the infowindow **/
-   protected $displayDirectionFields = false;
+  /** Content of the HTML generated **/
+  protected $content = '';
 
-    /** Hide the marker by default **/
-   protected $defaultHideMarker = false;
+  protected $mapService = 'google';
 
-    /** Extra content (marker, etc...) **/
-   protected $contentMarker = '';
+  /** Add the direction button to the infowindow **/
+  protected $displayDirectionFields = false;
 
-    /** Use clusterer to display a lot of markers on the gmap **/
-   protected $useClusterer = false;
-   protected $gridSize = 100;
-   protected $maxZoom = 9;
-   protected $clustererLibrarypath = 'markerclusterer_packed.js';
+  /** Hide the marker by default **/
+  protected $defaultHideMarker = false;
 
-    /** Enable automatic center/zoom **/
-   protected $enableAutomaticCenterZoom = false;
-	
-    /** maximum longitude of all markers **/
-   protected $maxLng = -1000000;
-    
-    /** minimum longitude of all markers **/
-   protected $minLng = 1000000;
-    
-    /** max latitude of all markers **/
-   protected $maxLat = -1000000;
-    
-    /** min latitude of all markers **/
-   protected $minLat = 1000000;
-   
-    /** map center latitude (horizontal), calculated automatically as markers are added to the map **/
-   protected $centerLat = null;
+  /** Extra content (marker, etc...) **/
+  //protected $contentMarker = '';
 
-    /** map center longitude (vertical),  calculated automatically as markers are added to the map **/
-   protected $centerLng = null;
-   
-    /** factor by which to fudge the boundaries so that when we zoom encompass, the markers aren't too close to the edge **/
-   protected $coordCoef = 0.01;
-   
-   protected $lines = array ();
+  // a list of markers, markers being associative arrays
+  protected $markers = array();
 
-   protected $contentLines = '';
-   
-   protected static $jsIncluded = false;
-   
+  /** Use clusterer to display a lot of markers on the gmap **/
+  protected $useClusterer = false;
+  protected $gridSize = 100;
+  protected $maxZoom = 9;
+  protected $clustererLibrarypath = 'markerclusterer_packed.js';
 
-    /**
-          * Class constructor
-          * 
-          * @param string $googleMapKey the googleMapKey
-          * 
-          * @return void
-          */
+  /** Enable automatic center/zoom **/
+  protected $enableAutomaticCenterZoom = false;
 
-    public function __construct($googleMapKey='') 
-    {
-        $this->googleMapKey = $googleMapKey;
+  /** maximum longitude of all markers **/
+  protected $maxLng = -1000000;
+
+  /** minimum longitude of all markers **/
+  protected $minLng = 1000000;
+
+  /** max latitude of all markers **/
+  protected $maxLat = -1000000;
+
+  /** min latitude of all markers **/
+  protected $minLat = 1000000;
+
+  /** map center latitude (horizontal), calculated automatically as markers are added to the map **/
+  protected $centerLat = null;
+
+  /** map center longitude (vertical),  calculated automatically as markers are added to the map **/
+  protected $centerLng = null;
+
+  /** factor by which to fudge the boundaries so that when we zoom encompass, the markers aren't too close to the edge **/
+  protected $coordCoef = 0.01;
+
+  protected $lines = array ();
+
+  protected $contentLines = '';
+
+  protected static $jsIncluded = false;
+
+
+  /**
+   * Class constructor
+   *
+   * @param string  $googleMapKey the googleMapKey
+   *
+   * @return void
+   */
+
+  public function __construct( $googleMapKey='' ) {
+    $this->googleMapKey = $googleMapKey;
+  }
+
+  /**
+   * Set the key of the gmap
+   *
+   * @param string  $googleMapKey the googleMapKey
+   *
+   * @return void
+   */
+
+  public function setKey( $googleMapKey ) {
+    $this->googleMapKey = $googleMapKey;
+  }
+
+
+  public function setShowInlineMapDivStyle( $new_show_inline_map_div_style ) {
+    $this->show_inline_map_div_style = $new_show_inline_map_div_style;
+  }
+
+  public function setAdditionalCSSClasses( $new_additional_css_classes ) {
+    $this->additional_css_classes = $new_additional_css_classes;
+  }
+
+
+  public function setMapStyles( $newStyles ) {
+    $this->jsonMapStyles = $newStyles;
+  }
+
+
+
+  public function setDelayLoadMapFunction( $newDelay ) {
+    $this->delayLoadMapFunction = $newDelay;
+  }
+
+  /**
+   * Set the useClusterer parameter (optimization to display a lot of marker)
+   *
+   * @param boolean $useClusterer           use cluster or not
+   * @param string  $clusterIcon            the cluster icon
+   * @param int     $maxVisibleMarkers      max visible markers
+   * @param int     $gridSize               grid size
+   * @param int     $minMarkersPerClusterer minMarkersPerClusterer
+   * @param int     $maxLinesPerInfoBox     maxLinesPerInfoBox
+   *
+   * @return void
+   */
+
+  public function setClusterer( $useClusterer, $gridSize=100, $maxZoom=9, $clustererLibraryPath='mappable/javascript/clusterer.js' ) {
+    $this->useClusterer = $useClusterer;
+    $this->gridSize = $gridSize;
+    $this->maxZoom = $maxZoom;
+    $this->clustererLibraryPath = $clustererLibraryPath;
+  }
+
+  /**
+   * Set the ID of the default gmap DIV
+   *
+   * @param string  $googleMapId the google div ID
+   *
+   * @return void
+   */
+
+  public function setDivId( $googleMapId ) {
+    $this->googleMapId = $googleMapId;
+  }
+
+  /**
+   * Set the ID of the default gmap direction DIV
+   *
+   * @param string  $googleMapDirectionId GoogleMap  Direction ID for the HTML DIV
+   *
+   * @return void
+   */
+
+  public function setDirectionDivId( $googleMapDirectionId ) {
+    $this->googleMapDirectionId = $googleMapDirectionId;
+  }
+
+  /**
+   * Set the size of the gmap
+   *
+   * @param int     $width  GoogleMap  width
+   * @param int     $height GoogleMap  height
+   *
+   * @return void
+   */
+
+  public function setSize( $width, $height ) {
+    $this->width = $width;
+    $this->height = $height;
+  }
+
+  /**
+   * Set the with of the gmap infowindow (on marker clik)
+   *
+   * @param int     $infoWindowWidth GoogleMap  info window width
+   *
+   * @return void
+   */
+
+  public function setInfoWindowWidth( $infoWindowWidth ) {
+    $this->infoWindowWidth = $infoWindowWidth;
+  }
+
+  /**
+   * Set the size of the icon markers
+   *
+   * @param int     $iconWidth  GoogleMap  marker icon width
+   * @param int     $iconHeight GoogleMap  marker icon height
+   *
+   * @return void
+   */
+
+  public function setIconSize( $iconWidth, $iconHeight ) {
+    $this->iconWidth = $iconWidth;
+    $this->iconHeight = $iconHeight;
+  }
+
+  /**
+   * Set the lang of the gmap
+   *
+   * @param string  $lang GoogleMap  lang : fr,en,..
+   *
+   * @return void
+   */
+
+  public function setLang( $lang ) {
+    $this->lang = $lang;
+  }
+
+  /**
+   * Set the zoom of the gmap
+   *
+   * @param int     $zoom GoogleMap  zoom.
+   *
+   * @return void
+   */
+
+  public function setZoom( $zoom ) {
+    $this->zoom = $zoom;
+  }
+
+  /**
+   * Set the zoom of the infowindow
+   *
+   * @param int     $zoom GoogleMap  zoom.
+   *
+   * @return void
+   */
+
+  public function setInfoWindowZoom( $infoWindowZoom ) {
+    $this->infoWindowZoom = $infoWindowZoom;
+  }
+
+  /**
+   * Enable the zoom on the marker when you click on it
+   *
+   * @param int     $zoom GoogleMap  zoom.
+   *
+   * @return void
+   */
+
+  public function setEnableWindowZoom( $enableWindowZoom ) {
+    $this->enableWindowZoom = $enableWindowZoom;
+  }
+
+  /**
+   * Enable theautomatic center/zoom at the gmap load
+   *
+   * @param int     $zoom GoogleMap  zoom.
+   *
+   * @return void
+   */
+
+  public function setEnableAutomaticCenterZoom( $enableAutomaticCenterZoom ) {
+    $this->enableAutomaticCenterZoom = $enableAutomaticCenterZoom;
+  }
+
+  /**
+   * Set the center of the gmap (an address)
+   *
+   * @param string  $center GoogleMap  center (an address)
+   *
+   * @return void
+   */
+
+  public function setCenter( $center ) {
+    $this->center = $center;
+  }
+
+  /**
+   * Set the type of the gmap
+   *
+   * @param string  $mapType ( can be 'google.maps.MapTypeId.ROADMAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
+   *
+   * @return void
+   */
+
+  public function setMapType( $mapType ) {
+    $this->mapType = $mapType;
+  }
+
+
+
+  public function setLatLongCenter( $center ) {
+    $this->latLongCenter = $center;
+  }
+
+  /**
+   * Set the center of the gmap
+   *
+   * @param boolean $displayDirectionFields display directions or not in the info window
+   *
+   * @return void
+   */
+
+  public function setDisplayDirectionFields( $displayDirectionFields ) {
+    $this->displayDirectionFields = $displayDirectionFields;
+  }
+
+  /**
+   * Set the defaultHideMarker
+   *
+   * @param boolean $defaultHideMarker hide all the markers on the map by default
+   *
+   * @return void
+   */
+
+  public function setDefaultHideMarker( $defaultHideMarker ) {
+    $this->defaultHideMarker = $defaultHideMarker;
+  }
+
+  /**
+   * Get the google map content
+   *
+   * @return string the google map html code
+   */
+
+  public function getGoogleMap() {
+    return $this->content;
+  }
+
+  /**
+   * Get URL content using cURL.
+   *
+   * @param string  $url the url
+   *
+   * @return string the html code
+   *
+   * @todo add proxy settings
+   */
+
+  public function getContent( $url ) {
+    $curl = curl_init();
+    curl_setopt( $curl, CURLOPT_TIMEOUT, 10 );
+    curl_setopt( $curl, CURLOPT_CONNECTTIMEOUT, 5 );
+    curl_setopt( $curl, CURLOPT_RETURNTRANSFER, TRUE );
+    curl_setopt( $curl, CURLOPT_URL, $url );
+    $data = curl_exec( $curl );
+    curl_close( $curl );
+    return $data;
+  }
+
+  /**
+   * Geocoding an address (address -> lat,lng)
+   *
+   * @param string  $address an address
+   *
+   * @return array array with precision, lat & lng
+   */
+
+  public function geocoding( $address ) {
+    $encodeAddress = urlencode( $address );
+    $url = "http://maps.google.com/maps/geo?q=".$encodeAddress."&output=csv&key=".$this->googleMapKey;
+
+    if ( function_exists( 'curl_init' ) ) {
+      $data = $this->getContent( $url );
+    } else {
+      $data = file_get_contents( $url );
     }
 
-    /**
-          * Set the key of the gmap
-          * 
-          * @param string $googleMapKey the googleMapKey
-          * 
-          * @return void
-          */
+    $csvSplit = preg_split( "/,/", $data );
+    $status = $csvSplit[0];
 
-    public function setKey($googleMapKey) 
-    {
-        $this->googleMapKey = $googleMapKey;
+    if ( strcmp( $status, "200" ) == 0 ) {
+      $return = $csvSplit; // successful geocode, $precision = $csvSplit[1],$lat = $csvSplit[2],$lng = $csvSplit[3];
+    } else {
+      $return = null; // failure to geocode
     }
 
+    return $return;
+  }
 
-    public function setShowInlineMapDivStyle($new_show_inline_map_div_style) {
-      $this->show_inline_map_div_style = $new_show_inline_map_div_style;
+  /**
+   * Add marker by his coord
+   *
+   * @param string  $lat      lat
+   * @param string  $lng      lngs
+   * @param string  $html     html code display in the info window
+   * @param string  $category marker category
+   * @param string  $icon     an icon url
+   *
+   * @return void
+   */
+
+  public function addMarkerByCoords( $lat, $lng, $html='', $category='', $icon='' ) {
+
+    error_log("Add marker by coords");
+
+    // Save the lat/lon to enable the automatic center/zoom
+    $this->maxLng = (float) max( (float)$lng, $this->maxLng );
+    $this->minLng = (float) min( (float)$lng, $this->minLng );
+    $this->maxLat = (float) max( (float)$lat, $this->maxLat );
+    $this->minLat = (float) min( (float)$lat, $this->minLat );
+    $this->centerLng = (float) ( $this->minLng + $this->maxLng ) / 2;
+    $this->centerLat = (float) ( $this->minLat + $this->maxLat ) / 2;
+
+    //$this->contentMarker .= "\t\t\t".'createMarker('.$lat.','.$lng.',"'.$html.'","'.$category.'","'.$icon.'");'."\n";
+    $m = array(
+      'latitude' => $lat,
+      'longitude' => $lng,
+      'html' => $html,
+      'category' => $category,
+      'icon' => $icon
+    );
+    array_push($this->markers, $m);
+  }
+
+  /**
+   * Add marker by his address
+   *
+   * @param string  $address  an ddress
+   * @param string  $content  html code display in the info window
+   * @param string  $category marker category
+   * @param string  $icon     an icon url
+   *
+   * @return void
+   */
+
+  public function addMarkerByAddress( $address, $content='', $category='', $icon='' ) {
+    error_log("Add marker by address");
+
+    $point = $this->geocoding( $address );
+    if ( $point!==null ) {
+      $this->addMarkerByCoords( $point[2], $point[3], $content, $category, $icon );
+    } else {
+      // throw new Exception('Adress not found : '.$address);
+    }
+  }
+
+  /**
+   * Add marker by an array of coord
+   *
+   * @param string  $coordtab an array of lat,lng,content
+   * @param string  $category marker category
+   * @param string  $icon     an icon url
+   *
+   * @return void
+   */
+
+  public function addArrayMarkerByCoords( $coordtab, $category='', $icon='' ) {
+        error_log("Add  array marker by coords");
+
+    foreach ( $coordtab as $coord ) {
+      $this->addMarkerByCoords( $coord[0], $coord[1], $coord[2], $category, $icon );
+    }
+  }
+
+
+  /**
+   * Adds a {@link ViewableData} object that implements {@link Mappable}
+   * to the map.
+   *
+   * @param ViewableData $obj
+   */
+  public function addMarkerAsObject( ViewableData $obj ) {
+        error_log("Add marker as object");
+
+    if ( $obj instanceof Mappable ) {
+      //if(($obj->getMappableLatitude() > 0) || ($obj->getMappableLongitude() > 0)) {
+      $cat = $obj->hasMethod( 'getMapCategory' ) ? $obj->getMapCategory() : "default";
+      $this->addMarkerByCoords( $obj->getMappableLatitude(), $obj->getMappableLongitude(), $obj->getMapContent(), $cat, $obj->getMapPin() );
+      //}
+    }
+  }
+
+
+  /**
+   * Draws a line between two {@link ViewableData} objects
+   *
+   * @param ViewableData $one   The first point
+   * @param ViewableData $two   The second point
+   * @param string  $color The hexidecimal color of the line
+   */
+  public function connectPoints( ViewableData $one, ViewableData $two, $color = "#FF3300" ) {
+    $this->addLine(
+      array( $one->getMappableLatitude(), $one->getMappableLongitude() ),
+      array( $two->getMappableLatitude(), $two->getMappableLongitude() ),
+      $color
+    );
+  }
+
+
+  public function forTemplate() {
+    $this->generate();
+    return $this->getGoogleMap();
+  }
+
+
+
+  /**
+   * Add marker by an array of address
+   *
+   * @param string  $coordtab an array of address
+   * @param string  $category marker category
+   * @param string  $icon     an icon url
+   *
+   * @return void
+   */
+
+  public function addArrayMarkerByAddress( $coordtab, $category='', $icon='' ) {
+    foreach ( $coordtab as $coord ) {
+      $this->addMarkerByAddress( $coord[0], $coord[1], $category, $icon );
+    }
+  }
+
+  /**
+   * Set a direction between 2 addresss and set a text panel
+   *
+   * @param string  $from    an address
+   * @param string  $to      an address
+   * @param string  $idpanel id of the div panel
+   *
+   * @return void
+   */
+
+  public function addDirection( $from, $to, $idpanel='' ) {
+    $this->contentMarker .= 'addDirection("'.$from.'","'.$to.'","'.$idpanel.'");';
+  }
+
+  /**
+   * Parse a KML file and add markers to a category
+   *
+   * @param string  $url      url of the kml file compatible with gmap and gearth
+   * @param string  $category marker category
+   * @param string  $icon     an icon url
+   *
+   * @return void
+   */
+
+  public function addKML( $url, $category='', $icon='' ) {
+    $xml = new SimpleXMLElement( $url, null, true );
+    foreach ( $xml->Document->Folder->Placemark as $item ) {
+      $coordinates = explode( ',', (string) $item->Point->coordinates );
+      $name = (string) $item->name;
+      $this->addMarkerByCoords( $coordinates[1], $coordinates[0], $name, $category, $icon );
+    }
+  }
+
+
+  public function addLine( $from = array(), $to = array(), $color = "#FF3300" ) {
+    $this->contentLines .= "var points = [new google.maps.LatLng({$from[0]},{$from[1]}), new google.maps.LatLng({$to[0]},{$to[1]})];\n";
+    $this->contentLines .= "map.addOverlay(new GPolyline(points,'{$color}',4,0.6));\n";
+  }
+  /**
+   * Initialize the javascript code
+   *
+   * @return void
+   */
+
+
+
+  
+
+  /**
+   * Generate the gmap
+   *
+   * @return void
+   */
+
+  public function generate() {
+    error_log("GENERATE: MARKERS ARE");
+    error_log(print_r($this->markers,1));
+    $jsonMarkers = json_encode($this->markers);
+    error_log('JSON MARKERS:'.$jsonMarkers);
+
+     // Center of the GMap
+    $geocodeCentre = ( $this->latLongCenter ) ? $this->latLongCenter : $this->geocoding( $this->center );
+
+    // coordinates for centre depending on which method used
+    if ( $geocodeCentre[0]=="200" ) { // success
+      $latlngCentre = $geocodeCentre[2].",".$geocodeCentre[3];
+    } else { // Paris
+      $latlngCentre = "48.8792,2.34778";
     }
 
-    public function setAdditionalCSSClasses($new_additional_css_classes) {
-      $this->additional_css_classes = $new_additional_css_classes;
+    $lenLng = $this->maxLng - $this->minLng;
+    $lenLat = $this->maxLat - $this->minLat;
+    $this->minLng -= $lenLng * $this->coordCoef;
+    $this->maxLng += $lenLng * $this->coordCoef;
+    $this->minLat -= $lenLat * $this->coordCoef;
+    $this->maxLat += $lenLat * $this->coordCoef;
+
+    $vars = new ArrayData(array(
+        'EnableWindowZoom' => $this->enableWindowZoom,
+        'MapMarkers' => $jsonMarkers,
+        'DelayLoadMapFunction' => $this->delayLoadMapFunction,
+        'DefaultHideMarker' => $this->defaultHideMarker,
+        'LatLngCentre' => $latlngCentre,
+        'EnableAutomaticCenterZoom' => $this->enableAutomaticCenterZoom,
+        'Zoom' => $this->zoom,
+        'MinLng' => $this->minLng,
+        'MinLat' => $this->minLat,
+        'MaxLng' => $this->maxLng,
+        'MaxLat' => $this->maxLat,
+        'MapType' => $this->mapTypes,
+        'GoogleMapID' => $this->googleMapId
+      )
+    );
+    $this->content = $this->processTemplate('Map', $vars);
+  }
+
+
+   function processTemplate( $templateName, $templateVariables = null  ) {
+    if (!$templateVariables) {
+      $templateVariables = new ArrayList();
     }
+   // Requirements::javascriptTemplate( MAPPABLE_MODULE_PATH.'/javascript/'.$this->mappingService.'/'.$templateName.'.ss', $templateVariables );
+    $result = $templateVariables->renderWith($templateName.$this->mappingService );
+    error_log("TEMPLATE:");
+    error_log($result);
+    return $result;
+  }
 
 
-    public function setMapStyles($newStyles) {
-      $this->jsonMapStyles = $newStyles;
-    }
 
+  // Only download the mapping JS once
+  public function NeedToDownloadMappingJS() {
+      if ( self::$jsIncluded ) return false;
 
+      self::$jsIncluded = true;
 
-    public function setDelayLoadMapFunction($newDelay) {
-      $this->delayLoadMapFunction = $newDelay;
-    }
+  }
 
-    /**
-          * Set the useClusterer parameter (optimization to display a lot of marker)
-          * 
-          * @param boolean $useClusterer use cluster or not
-          * @param string $clusterIcon the cluster icon
-          * @param int $maxVisibleMarkers max visible markers
-          * @param int $gridSize grid size
-          * @param int $minMarkersPerClusterer minMarkersPerClusterer
-          * @param int $maxLinesPerInfoBox maxLinesPerInfoBox
-          * 
-          * @return void
-          */
+  public function UseClusterer() {
+    return $this->useClusterer;
+  }
 
-    public function setClusterer($useClusterer,$gridSize=100,$maxZoom=9,$clustererLibraryPath='mappable/javascript/clusterer.js') 
-    {
-        $this->useClusterer = $useClusterer;
-        $this->gridSize = $gridSize;
-        $this->maxZoom = $maxZoom;
-		$this->clustererLibraryPath = $clustererLibraryPath;
-    }
+  public function ClusterLibraryPath() {
+    return $this->clustererLibraryPath;
+  }
 
-    /**
-          * Set the ID of the default gmap DIV
-          * 
-          * @param string $googleMapId the google div ID
-          * 
-          * @return void
-          */
+  public function InfoWidth() {
+    return $this->infoWindowWidth;
+  }
 
-    public function setDivId($googleMapId) 
-    {
-        $this->googleMapId = $googleMapId;
-    }
-    
-    /**
-          * Set the ID of the default gmap direction DIV 
-          * 
-          * @param string $googleMapDirectionId GoogleMap  Direction ID for the HTML DIV
-          * 
-          * @return void
-          */
+  public function InfoWindowZoom() {
+    return $this->infoWindowZoom;
+  }
 
-    public function setDirectionDivId($googleMapDirectionId) 
-    {
-        $this->googleMapDirectionId = $googleMapDirectionId;
-    }
+  public function ShowInlineMapDivStyle() {
+    return $this->show_inline_map_div_style;
+  }
 
-    /**
-          * Set the size of the gmap
-          * 
-          * @param int $width GoogleMap  width
-          * @param int $height GoogleMap  height
-          * 
-          * @return void
-          */
+  public function Width() {
+    return $this->width;
+  }
 
-    public function setSize($width,$height) 
-    {
-        $this->width = $width;
-        $this->height = $height;
-    }
 
-    /**
-          * Set the with of the gmap infowindow (on marker clik)
-          * 
-          * @param int $infoWindowWidth GoogleMap  info window width
-          * 
-          * @return void
-          */
-    
-    public function setInfoWindowWidth ($infoWindowWidth) 
-    {
-        $this->infoWindowWidth = $infoWindowWidth;
-    }
-    
-    /**
-          * Set the size of the icon markers
-          * 
-          * @param int $iconWidth GoogleMap  marker icon width
-          * @param int $iconHeight GoogleMap  marker icon height
-          * 
-          * @return void
-          */
+  public function Height() {
+    return $this->height;
+  }
 
-    public function setIconSize($iconWidth,$iconHeight) 
-    {
-        $this->iconWidth = $iconWidth;
-        $this->iconHeight = $iconHeight;
-    }
+  public function AdditionalCssClasses() {
+    return $this->additional_css_classes;
+  }
 
-    /**
-          * Set the lang of the gmap
-          * 
-          * @param string $lang GoogleMap  lang : fr,en,..
-          * 
-          * @return void
-          */
-
-    public function setLang($lang) 
-    {
-        $this->lang = $lang;
-    }
-    
-    /**
-          * Set the zoom of the gmap
-          * 
-          * @param int $zoom GoogleMap  zoom.
-          * 
-          * @return void
-          */
-
-    public function setZoom($zoom) 
-    {
-        $this->zoom = $zoom;
-    }
-	
-	/**
-          * Set the zoom of the infowindow
-          * 
-          * @param int $zoom GoogleMap  zoom.
-          * 
-          * @return void
-          */
-
-    public function setInfoWindowZoom($infoWindowZoom) 
-    {
-        $this->infoWindowZoom = $infoWindowZoom;
-    }
-	
-	/**
-          * Enable the zoom on the marker when you click on it
-          * 
-          * @param int $zoom GoogleMap  zoom.
-          * 
-          * @return void
-          */
-
-    public function setEnableWindowZoom($enableWindowZoom) 
-    {
-        $this->enableWindowZoom = $enableWindowZoom;
-    }
-	
-	/**
-          * Enable theautomatic center/zoom at the gmap load
-          * 
-          * @param int $zoom GoogleMap  zoom.
-          * 
-          * @return void
-          */
-
-    public function setEnableAutomaticCenterZoom($enableAutomaticCenterZoom) 
-    {
-        $this->enableAutomaticCenterZoom = $enableAutomaticCenterZoom;
-    }
-	
-    /**
-          * Set the center of the gmap (an address)
-          * 
-          * @param string $center GoogleMap  center (an address)
-          * 
-          * @return void
-          */
-
-    public function setCenter($center) 
-    {
-        $this->center = $center;
-    }
-
-    /**
-      * Set the type of the gmap
-      *
-      * @param string $mapType ( can be 'google.maps.MapTypeId.ROADMAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
-      *
-      * @return void
-      */
-
-    public function setMapType($mapType)
-    {
-        $this->mapType = $mapType;
-    }
-
-
-
-    public function setLatLongCenter($center) 
-    {
-        $this->latLongCenter = $center;
-    }
-
-    /**
-          * Set the center of the gmap
-          * 
-          * @param boolean $displayDirectionFields display directions or not in the info window
-          * 
-          * @return void
-          */
-
-    public function setDisplayDirectionFields($displayDirectionFields) 
-    {
-        $this->displayDirectionFields = $displayDirectionFields;
-    }
-
-    /**
-          * Set the defaultHideMarker
-          * 
-          * @param boolean $defaultHideMarker hide all the markers on the map by default
-          * 
-          * @return void
-          */
-
-    public function setDefaultHideMarker($defaultHideMarker) 
-    {
-        $this->defaultHideMarker = $defaultHideMarker;
-    }
-
-    /**
-          * Get the google map content
-          * 
-          * @return string the google map html code
-          */
-
-    public function getGoogleMap() 
-    {
-        return $this->content;
-    }
-    
-    /**
-           * Get URL content using cURL.
-          * 
-          * @param string $url the url 
-          * 
-          * @return string the html code
-          *
-          * @todo add proxy settings
-          */
-		  
-    public function getContent($url)
-    {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        $data = curl_exec($curl);
-        curl_close ($curl);
-        return $data;
-    }
-    
-    /**
-          * Geocoding an address (address -> lat,lng)
-          * 
-          * @param string $address an address
-          * 
-          * @return array array with precision, lat & lng
-          */
-
-    public function geocoding($address) 
-    {
-        $encodeAddress = urlencode($address);
-        $url = "http://maps.google.com/maps/geo?q=".$encodeAddress."&output=csv&key=".$this->googleMapKey;
-        
-        if(function_exists('curl_init')) {
-            $data = $this->getContent($url);
-        } else {
-            $data = file_get_contents($url);
-        }
-        
-		$csvSplit = preg_split("/,/",$data);
-        $status = $csvSplit[0];
-
-        if (strcmp($status, "200") == 0) {
-            $return = $csvSplit; // successful geocode, $precision = $csvSplit[1],$lat = $csvSplit[2],$lng = $csvSplit[3];
-        } else {
-            $return = null; // failure to geocode
-        }
-
-        return $return;
-    }
-
-    /**
-          * Add marker by his coord
-          * 
-          * @param string $lat lat
-          * @param string $lng lngs
-          * @param string $html html code display in the info window
-          * @param string $category marker category
-          * @param string $icon an icon url
-          * 
-          * @return void
-          */
-
-    public function addMarkerByCoords($lat,$lng,$html='',$category='',$icon='') 
-    {
-
-		// Save the lat/lon to enable the automatic center/zoom
-		$this->maxLng = (float) max((float)$lng, $this->maxLng);
-        $this->minLng = (float) min((float)$lng, $this->minLng);
-        $this->maxLat = (float) max((float)$lat, $this->maxLat);
-        $this->minLat = (float) min((float)$lat, $this->minLat);
-        $this->centerLng = (float) ($this->minLng + $this->maxLng) / 2;
-        $this->centerLat = (float) ($this->minLat + $this->maxLat) / 2;
-		
-        $this->contentMarker .= "\t\t\t".'createMarker('.$lat.','.$lng.',"'.$html.'","'.$category.'","'.$icon.'");'."\n";
-    }
-
-    /**
-          * Add marker by his address
-          * 
-          * @param string $address an ddress
-          * @param string $content html code display in the info window
-          * @param string $category marker category
-          * @param string $icon an icon url
-          * 
-          * @return void
-          */
-
-    public function addMarkerByAddress($address,$content='',$category='',$icon='') 
-    {
-        $point = $this->geocoding($address);
-		if ($point!==null) {
-        $this->addMarkerByCoords($point[2], $point[3], $content, $category, $icon);
-		} else {
-			// throw new Exception('Adress not found : '.$address);
-		}
-    }
-
-    /**
-          * Add marker by an array of coord
-          * 
-          * @param string $coordtab an array of lat,lng,content
-          * @param string $category marker category
-          * @param string $icon an icon url
-          * 
-          * @return void
-          */
-
-    public function addArrayMarkerByCoords($coordtab,$category='',$icon='') 
-    {
-        foreach ($coordtab as $coord) {
-            $this->addMarkerByCoords($coord[0], $coord[1], $coord[2], $category, $icon);
-        }
-    }
-    
-    
-    /**
-     * Adds a {@link ViewableData} object that implements {@link Mappable}
-     * to the map.
-     *
-     * @param ViewableData $obj
-     */
-    public function addMarkerAsObject(ViewableData $obj) {    
-    	if($obj instanceof Mappable) {
-        	//if(($obj->getMappableLatitude() > 0) || ($obj->getMappableLongitude() > 0)) {
-        		$cat = $obj->hasMethod('getMapCategory') ? $obj->getMapCategory() : "default";
-		        $this->addMarkerByCoords($obj->getMappableLatitude(), $obj->getMappableLongitude(), $obj->getMapContent(), $cat, $obj->getMapPin());
-	        //}
-        }    
-    }
-    
-    
-    /**
-     * Draws a line between two {@link ViewableData} objects
-     *
-     * @param ViewableData $one The first point
-     * @param ViewableData $two The second point
-     * @param string $color The hexidecimal color of the line
-     */
-    public function connectPoints(ViewableData $one, ViewableData $two, $color = "#FF3300") {
-		$this->addLine(
-			array($one->getMappableLatitude(), $one->getMappableLongitude()),
-			array($two->getMappableLatitude(), $two->getMappableLongitude()),
-			$color
-		);    
-    }
-    
-    
-    public function forTemplate() {
-    	$this->generate();
-    	return $this->getGoogleMap();
-    }
-    
-    
-
-    /**
-          * Add marker by an array of address
-          * 
-          * @param string $coordtab an array of address
-          * @param string $category marker category
-          * @param string $icon an icon url
-          * 
-          * @return void
-          */
-
-    public function addArrayMarkerByAddress($coordtab,$category='',$icon='') 
-    {
-        foreach ($coordtab as $coord) {
-            $this->addMarkerByAddress($coord[0], $coord[1], $category, $icon);
-        }
-    }
-
-    /**
-          * Set a direction between 2 addresss and set a text panel
-          * 
-          * @param string $from an address
-          * @param string $to an address
-          * @param string $idpanel id of the div panel
-          * 
-          * @return void
-          */
-
-    public function addDirection($from,$to,$idpanel='') 
-    {
-        $this->contentMarker .= 'addDirection("'.$from.'","'.$to.'","'.$idpanel.'");';
-    }
-
-    /**
-          * Parse a KML file and add markers to a category
-          * 
-          * @param string $url url of the kml file compatible with gmap and gearth
-          * @param string $category marker category
-          * @param string $icon an icon url
-          * 
-          * @return void
-          */
-
-    public function addKML ($url,$category='',$icon='') 
-    {
-        $xml = new SimpleXMLElement($url, null, true);
-        foreach ($xml->Document->Folder->Placemark as $item) {
-            $coordinates = explode(',', (string) $item->Point->coordinates);
-            $name = (string) $item->name;
-            $this->addMarkerByCoords($coordinates[1], $coordinates[0], $name, $category, $icon);
-        }
-    }
-
-
-	public function addLine($from = array(), $to = array(), $color = "#FF3300") {
-		$this->contentLines .= "var points = [new google.maps.LatLng({$from[0]},{$from[1]}), new google.maps.LatLng({$to[0]},{$to[1]})];\n";
-		$this->contentLines .= "map.addOverlay(new GPolyline(points,'{$color}',4,0.6));\n";
-	}
-    /**
-          * Initialize the javascript code
-          * 
-          * @return void
-          */
-
-	public function includeGMapsJS() {
-		if(self::$jsIncluded) return;
-        // Google map JS
-        $this->content .= '<script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false&amp;hl='. $this->lang.'" type="text/javascript">';
-        $this->content .= '</script>'."\n";
-        
-        // Clusterer JS
-        if ($this->useClusterer==true) {
-			// Source: http://gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/1.0/src/
-			$this->content .= '<script src="'.$this->clustererLibraryPath.'" type="text/javascript"></script>'."\n";
-        }
-        
-        self::$jsIncluded = true;
-	
-	}
-
-    public function init() 
-    {
-		$this->includeGMapsJS();
-        // JS variable init
-        $this->content .= "\t".'<script type="text/javascript">'."\n";
-        $this->content .= "\t".'var map;'."\n";
-        $this->content .= "\t".'var gmarkers = [];'."\n";
-        $this->content .= "\t".'var gicons = [];'."\n";
-        $this->content .= "\t".'var clusterer = null;'."\n";
-        $this->content .= "\t".'var current_lat = 0;'."\n";
-        $this->content .= "\t".'var current_lng = 0;'."\n";
-        $this->content .= "\t".'var layer_wikipedia = null;'."\n";
-        $this->content .= "\t".'var layer_panoramio = null;'."\n";
-        $this->content .= "\t".'var trafficInfo = null;'."\n";
-        $this->content .= "\t".'var directions = null;'."\n";
-        $this->content .= "\t".'var geocoder = null;'."\n";
-        $this->content .= "\tvar infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 300 });";
-
-
-        // JS public function to add a marker to the map
-        $this->content .= "\n\n\t".'function createMarker(lat,lng,html,category,icon) {'."\n";
-        /*
-        $this->content .= "\t\t".'if (icon=="") gicon = new GIcon(G_DEFAULT_ICON);'."\n";
-        $this->content .= "\t\t".'else { gicon = new GIcon(G_DEFAULT_ICON,icon); gicon.iconSize = new GSize('. $this->iconWidth.','. $this->iconHeight.'); gicon.shadowSize  = new GSize(0,0); }'."\n";
-       
-    var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
-    var myOptions = {
-      zoom: 4,
-      center: myLatlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-    
-    var marker = new google.maps.Marker({
-        position: myLatlng, 
-        map: map,
-        title:"Hello World!"
-    });  
-        */
-
-          
-        
-        $this->content .= "\n\t\t".'var marker = new google.maps.Marker();'."\n";
-        $this->content .= "\t\tmarker.setPosition(new google.maps.LatLng(lat,lng));\n";
-        
-        $this->content .= "\t\t".'marker.mycategory = category;'."\n";
-
-        $this->content .= "\t\t\tif (icon != '') {";
-
-        $this->content .= "\t\t\t\t".'var image = new google.maps.MarkerImage(icon);';
-        $this->content .= "\t\t\t\t".'marker.setIcon(image);'."\n";
-        $this->content .= "\t\t\t};\n";
-
-        // Use clusterer optimisation or not
-        if ($this->useClusterer==true) {
-			// nothing
-        } else {
-            $this->content .= "\t\t".'marker.setMap(map);'."\n";
-        }
-
-       
-
-        $this->content .= "\t\t".'html = \'<div style="float:left;text-align:left;width:'.$this->infoWindowWidth.'px;">\'+html+\'</div>\''."\n";
-        $this->content .= "\t\t".'google.maps.event.addListener(marker,"click",function() { ';
-		
-		// Enable the zoom when you click on a marker
-		if ($this->enableWindowZoom==true) {
-			$this->content .= 'map.setCenter(new google.maps.LatLng(lat,lng),'.$this->infoWindowZoom.'); ';
-		}
-		
-		//$this->content .= 'marker.openInfoWindowHtml(html); });'."\n"; 
-      $this->content .= "\n\t\t".'infoWindow.setContent(html);';
-      $this->content .= "\t\t".'infoWindow.open(map, this);';
-      $this->content .= ' });'."\n"; 
-        $this->content .= "\t\t".'gmarkers.push(marker);'."\n";
-
-        // Hide marker by default
-        if ($this->defaultHideMarker==true) {
-            $this->content .= "\t\t".'marker.hide();'."\n";
-        }
-
-        $this->content .= "\t".'}'."\n";
-        
-        // JS public function to get current Lat & Lng
-        $this->content .= "\n\t".'function getCurrentLat() {'."\n";
-        $this->content .= "\t\t".'return current_lat;'."\n";
-        $this->content .= "\t".'}'."\n";
-        $this->content .= "\n\t".'function getCurrentLng() {'."\n";
-        $this->content .= "\t\t".'return current_lng;'."\n";
-        $this->content .= "\t".'}'."\n";
-
-
-		
-		// JS public function to center the gmaps dynamically
-        $this->content .= "\n\t".'function showAddress(address) {'."\n";
-        $this->content .= "\t\t".'if (geocoder) {'."\n";
-        $this->content .= "\t\t\t".'geocoder.getLatLng('."\n";
-        $this->content .= "\t\t\t\t".'address,'."\n";
-        $this->content .= "\t\t\t\t".'function(point) {'."\n";
-        $this->content .= "\t\t\t\t\t".'if (!point) { alert(address + " not found"); }'."\n";
-        $this->content .= "\t\t\t\t\t".'else {'."\n";
-        $this->content .= "\t\t\t\t\t\t".'map.setCenter(point, '.$this->zoom.');'."//T1\n";
-        $this->content .= "\t\t\t\t\t".'}'."\n";
-        $this->content .= "\t\t\t\t".'}'."\n";
-        $this->content .= "\t\t\t".');'."\n";
-        $this->content .= "\t\t".'}'."\n";
-        $this->content .= "\t".'}'."\n";
-
-        $this->content .=  "\t".'</script>'."\n";
-
-        // Google map DIV
-        $this->content .= "\t".'<div id="'.$this->googleMapId.'"';
-
-        if ($this->show_inline_map_div_style) {
-          $this->content .= 'style="width:'.$this->width.'px;height:'.$this->height.'px"';
-        }
-
-        if ($this->additional_css_classes != '') {
-          $this->content .= ' class="'.$this->additional_css_classes.'"';
-        }
-
-
-        $this->content .= "></div>\n";
-    }
-
-    /**
-          * Generate the gmap
-          * 
-          * @return void
-          */
-
-    public function generate() 
-    {
-
-        $this->init();
-
-      // THIS SEEMS ROGUE  $this->content .=  "\t".'</script>'."\n";
-
-        // Center of the GMap
-		  $geocodeCentre = ($this->latLongCenter) ? $this->latLongCenter : $this->geocoding($this->center);
-
-        if ($geocodeCentre[0]=="200") { // success
-            $latlngCentre = $geocodeCentre[2].",".$geocodeCentre[3];
-        } else { // Paris
-            $latlngCentre = "48.8792,2.34778";
-        }
-
-        $this->content .= "\t".'<script type="text/javascript">'."\n";
-        $this->content .= "\t".'function load() {'."\n";
-        $this->content .= "\t\t".'//if (GBrowserIsCompatible()) {'."\n";
-        $this->content .= "\t\t\t".'map = new google.maps.Map(document.getElementById("'.$this->googleMapId.'"));'."\n";
-
-        if ($this->jsonMapStyles) {
-          $this->content .="var mappableStyles=".$this->jsonMapStyles."\n";
-         // $this->content .="\nvar styledMapType = new google.maps.StyledMapType(styles, { name: 'Styled' });\n";
-        //  $this->content .="\nmap.mapTypes.set('Styled', styledMapType);\n";
-          $this->content .= 'map.setOptions({styles: mappableStyles});
-'."\n";
-        }
-
-
-        /*
-
-        */
-        $this->content .= "\t\t\t".'geocoder = new google.maps.Geocoder();'."\n";
-
-		
-		if ($this->enableAutomaticCenterZoom==true) {
-
-			$latlngCentre = $this->centerLat.",".$this->centerLng;
-
-      error_log("LAT LONG CENTRE");
-      error_log(print_r($latlngCentre,1));
-			$this->content .= "\t\t\t".'map.setCenter(new google.maps.LatLng('.$latlngCentre.'),'.$this->zoom.');'."\n";
-			
-			$lenLng = $this->maxLng - $this->minLng;
-            $lenLat = $this->maxLat - $this->minLat;
-            $this->minLng -= $lenLng * $this->coordCoef;
-            $this->maxLng += $lenLng * $this->coordCoef;
-            $this->minLat -= $lenLat * $this->coordCoef;
-            $this->maxLat += $lenLat * $this->coordCoef;
-
-            $this->content .= "\t\t\t".'var bds = new google.maps.LatLngBounds(new google.maps.LatLng('.$this->minLat.','.$this->minLng.'),new google.maps.LatLng('.$this->maxLat.','.$this->maxLng.'));'."\n";
-            $this->content .= "\t\t\t".'map.setZoom(map.fitBounds(bds));'."\n";
-		} else {
-
-			$this->content .= "\t\t\t".'map.setCenter(new google.maps.LatLng('.$latlngCentre.'));'."\n";
-      $this->content .= "\t\t\t".'map.setZoom('.$this->zoom.');'."\n";
-
-		}
-
-
-
-    
-        $this->content .= "\t\t\t".'map.setMapTypeId('.$this->mapType.');'."\n";
-       // $this->content .= "\t\t\t".'map.setUIToDefault();'."\n";
-        $this->content .= "\t\t\t".'google.maps.event.addListener(map,"click",function(overlay,latlng) { if (latlng) { current_lat=latlng.lat();current_lng=latlng.lng(); }}) ;'."\n";
-
-
-        // add all the markers
-        $this->content .= $this->contentMarker;
-        
-        // add the lines
-        $this->content .= $this->contentLines;
-        
-        $this->content .= "\t\t" . '}'."\n";
-
-        /*
-        If you wish to control when the load method for maps is called use
-    GoogleMapAPI::setDelayLoadMaps(true);
-        */
-        if (!$this->delayLoadMapFunction) {
-          $this->content .= "\t".'load();'."\n";
-        }
- 
-        if ($this->useClusterer==true) {
-            $this->content .= "\t".'var markerCluster = new MarkerClusterer(map, gmarkers,{gridSize: '.$this->gridSize.', maxZoom: '.$this->maxZoom.'});'."\n";
-        }
-
-        $this->content .= "\t".'</script>'."\n";
-
-    }
+  public function JsonMapStyles() {
+    return $this->jsonMapStyles;
+  }
 }
