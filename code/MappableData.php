@@ -8,10 +8,10 @@
  */
 class MappableData extends Extension {
 
-	public function GoogleMap($width = null, $height = null, $zoom = 9) {
-		$gmap = GoogleMapUtil::get_map(new DataObjectSet($this->owner));
-		$w = $width ? $width : GoogleMapUtil::$map_width;
-		$h = $height ? $height : GoogleMapUtil::$map_height;
+	public function RenderMap($width = null, $height = null, $zoom = 9) {
+		$gmap = MapUtil::get_map(new DataObjectSet($this->owner));
+		$w = $width ? $width : MapUtil::$map_width;
+		$h = $height ? $height : MapUtil::$map_height;
 		$gmap->setSize($w,$h);
 		$gmap->setZoom($zoom);
 		$gmap->setEnableAutomaticCenterZoom(false);
@@ -25,8 +25,8 @@ class MappableData extends Extension {
 		return $gmap;
 	}
         public function StaticMap($width = null, $height = null) {
-		$w = $width ? $width : GoogleMapUtil::$map_width;
-		$h = $height ? $height : GoogleMapUtil::$map_height;
+		$w = $width ? $width : MapUtil::$map_width;
+		$h = $height ? $height : MapUtil::$map_height;
 
                 $lat = $this->owner->getLatitude();
                 $lng = $this->owner->getLongitude();
