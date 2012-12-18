@@ -506,9 +506,6 @@ var styles = [
    */
 
   public function addMarkerByCoords( $lat, $lng, $html='', $category='', $icon='' ) {
-
-    error_log("Add marker by coords");
-
     // Save the lat/lon to enable the automatic center/zoom
     $this->maxLng = (float) max( (float)$lng, $this->maxLng );
     $this->minLng = (float) min( (float)$lng, $this->minLng );
@@ -540,8 +537,6 @@ var styles = [
    */
 
   public function addMarkerByAddress( $address, $content='', $category='', $icon='' ) {
-    error_log("Add marker by address");
-
     $point = $this->geocoding( $address );
     if ( $point!==null ) {
       $this->addMarkerByCoords( $point[2], $point[3], $content, $category, $icon );
@@ -561,8 +556,6 @@ var styles = [
    */
 
   public function addArrayMarkerByCoords( $coordtab, $category='', $icon='' ) {
-        error_log("Add  array marker by coords");
-
     foreach ( $coordtab as $coord ) {
       $this->addMarkerByCoords( $coord[0], $coord[1], $coord[2], $category, $icon );
     }
@@ -576,8 +569,6 @@ var styles = [
    * @param ViewableData $obj
    */
   public function addMarkerAsObject( ViewableData $obj ) {
-        error_log("Add marker as object");
-
     if ( $obj instanceof Mappable ) {
       //if(($obj->getMappableLatitude() > 0) || ($obj->getMappableLongitude() > 0)) {
       $cat = $obj->hasMethod( 'getMapCategory' ) ? $obj->getMapCategory() : "default";
@@ -681,10 +672,7 @@ var styles = [
    */
 
   public function generate() {
-    error_log("GENERATE: MARKERS ARE");
-    error_log(print_r($this->markers,1));
     $jsonMarkers = json_encode($this->markers);
-    error_log('JSON MARKERS:'.$jsonMarkers);
 
      // Center of the GMap
     $geocodeCentre = ( $this->latLongCenter ) ? $this->latLongCenter : $this->geocoding( $this->center );
@@ -702,6 +690,7 @@ var styles = [
     $this->maxLng += $lenLng * $this->coordCoef;
     $this->minLat -= $lenLat * $this->coordCoef;
     $this->maxLat += $lenLat * $this->coordCoef;
+    $this->NeedToDownloadMappingJS();
 
     $vars = new ArrayData(array(
         'EnableWindowZoom' => $this->enableWindowZoom,
@@ -711,12 +700,16 @@ var styles = [
         'LatLngCentre' => $latlngCentre,
         'EnableAutomaticCenterZoom' => $this->enableAutomaticCenterZoom,
         'Zoom' => $this->zoom,
+        'MaxZoom' => $this->maxZoom,
+        'GridSize' => $this->gridSize,
         'MinLng' => $this->minLng,
         'MinLat' => $this->minLat,
         'MaxLng' => $this->maxLng,
         'MaxLat' => $this->maxLat,
-        'MapType' => $this->mapTypes,
-        'GoogleMapID' => $this->googleMapId
+        'MapType' => $this->MapTypeId,
+        'GoogleMapID' => $this->googleMapId,
+        'Lang'=>$this->lang,
+        'DownloadJS' => (self::$jsIncluded)
       )
     );
     $this->content = $this->processTemplate('Map', $vars);
@@ -729,8 +722,6 @@ var styles = [
     }
    // Requirements::javascriptTemplate( MAPPABLE_MODULE_PATH.'/javascript/'.$this->mappingService.'/'.$templateName.'.ss', $templateVariables );
     $result = $templateVariables->renderWith($templateName.$this->mappingService );
-    error_log("TEMPLATE:");
-    error_log($result);
     return $result;
   }
 
