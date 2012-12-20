@@ -157,7 +157,7 @@ var styles = [
   protected $useClusterer = false;
   protected $gridSize = 100;
   protected $maxZoom = 9;
-  protected $clustererLibrarypath = 'markerclusterer_packed.js';
+  protected $clustererLibrarypath = 'Fluster2.js';
 
   /** Enable automatic center/zoom **/
   protected $enableAutomaticCenterZoom = false;
@@ -247,7 +247,7 @@ var styles = [
    * @return void
    */
 
-  public function setClusterer( $useClusterer, $gridSize=100, $maxZoom=9, $clustererLibraryPath='mappable/javascript/clusterer.js' ) {
+  public function setClusterer( $useClusterer, $gridSize=100, $maxZoom=9, $clustererLibraryPath='mappable/javascript/Fluster2.packed.js' ) {
     $this->useClusterer = $useClusterer;
     $this->gridSize = $gridSize;
     $this->maxZoom = $maxZoom;
@@ -709,9 +709,13 @@ var styles = [
         'MapType' => $this->MapTypeId,
         'GoogleMapID' => $this->googleMapId,
         'Lang'=>$this->lang,
-        'DownloadJS' => (self::$jsIncluded)
+        'UseClusterer'=>$this->useClusterer,
+        'DownloadJS' => (self::$jsIncluded),
+        'ClusterLibraryPath' => $this->clustererLibraryPath
       )
     );
+
+
     $this->content = $this->processTemplate('Map', $vars);
   }
 
@@ -735,13 +739,9 @@ var styles = [
 
   }
 
-  public function UseClusterer() {
-    return $this->useClusterer;
-  }
+  
 
-  public function ClusterLibraryPath() {
-    return $this->clustererLibraryPath;
-  }
+ 
 
   public function InfoWidth() {
     return $this->infoWindowWidth;
