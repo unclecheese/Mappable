@@ -112,6 +112,16 @@
         
     }
 
+    function addKmlFiles(kmlFiles) {
+        for (var i=0; i< kmlFiles.length; i++) {
+            var kmlFile = kmlFiles[i];
+            var kmlLayer = new google.maps.KmlLayer(kmlFile, {
+                suppressInfoWindows:true,
+                map: map
+            });
+        }
+    }
+
 
 
 </script>
@@ -172,6 +182,7 @@ console.log('mapping service load');
 
     addAllMarkers();  
     addLines($Lines);
+    addKmlFiles($KmlFiles);
     fluster.initialize();
   
 }
