@@ -41,6 +41,9 @@ class MapAPI extends ViewableData
   /** Icon height of the gmarker **/
   protected $iconHeight = 34;
 
+  /* array of lines to be drawn on the map */
+  protected $lines = array();
+
   /**
    *
    *
@@ -183,7 +186,6 @@ var styles = [
   /** factor by which to fudge the boundaries so that when we zoom encompass, the markers aren't too close to the edge **/
   protected $coordCoef = 0.01;
 
-  protected $lines = array ();
 
   protected $contentLines = '';
 
@@ -652,9 +654,19 @@ var styles = [
 
 
   public function addLine( $from = array(), $to = array(), $color = "#FF3300" ) {
-    $this->contentLines .= "var points = [new google.maps.LatLng({$from[0]},{$from[1]}), new google.maps.LatLng({$to[0]},{$to[1]})];\n";
-    $this->contentLines .= "map.addOverlay(new GPolyline(points,'{$color}',4,0.6));\n";
+    $line = array(
+      'lat1' => $from[0],
+      'lon1' => $from[1],
+      'lat2' => $to[0],
+      'lon2' => $to[1],
+      'color' => $color
+    );
+
+    array_push($this->lines, $line);
+    
+   
   }
+
   /**
    * Initialize the javascript code
    *
@@ -673,6 +685,7 @@ var styles = [
 
   public function generate() {
     $jsonMarkers = json_encode($this->markers);
+    $linesJson = json_encode($this->lines);
 
      // Center of the GMap
     $geocodeCentre = ( $this->latLongCenter ) ? $this->latLongCenter : $this->geocoding( $this->center );
@@ -692,7 +705,15 @@ var styles = [
     $this->maxLat += $lenLat * $this->coordCoef;
     $this->NeedToDownloadMappingJS();
 
+  
     $vars = new ArrayData(array(
+        'JsonMapStyles' => $this->jsonMapStyles,
+        'AdditionalCssClasses' => $this->additional_css_classes,
+        'Width' => $this->Width,
+        'Height' => $this->Height,
+        'InfoWindowWidth' => $this->InfoWindowWidth,
+        'ShowInlineMapDivStyle' => $this->show_inline_map_div_style,
+        'InfoWindowZoom' => $this->InfoWindowZoom,
         'EnableWindowZoom' => $this->enableWindowZoom,
         'MapMarkers' => $jsonMarkers,
         'DelayLoadMapFunction' => $this->delayLoadMapFunction,
@@ -711,7 +732,8 @@ var styles = [
         'Lang'=>$this->lang,
         'UseClusterer'=>$this->useClusterer,
         'DownloadJS' => (self::$jsIncluded),
-        'ClusterLibraryPath' => $this->clustererLibraryPath
+        'ClusterLibraryPath' => $this->clustererLibraryPath,
+        'Lines' => $linesJson
       )
     );
 
@@ -741,34 +763,4 @@ var styles = [
 
   
 
- 
-
-  public function InfoWidth() {
-    return $this->infoWindowWidth;
-  }
-
-  public function InfoWindowZoom() {
-    return $this->infoWindowZoom;
-  }
-
-  public function ShowInlineMapDivStyle() {
-    return $this->show_inline_map_div_style;
-  }
-
-  public function Width() {
-    return $this->width;
-  }
-
-
-  public function Height() {
-    return $this->height;
-  }
-
-  public function AdditionalCssClasses() {
-    return $this->additional_css_classes;
-  }
-
-  public function JsonMapStyles() {
-    return $this->jsonMapStyles;
-  }
 }
