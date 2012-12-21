@@ -44,6 +44,9 @@ class MapAPI extends ViewableData
   /* array of lines to be drawn on the map */
   protected $lines = array();
 
+  /* kml file to be rendered */
+  protected $kmlFiles = array();
+
   /**
    *
    *
@@ -186,8 +189,6 @@ var styles = [
   /** factor by which to fudge the boundaries so that when we zoom encompass, the markers aren't too close to the edge **/
   protected $coordCoef = 0.01;
 
-
-  protected $contentLines = '';
 
   protected static $jsIncluded = false;
 
@@ -637,19 +638,12 @@ var styles = [
    * Parse a KML file and add markers to a category
    *
    * @param string  $url      url of the kml file compatible with gmap and gearth
-   * @param string  $category marker category
-   * @param string  $icon     an icon url
    *
    * @return void
    */
 
-  public function addKML( $url, $category='', $icon='' ) {
-    $xml = new SimpleXMLElement( $url, null, true );
-    foreach ( $xml->Document->Folder->Placemark as $item ) {
-      $coordinates = explode( ',', (string) $item->Point->coordinates );
-      $name = (string) $item->name;
-      $this->addMarkerByCoords( $coordinates[1], $coordinates[0], $name, $category, $icon );
-    }
+  public function addKML( $url ) {
+    array_push($this->kmlFiles, $url);
   }
 
 
@@ -686,6 +680,7 @@ var styles = [
   public function generate() {
     $jsonMarkers = json_encode($this->markers);
     $linesJson = json_encode($this->lines);
+    $kmlJson = json_encode($this->kmlFiles);
 
      // Center of the GMap
     $geocodeCentre = ( $this->latLongCenter ) ? $this->latLongCenter : $this->geocoding( $this->center );
@@ -733,7 +728,8 @@ var styles = [
         'UseClusterer'=>$this->useClusterer,
         'DownloadJS' => (self::$jsIncluded),
         'ClusterLibraryPath' => $this->clustererLibraryPath,
-        'Lines' => $linesJson
+        'Lines' => $linesJson,
+        'KmlFiles' => $kmlJson
       )
     );
 
