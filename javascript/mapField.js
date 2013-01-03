@@ -1,8 +1,11 @@
 // FIXME avoid global
 var marker;
 
+
+//('map field loaded');
+
 /*
-The following variables are set up by a literal field int he map field, as they names of these fields can of course vary
+The following variables are set up by a LiteralField in the LatLongField field, as they names of these fields can of course vary
 - latFieldName: latittude field name
 - lonFieldName: longitutude field name
 - zoomFieldName:  zoom field name
@@ -13,6 +16,7 @@ The following variables are set up by a literal field int he map field, as they 
    
 
    function gmloaded() {
+    //('google maps call back');
      initLivequery();
      //initMap();
    }
@@ -20,6 +24,8 @@ The following variables are set up by a literal field int he map field, as they 
    // initialise the map
 
    function initMap() {
+    //('init map');
+
      var myOptions = {
        zoom: 16,
        disableDefaultUI: false,
@@ -31,15 +37,28 @@ The following variables are set up by a literal field int he map field, as they 
      };
 
      (function($) {
-      var latField = $('input[name="$LatFieldName"]');
-      var lonField = $('input[name="$LonFieldName"]');
-      var zoomField = $('input[name="$ZoomFieldName"]');
+      var gm = $('#GoogleMap');
+      //(gm);
+      var latFieldName = gm.attr('data-latfieldname');
+      //("LAT FIELD NAME:"+latFieldName);
+
+      var latField = $('input[name='+gm.attr('data-latfieldname')+']'); //$('input[name="$LatFieldName"]');
+      var lonField = $('input[name='+gm.attr('data-lonfieldname')+']'); // $('input[name="$LonFieldName"]');
+      var zoomField = $('input[name='+gm.attr('data-zoomfieldname')+']'); // $('input[name="$ZoomFieldName"]');
+
+      //("latitude field");
+      //(latField);
+      //(latField.val());
+      //('lon');
+      //(lonField.val());
 
   
        myOptions.center = new google.maps.LatLng(latField.val(), lonField.val());
 
        if (zoomField.length) {
           myOptions['zoom'] = parseInt(zoomField.val());
+          //("ZOOM="+myOptions['zoom']);
+          //(zoomField);
        }
 
 
@@ -68,8 +87,8 @@ The following variables are set up by a literal field int he map field, as they 
 
       
        google.maps.event.addListener(map, "zoom_changed", function(e) {
-         if ($('input[name="$ZoomFieldName"]').length) {
-           $('input[name="$ZoomFieldName"]').val(map.getZoom());
+         if (zoomField.length) {
+           zoomField.val(map.getZoom());
          }
        });
 
@@ -84,11 +103,11 @@ The following variables are set up by a literal field int he map field, as they 
      //google.maps.event.trigger(map, 'resize');
 
      $( document ).bind( "pageshow", function( event, data ){
-        alert('page show');
         google.maps.event.trigger(map, 'resize');
       });
 
 
+     // When the location tab is clicked, resize the map
      $('a[href="#Root_Location"]').click(function() {
         google.maps.event.trigger(map, 'resize');
        map.setCenter(marker.getPosition());
@@ -207,6 +226,8 @@ The following variables are set up by a literal field int he map field, as they 
    function initLivequery() {
      (function($) {
 
+      //('init live query');
+
        //triggers
        $('input[name=action_GetCoords]').livequery('click', function(e) {
          // get the data needed to ask coords
@@ -227,8 +248,8 @@ The following variables are set up by a literal field int he map field, as they 
        $('.geocodedSearchResults li').livequery('click', function(e) {
          // get the data needed to ask coords
          var t = $(this);
-         console.log("ENTRY CLICKED");
-         console.log(t);
+         //("ENTRY CLICKED");
+         //(t);
          var lat = t.attr("lat");
          var lon = t.attr("lon");
          var address = t.html();
