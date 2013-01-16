@@ -2,7 +2,7 @@
 var marker;
 
 
-//('map field loaded');
+//console.log('map field loaded');
 
 /*
 The following variables are set up by a LiteralField in the LatLongField field, as they names of these fields can of course vary
@@ -16,7 +16,7 @@ The following variables are set up by a LiteralField in the LatLongField field, 
    
 
    function gmloaded() {
-    //('google maps call back');
+    //console.log('google maps call back');
      initLivequery();
      //initMap();
    }
@@ -24,7 +24,7 @@ The following variables are set up by a LiteralField in the LatLongField field, 
    // initialise the map
 
    function initMap() {
-    //('init map');
+    //console.log('init map');
 
      var myOptions = {
        zoom: 16,
@@ -38,27 +38,29 @@ The following variables are set up by a LiteralField in the LatLongField field, 
 
      (function($) {
       var gm = $('#GoogleMap');
-      //(gm);
+      //console.log(gm);
       var latFieldName = gm.attr('data-latfieldname');
-      //("LAT FIELD NAME:"+latFieldName);
+      //console.log("LAT FIELD NAME:"+latFieldName);
 
       var latField = $('input[name='+gm.attr('data-latfieldname')+']'); //$('input[name="$LatFieldName"]');
       var lonField = $('input[name='+gm.attr('data-lonfieldname')+']'); // $('input[name="$LonFieldName"]');
       var zoomField = $('input[name='+gm.attr('data-zoomfieldname')+']'); // $('input[name="$ZoomFieldName"]');
 
-      //("latitude field");
-      //(latField);
-      //(latField.val());
-      //('lon');
-      //(lonField.val());
+      //console.log("latitude field");
+      //console.log(latField);
+      //console.log("VAL:"+latField.val());
+      //console.log('longitude field');
+      //console.log(lonField);
+      //console.log("VAL:"+lonField.val());
+
 
   
        myOptions.center = new google.maps.LatLng(latField.val(), lonField.val());
 
        if (zoomField.length) {
           myOptions['zoom'] = parseInt(zoomField.val());
-          //("ZOOM="+myOptions['zoom']);
-          //(zoomField);
+          //console.log("ZOOM="+myOptions['zoom']);
+          //console.log(zoomField);
        }
 
 
@@ -226,7 +228,7 @@ The following variables are set up by a LiteralField in the LatLongField field, 
    function initLivequery() {
      (function($) {
 
-      //('init live query');
+      //console.log('init live query');
 
        //triggers
        $('input[name=action_GetCoords]').livequery('click', function(e) {
@@ -248,8 +250,8 @@ The following variables are set up by a LiteralField in the LatLongField field, 
        $('.geocodedSearchResults li').livequery('click', function(e) {
          // get the data needed to ask coords
          var t = $(this);
-         //("ENTRY CLICKED");
-         //(t);
+         //console.log("ENTRY CLICKED");
+         //console.log(t);
          var lat = t.attr("lat");
          var lon = t.attr("lon");
          var address = t.html();
