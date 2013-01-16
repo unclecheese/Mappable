@@ -9,7 +9,7 @@
 class MappableData extends Extension {
 
 	public function RenderMap($width = null, $height = null, $zoom = 9) {
-		$gmap = MapUtil::get_map(new DataObjectSet($this->owner));
+		$gmap = MapUtil::get_map(new ArrayList($this->owner));
 		$w = $width ? $width : MapUtil::$map_width;
 		$h = $height ? $height : MapUtil::$map_height;
 		$gmap->setSize($w,$h);
