@@ -74,11 +74,21 @@ var zoomFieldName = "'.$this->zoomField.'";
             'id' => 'GoogleMap',
             'data-LatFieldName' => $this->latField,
 			'data-LonFieldName' => $this->longField,
-			'data-ZoomFieldName' => $this->zoomField
+			'data-ZoomFieldName' => $this->zoomField,
+			'data-UseMapBounds' => false
         );
 
         Requirements::css('mappable/css/mapField.css');
-        
+        $guidePointsJSON = '';
+        if (isset($this->guidePoints)) {
+        	$guidePointsJSON = json_encode($this->guidePoints);
+        	$attributes['data-GuidePoints'] = $guidePointsJSON;
+
+        	// we only wish to change the bounds to those of all the points iff the item currently has no location
+        	//$attributes['data-useMapBounds'] = true;
+        	error_log('**** GUIDE POINTS SET ****');
+        	error_log($guidePointsJSON);
+        }
         $content = '<div class="editableMapWrapper">' . $this->createTag(
             "div",
             $attributes
@@ -109,6 +119,14 @@ var zoomFieldName = "'.$this->zoomField.'";
 				return new SS_HTTPResponse( $location->lat.",".$location->lng );
 			}
 		}
+	}
+
+	/*
+	Set guidance points for the map being edited.  For example in a photographic set show the map position of some other images
+	so that subsequent photo edits do not start with a map centred on the horizon
+	*/
+	public function setGuidePoints($guidePoints) {
+		$this->guidePoints = $guidePoints;
 	}
 
 }
