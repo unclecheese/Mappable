@@ -1,0 +1,16 @@
+{
+	"name": "weboftalent/mappable",
+	"description": "An upgraded version of Uncle Cheese's Mappable module compatible with Silverstripe 3",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "googlemaps","weboftalent"],
+	"authors": [
+	{
+		"name": "Gordon Anderson",
+		"email": "gordon@weboftalent.asia"
+	}
+	],
+	"require":
+	{
+		"silverstripe/framework": "3.*"
+	}
+}
