@@ -200,12 +200,20 @@ class MapUtil
 	 * @param DataObjectSet $set
 	 * @return GoogleMapsAPI
 	 */
-	public static function get_map(DataObjectSet $set) {
+	public static function get_map(DataList $list) {
 		$gmap = self::instance();
-		if($set) {
-		    foreach($set as $obj) {
-		    	$gmap->addMarkerAsObject($obj);
-		    }
+		error_log(print_r($list,1));
+		if($list) {
+			error_log("IS A LIST");
+			error_log("SIZE OF LIST?: ".$list->count());
+			error_log('LIST:'.$list);
+			$arr = $list->toArray();
+			foreach ($arr as $mappable) {
+				error_log("MAPPABLE THING:".$mappable);
+				$gmap->addMarkerAsObject($mappable);
+
+			}
+			
 		}
 		return $gmap;	
 	}
