@@ -183,7 +183,7 @@ console.log('mapping service load');
     addAllMarkers();  
     addLines($Lines);
     addKmlFiles($KmlFiles);
-    fluster.initialize();
+    <% if UseClusterer %>fluster.initialize();<% end_if %>
   
 }
 
