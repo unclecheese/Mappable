@@ -85,7 +85,7 @@ var zoomFieldName = "'.$this->zoomField.'";
         	$attributes['data-GuidePoints'] = $guidePointsJSON;
 
         	// we only wish to change the bounds to those of all the points iff the item currently has no location
-        	//$attributes['data-useMapBounds'] = true;
+        	$attributes['data-useMapBounds'] = true;
         	error_log('**** GUIDE POINTS SET ****');
         	error_log($guidePointsJSON);
         }
