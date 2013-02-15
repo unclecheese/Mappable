@@ -171,13 +171,16 @@ The following variables are set up by a LiteralField in the LatLongField field, 
      $('a[href="#Root_Location"]').click(function() {
         google.maps.event.trigger(map, 'resize');
         var gm = $('#GoogleMap');
-        var useMapBounds = gm.attr('data-UseMapBounds');
-        console.log(useMapBounds);
+        console.log(gm);
+        var useMapBounds = gm.attr('data-usemapbounds');
+        console.log("Use map bounds?: " + useMapBounds);
         if (useMapBounds) {
           console.log("FITTING MAP TO BOUNDS ON TAB CLICK");
             map.fitBounds(bounds);
         } else {
             console.log("FITTING MAP TO CENTRE OF MARKER");
+            console.log(marker.getPosition().lat()+','+marker.getPosition().lng());
+
             map.setCenter(marker.getPosition());
         }
      });
