@@ -572,18 +572,13 @@ var styles = [
    * @param ViewableData $obj
    */
   public function addMarkerAsObject( ViewableData $obj ) {
-    error_log("Marker as object");
-    error_log("INSTANCE OF MAPPABLE? ".($obj instanceof Mappable));
-    error_log("OBJ IS SET?: ".isset($obj));
-    error_log("CLASS:".get_class($obj));
-    error_log("TYPE:".gettype($obj));
     if ( ($obj instanceof Mappable) || (Object::has_extension($obj->ClassName, 'MapExtension')) ) {
       //if(($obj->getMappableLatitude() > 0) || ($obj->getMappableLongitude() > 0)) {
       $cat = $obj->hasMethod( 'getMapCategory' ) ? $obj->getMapCategory() : "default";
       $this->addMarkerByCoords( $obj->getMappableLatitude(), $obj->getMappableLongitude(), $obj->getMapContent(), $cat, $obj->getMapPin() );
       //}
     } else {
-      error_log("Unable to add object to map as it does not implement mappable");
+      error_log("Unable to add object ".$obj." of ID ".$obj->ID." to map as it does not implement mappable");
     }
   }
 
