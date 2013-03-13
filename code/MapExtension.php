@@ -51,7 +51,6 @@ class MapExtension extends DataExtension implements Mappable {
   Check for non zero coordinates, on the assumption that (0,0) will never be the desired coordinates
   */
   public function HasGeo() {
-    error_log("MAP EXT: Has geo");
     return ($this->owner->Lat != 0) && ($this->owner->Lon != 0);
   }
 
