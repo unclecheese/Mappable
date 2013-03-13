@@ -680,9 +680,11 @@ var styles = [
    */
 
   public function generate() {
-    $jsonMarkers = json_encode($this->markers);
-    $linesJson = json_encode($this->lines);
-    $kmlJson = json_encode($this->kmlFiles);
+    // from http://stackoverflow.com/questions/3586401/cant-decode-json-string-in-php
+    $jsonMarkers = stripslashes(json_encode($this->markers));
+
+    $linesJson = stripslashes(json_encode($this->lines));
+    $kmlJson = stripslashes(json_encode($this->kmlFiles));
 
      // Center of the GMap
     $geocodeCentre = ( $this->latLongCenter ) ? $this->latLongCenter : $this->geocoding( $this->center );
