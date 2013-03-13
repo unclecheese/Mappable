@@ -20,7 +20,7 @@
     var trafficInfo = null;
     var directions = null;
     var geocoder = null;
-    var infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 300 });
+    var infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 400 });
 
 
     function createMarker(lat,lng,html,category,icon) {
