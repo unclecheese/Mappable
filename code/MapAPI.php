@@ -704,6 +704,9 @@ var styles = [
     $this->maxLat += $lenLat * $this->coordCoef;
     $this->NeedToDownloadMappingJS();
 
+    // add the css class mappable as a handle onto the map styling
+    $this->additional_css_classes .= ' mappable';
+
   
     $vars = new ArrayData(array(
         'JsonMapStyles' => $this->jsonMapStyles,
