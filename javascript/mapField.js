@@ -48,14 +48,14 @@ The following variables are set up by a LiteralField in the LatLongField field, 
       var lonField = $('input[name='+gm.attr('data-lonfieldname')+']'); // $('input[name="$LonFieldName"]');
       var zoomField = $('input[name='+gm.attr('data-zoomfieldname')+']'); // $('input[name="$ZoomFieldName"]');
       var guidePointsAttr = gm.attr('data-GuidePoints');
-      console.log(guidePointsAttr);
+      //console.log(guidePointsAttr);
 
       var guidePoints = new Array();
       if (typeof guidePointsAttr != "undefined") {
         guidePoints = JSON.parse(guidePointsAttr);
       }
       
-      console.log('T1');
+      //console.log('T1');
 
       //console.log("latitude field");
       //console.log(latField);
@@ -80,14 +80,14 @@ The following variables are set up by a LiteralField in the LatLongField field, 
 
 
        if (guidePoints.length) {
-        console.log("GP T1");
-        console.log("GP T2");
-        console.log(guidePoints);
+        //console.log("GP T1");
+        //console.log("GP T2");
+        //console.log(guidePoints);
         var sumlat = 0;
         var sumlon = 0;
         for (var i = guidePoints.length - 1; i >= 0; i--) {
-          console.log(i);
-          console.log(guidePoints[i]);
+          //console.log(i);
+          //console.log(guidePoints[i]);
           var lat = guidePoints[i].latitude;
           var lon = guidePoints[i].longitude;
           addGuideMarker(lat,lon);
@@ -101,19 +101,19 @@ The following variables are set up by a LiteralField in the LatLongField field, 
 
        /*
         var markerPos = marker.getPosition();
-        console.log("MARKER POS");
-        console.log(markerPos.lat());
+        //console.log("MARKER POS");
+        //console.log(markerPos.lat());
     */
 
         if ((latField.val() == 0) && (lonField.val() == 0)) {
           var nPoints = guidePoints.length;
-          console.log("N Points:"+nPoints);
-          console.log('sum lat = '+sumlat);
+          //console.log("N Points:"+nPoints);
+          //console.log('sum lat = '+sumlat);
           var newMarkerPos = new google.maps.LatLng(sumlat/nPoints, sumlon/nPoints);
           /*
           marker.setPosition(newMarkerPos);
-          console.log("New positino: ");
-          console.log(newMarkerPos);
+          //console.log("New positino: ");
+          //console.log(newMarkerPos);
           bounds.extend(newMarkerPos);
           */
         }
@@ -138,7 +138,7 @@ The following variables are set up by a LiteralField in the LatLongField field, 
          latField.val(lat);
          lonField.val(lng);
          // populate yor box/field with lat, lng
-         console.log('set marker');
+         //console.log('set marker');
          setMarker(event.latLng, false);
        });
 
@@ -168,18 +168,18 @@ The following variables are set up by a LiteralField in the LatLongField field, 
 
 
      // When the location tab is clicked, resize the map
-     $('a[href="#Root_Location"]').click(function() {
+     $('.ui-tabs-anchor').click(function() {
         google.maps.event.trigger(map, 'resize');
         var gm = $('#GoogleMap');
-        console.log(gm);
+        //console.log(gm);
         var useMapBounds = gm.attr('data-usemapbounds');
-        console.log("Use map bounds?: " + useMapBounds);
+        //console.log("Use map bounds?: " + useMapBounds);
         if (useMapBounds) {
-          console.log("FITTING MAP TO BOUNDS ON TAB CLICK");
+          //console.log("FITTING MAP TO BOUNDS ON TAB CLICK");
             map.fitBounds(bounds);
         } else {
-            console.log("FITTING MAP TO CENTRE OF MARKER");
-            console.log(marker.getPosition().lat()+','+marker.getPosition().lng());
+            //console.log("FITTING MAP TO CENTRE OF MARKER");
+            //console.log(marker.getPosition().lat()+','+marker.getPosition().lng());
 
             map.setCenter(marker.getPosition());
         }
@@ -199,8 +199,8 @@ The following variables are set up by a LiteralField in the LatLongField field, 
    // utility functions
 
    function addGuideMarker(lat,lon) {
-    console.log("LAT:"+lat);
-    console.log("LON:"+lon);
+    //console.log("LAT:"+lat);
+    //console.log("LON:"+lon);
     var latlng = new google.maps.LatLng(lat, lon);
     var pinColor = "CCCCCC";
     var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
@@ -244,7 +244,7 @@ The following variables are set up by a LiteralField in the LatLongField field, 
    function setCoordByMarker(event) {
      (function($) {
 
-      console.log("Set coord by drag");
+      //console.log("Set coord by drag");
 
       var latField = $('input[name="$LatFieldName"]');
       var lonField = $('input[name="$LonFieldName"]');
@@ -256,9 +256,9 @@ The following variables are set up by a LiteralField in the LatLongField field, 
       lonField.val(lng);
 
      
-       console.log("LATFIELD");
-       console.log(latField.val());
-       console.log("SHOULD BE "+event.latLng.lng());
+       //console.log("LATFIELD");
+       //console.log(latField.val());
+       //console.log("SHOULD BE "+event.latLng.lng());
 
        if (zoomField.length) {
          zoomField.val(map.getZoom());
