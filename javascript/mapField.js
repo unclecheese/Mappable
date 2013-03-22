@@ -4,23 +4,9 @@ var marker;
 var bounds ;
 
 
-//console.log('map field loaded');
-
-/*
-The following variables are set up by a LiteralField in the LatLongField field, as they names of these fields can of course vary
-- latFieldName: latittude field name
-- lonFieldName: longitutude field name
-- zoomFieldName:  zoom field name
-*/
-
-
-
-   
-
    function gmloaded() {
     //console.log('google maps call back');
      initLivequery();
-     //initMap();
    }
 
    // initialise the map
@@ -40,29 +26,19 @@ The following variables are set up by a LiteralField in the LatLongField field, 
 
      (function($) {
       var gm = $('#GoogleMap');
-      //console.log(gm);
       var latFieldName = gm.attr('data-latfieldname');
-      //console.log("LAT FIELD NAME:"+latFieldName);
 
       var latField = $('input[name='+gm.attr('data-latfieldname')+']'); //$('input[name="$LatFieldName"]');
       var lonField = $('input[name='+gm.attr('data-lonfieldname')+']'); // $('input[name="$LonFieldName"]');
       var zoomField = $('input[name='+gm.attr('data-zoomfieldname')+']'); // $('input[name="$ZoomFieldName"]');
       var guidePointsAttr = gm.attr('data-GuidePoints');
-      //console.log(guidePointsAttr);
 
       var guidePoints = new Array();
       if (typeof guidePointsAttr != "undefined") {
         guidePoints = JSON.parse(guidePointsAttr);
       }
       
-      //console.log('T1');
 
-      //console.log("latitude field");
-      //console.log(latField);
-      //console.log("VAL:"+latField.val());
-      //console.log('longitude field');
-      //console.log(lonField);
-      //console.log("VAL:"+lonField.val());
 
 
   
@@ -70,24 +46,18 @@ The following variables are set up by a LiteralField in the LatLongField field, 
 
        if (zoomField.length) {
           myOptions['zoom'] = parseInt(zoomField.val());
-          //console.log("ZOOM="+myOptions['zoom']);
-          //console.log(zoomField);
        }
 
 
        map = new google.maps.Map(document.getElementById("GoogleMap"), myOptions);
        bounds = new google.maps.LatLngBounds ();
 
-
+       // guide points are grey marked out pins that are used as contextual hints to the current desired location
+       // An example of this would be photographs taken on the same bike ride or walk
        if (guidePoints.length) {
-        //console.log("GP T1");
-        //console.log("GP T2");
-        //console.log(guidePoints);
         var sumlat = 0;
         var sumlon = 0;
         for (var i = guidePoints.length - 1; i >= 0; i--) {
-          //console.log(i);
-          //console.log(guidePoints[i]);
           var lat = guidePoints[i].latitude;
           var lon = guidePoints[i].longitude;
           addGuideMarker(lat,lon);
@@ -99,23 +69,10 @@ The following variables are set up by a LiteralField in the LatLongField field, 
           bounds.extend (latlng);
         };
 
-       /*
-        var markerPos = marker.getPosition();
-        //console.log("MARKER POS");
-        //console.log(markerPos.lat());
-    */
 
         if ((latField.val() == 0) && (lonField.val() == 0)) {
           var nPoints = guidePoints.length;
-          //console.log("N Points:"+nPoints);
-          //console.log('sum lat = '+sumlat);
           var newMarkerPos = new google.maps.LatLng(sumlat/nPoints, sumlon/nPoints);
-          /*
-          marker.setPosition(newMarkerPos);
-          //console.log("New positino: ");
-          //console.log(newMarkerPos);
-          bounds.extend(newMarkerPos);
-          */
         }
 
         map.fitBounds(bounds);
@@ -128,18 +85,14 @@ The following variables are set up by a LiteralField in the LatLongField field, 
        }
 
 
-
-
-
-
+       // when one right clicks, set the red marker flag to that coordinate
        google.maps.event.addListener(map, "rightclick", function(event) {
          var lat = event.latLng.lat();
          var lng = event.latLng.lng();
          latField.val(lat);
          lonField.val(lng);
-         // populate yor box/field with lat, lng
-         //console.log('set marker');
          setMarker(event.latLng, false);
+         statusMessage('Location changed to '+lat+','+lng);
        });
 
 
@@ -151,47 +104,24 @@ The following variables are set up by a LiteralField in the LatLongField field, 
        });
 
       google.maps.event.trigger(map, 'resize');
-
       map.setZoom( map.getZoom() );
 
-      
 
 
-
-
-     // see http://stackoverflow.com/questions/10197128/google-maps-api-v3-not-rendering-competely-on-tabbed-page-using-twitters-bootst
-     //google.maps.event.trigger(map, 'resize');
-
-     $( document ).bind( "pageshow", function( event, data ){
-        google.maps.event.trigger(map, 'resize');
-      });
-
-
-     // When the location tab is clicked, resize the map
+     // When any tab is clicked, resize the map
      $('.ui-tabs-anchor').click(function() {
         google.maps.event.trigger(map, 'resize');
         var gm = $('#GoogleMap');
         //console.log(gm);
         var useMapBounds = gm.attr('data-usemapbounds');
-        //console.log("Use map bounds?: " + useMapBounds);
         if (useMapBounds) {
-          //console.log("FITTING MAP TO BOUNDS ON TAB CLICK");
             map.fitBounds(bounds);
         } else {
-            //console.log("FITTING MAP TO CENTRE OF MARKER");
-            //console.log(marker.getPosition().lat()+','+marker.getPosition().lng());
-
             map.setCenter(marker.getPosition());
         }
      });
 
      })(jQuery);
-
-    
-
-    // map.setZoom(map.getZoom());
-
-
 
    }
 
@@ -255,10 +185,8 @@ The following variables are set up by a LiteralField in the LatLongField field, 
       latField.val(lat);
       lonField.val(lng);
 
-     
-       //console.log("LATFIELD");
-       //console.log(latField.val());
-       //console.log("SHOULD BE "+event.latLng.lng());
+      statusMessage('Location changed to '+lat+','+lng);
+
 
        if (zoomField.length) {
          zoomField.val(map.getZoom());
@@ -328,8 +256,6 @@ The following variables are set up by a LiteralField in the LatLongField field, 
 
    function initLivequery() {
      (function($) {
-
-      //console.log('init live query');
 
        //triggers
        $('input[name=action_GetCoords]').livequery('click', function(e) {
