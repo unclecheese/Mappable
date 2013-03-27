@@ -61,16 +61,18 @@ class MapUtil
 	 */
 	public static $map_type = 'google.maps.MapTypeId.ROADMAP';
 
-        /**
-         * @var string $center Center of map (adress)
-         */
+	/**
+	 * @var string $center Center of map (adress)
+	 */
 	public static $center = 'Paris, France';
 
-        /**
-         * @var int info_window_width Width of info window
-         */
+	/**
+	 * @var int info_window_width Width of info window
+	 */
 
-        public static $info_window_width = 250;
+	public static $info_window_width = 250;
+
+	private static $map_already_rendered = false;
 	
 	
 	/**
@@ -80,6 +82,15 @@ class MapUtil
 	 */
 	public static function set_api_key($key) {
 		self::$api_key = $key;
+	}
+
+
+	public static function set_map_already_rendered($new_map_already_rendered) {
+		self::$map_already_rendered = $new_map_already_rendered;
+	}
+
+	public static function get_map_already_rendered() {
+		return self::$map_already_rendered;
 	}
 	
 	
@@ -153,6 +164,8 @@ class MapUtil
 	{
 		self::$instances++;
 
+		error_log("GOOGLE MAP INSTANCE:".self::$instances);
+
 		$url = Director::absoluteBaseURL();
 
 		// remove http and https
@@ -178,6 +191,7 @@ class MapUtil
         $gmap->setInfoWindowWidth(self::$info_window_width);
         $gmap->setCenter(self::$center);
         $gmap->setIconSize(self::$iconWidth, self::$iconHeight);
+        $gmap->setIncludeDownloadJavascript(self::$map_already_rendered);
 		return $gmap;
 	}
 
@@ -207,7 +221,6 @@ class MapUtil
 			foreach ($arr as $mappable) {
 				$gmap->addMarkerAsObject($mappable);
 			}
-			
 		}
 		return $gmap;	
 	}
