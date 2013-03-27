@@ -28,19 +28,30 @@ var bounds ;
       var gm = $('#GoogleMap');
       var latFieldName = gm.attr('data-latfieldname');
 
-      var latField = $('input[name='+gm.attr('data-latfieldname')+']'); //$('input[name="$LatFieldName"]');
-      var lonField = $('input[name='+gm.attr('data-lonfieldname')+']'); // $('input[name="$LonFieldName"]');
-      var zoomField = $('input[name='+gm.attr('data-zoomfieldname')+']'); // $('input[name="$ZoomFieldName"]');
+      var latField = $('input[name='+gm.attr('data-latfieldname')+']'); 
+      var lonField = $('input[name='+gm.attr('data-lonfieldname')+']'); 
+      var zoomField = $('input[name='+gm.attr('data-zoomfieldname')+']');
       var guidePointsAttr = gm.attr('data-GuidePoints');
+
+      // if we have emtpy initial values, set them appropriately, otherwise google maps code goes into an infinite tailspin
+      if (latField.val() == '') {
+        latField.val(0);
+      }
+
+      if (lonField.val() == '') {
+        lonField.val(0);
+      }
+
+      if (zoomField.val() == '') {
+        zoomField.val(2);
+      }
+
 
       var guidePoints = new Array();
       if (typeof guidePointsAttr != "undefined") {
         guidePoints = JSON.parse(guidePointsAttr);
       }
       
-
-
-
   
        myOptions.center = new google.maps.LatLng(latField.val(), lonField.val());
 
@@ -174,16 +185,18 @@ var bounds ;
    function setCoordByMarker(event) {
      (function($) {
 
-      //console.log("Set coord by drag");
+      var gm = $('#GoogleMap');
 
-      var latField = $('input[name="$LatFieldName"]');
-      var lonField = $('input[name="$LonFieldName"]');
-      var zoomField = $('input[name="$ZoomFieldName"]');
-
+      var latField = $('input[name='+gm.attr('data-latfieldname')+']'); 
+      var lonField = $('input[name='+gm.attr('data-lonfieldname')+']'); 
+      var zoomField = $('input[name='+gm.attr('data-zoomfieldname')+']');
+   
       var lat = event.latLng.lat();
       var lng = event.latLng.lng();
       latField.val(lat);
       lonField.val(lng);
+      setMarker(event.latLng, true);
+
 
       statusMessage('Location changed to '+lat+','+lng);
 
@@ -288,9 +301,12 @@ var bounds ;
          $('#Form_EditForm_Latitude').val(lat);
          $('#Form_EditForm_Longitude').val(lon);
 
-         var latField = $('input[name="$LatFieldName"]');
-         var lonField = $('input[name="$LonFieldName"]');
-         var zoomField = $('input[name="$ZoomFieldName"]');
+        var gm = $('#GoogleMap');
+
+
+         var latField = $('input[name='+gm.attr('data-latfieldname')+']'); 
+        var lonField = $('input[name='+gm.attr('data-lonfieldname')+']'); 
+        var zoomField = $('input[name='+gm.attr('data-zoomfieldname')+']');
 
          latField.val(lat);
          lonField.val(lon);
