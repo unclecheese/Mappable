@@ -21,8 +21,9 @@ function createMarker(map,lat, lng, html, category, icon, useClusterer, enableWi
 
     google.maps.event.addListener(marker, "click", function() {
         if (enableWindowZoom) {
-            map.setCenter(new google.maps.LatLng(lat, lng), $InfoWindowZoom);
+            map.setCenter(new google.maps.LatLng(lat, lng), 12); // $InfoWindowZoom);
         }
+        var infoWindow = infoWindows[mapId];
         infoWindow.setContent(html);
         infoWindow.open(map, this);
     });
@@ -129,6 +130,10 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
 
     // initialise gmarkers array for this map
     gmarkers[googleMapID] = [];
+
+    var infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 400 });
+    infoWindows[googleMapID] = infoWindow;
+
 }
 
 
