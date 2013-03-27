@@ -1,4 +1,3 @@
-CLP = $ClustererLibraryPath
 <% if DownloadJS %>
 <script src="http://maps.google.com/maps/api/js?sensor=false&amp;hl=$Lang" type="text/javascript"></script>
 <% if UseClusterer %>
