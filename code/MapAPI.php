@@ -84,6 +84,7 @@ class MapAPI extends ViewableData
   protected $mappingService = 'Google';
 
 
+
   /*
     Map styles for google maps, ignored if null
     <pre>
@@ -163,7 +164,7 @@ var styles = [
   protected $useClusterer = false;
   protected $gridSize = 100;
   protected $maxZoom = 9;
-  protected $clustererLibrarypath = 'Fluster2.js';
+  protected $clustererLibraryPath = '/mappable/javascript/Fluster2.packed.js';
 
   /** Enable automatic center/zoom **/
   protected $enableAutomaticCenterZoom = false;
@@ -190,7 +191,7 @@ var styles = [
   protected $coordCoef = 0.01;
 
 
-  protected static $jsIncluded = false;
+  protected static $includeDownloadJavascript = false;
 
 
   /**
@@ -215,6 +216,10 @@ var styles = [
 
   public function setKey( $googleMapKey ) {
     $this->googleMapKey = $googleMapKey;
+  }
+
+  public function setIncludeDownloadJavascript($inclusion) {
+    self::$includeDownloadJavascript = $inclusion;
   }
 
 
@@ -255,6 +260,8 @@ var styles = [
     $this->gridSize = $gridSize;
     $this->maxZoom = $maxZoom;
     $this->clustererLibraryPath = $clustererLibraryPath;
+
+    error_log('T1 Set cluster pathj to '.$clustererLibraryPath);
   }
 
   /**
@@ -702,10 +709,21 @@ var styles = [
     $this->maxLng += $lenLng * $this->coordCoef;
     $this->minLat -= $lenLat * $this->coordCoef;
     $this->maxLat += $lenLat * $this->coordCoef;
-    $this->NeedToDownloadMappingJS();
 
     // add the css class mappable as a handle onto the map styling
     $this->additional_css_classes .= ' mappable';
+
+    if (!$this->enableAutomaticCenterZoom) {
+      $this->enableAutomaticCenterZoom = 'false';
+    }
+
+    if (!$this->useClusterer) {
+      $this->useClusterer = 'false';
+    }
+
+    if (!$this->defaultHideMarker) {
+      $this->defaultHideMarker = 'false';
+    }
 
   
     $vars = new ArrayData(array(
@@ -733,12 +751,14 @@ var styles = [
         'GoogleMapID' => $this->googleMapId,
         'Lang'=>$this->lang,
         'UseClusterer'=>$this->useClusterer,
-        'DownloadJS' => (self::$jsIncluded),
-        'ClusterLibraryPath' => $this->clustererLibraryPath,
+        'DownloadJS' => !(self::$includeDownloadJavascript),
+        'ClustererLibraryPath' => $this->clustererLibraryPath,
         'Lines' => $linesJson,
         'KmlFiles' => $kmlJson
       )
     );
+
+
 
 
     $this->content = $this->processTemplate('Map', $vars);
@@ -755,14 +775,6 @@ var styles = [
   }
 
 
-
-  // Only download the mapping JS once
-  public function NeedToDownloadMappingJS() {
-      if ( self::$jsIncluded ) return false;
-
-      self::$jsIncluded = true;
-
-  }
 
   
 
