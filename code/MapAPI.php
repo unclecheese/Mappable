@@ -129,7 +129,7 @@ var styles = [
 ];
     </pre>
     */
-  protected $jsonMapStyles = null;
+  protected $jsonMapStyles = '[]';
 
   protected $delayLoadMapFunction = false;
 
@@ -698,10 +698,12 @@ var styles = [
 
     // coordinates for centre depending on which method used
     if ( $geocodeCentre[0]=="200" ) { // success
-      $latlngCentre = $geocodeCentre[2].",".$geocodeCentre[3];
+      $latlngCentre = array('lat'=>$geocodeCentre[2],'lng' => $geocodeCentre[3]);
     } else { // Paris
-      $latlngCentre = "48.8792,2.34778";
+      $latlngCentre = array('lat'=>48.8792, 'lng' => 2.34778);
     }
+
+    $this->LatLngCentreJSON = stripslashes(json_encode($latlngCentre));
 
     $lenLng = $this->maxLng - $this->minLng;
     $lenLat = $this->maxLat - $this->minLat;
@@ -725,6 +727,10 @@ var styles = [
       $this->defaultHideMarker = 'false';
     }
 
+    if (!$this->MapTypeId) {
+      $this->MapTypeId = 'false';
+    }
+
   
     $vars = new ArrayData(array(
         'JsonMapStyles' => $this->jsonMapStyles,
@@ -738,7 +744,7 @@ var styles = [
         'MapMarkers' => $jsonMarkers,
         'DelayLoadMapFunction' => $this->delayLoadMapFunction,
         'DefaultHideMarker' => $this->defaultHideMarker,
-        'LatLngCentre' => $latlngCentre,
+        'LatLngCentre' => $this->LatLngCentreJSON,
         'EnableAutomaticCenterZoom' => $this->enableAutomaticCenterZoom,
         'Zoom' => $this->zoom,
         'MaxZoom' => $this->maxZoom,
