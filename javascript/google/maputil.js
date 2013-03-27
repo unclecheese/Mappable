@@ -109,9 +109,10 @@ function addKmlFiles(kmlFiles) {
     }
 }
 
-function registerMap(googleMapID, centreCoordinates, minLat, minLng, maxLat, maxLng, mapType, markers, lines, kmlFiles, jsonMapStyles, enableAutomaticCenterZoom, useClusterer) {
+function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLat, maxLng, mapType, markers, lines, kmlFiles, jsonMapStyles, enableAutomaticCenterZoom, useClusterer) {
     var newMap = new Array();
     newMap['googleMapID'] = googleMapID;
+    newMap['zoom'] = zoom;
     newMap['centreCoordinates'] = centreCoordinates;
     newMap['minLat'] = minLat;
     newMap['minLng'] = minLng;
@@ -157,8 +158,8 @@ function loadedGoogleMapsAPI() {
 
 
         if (map_info.enableAutomaticCenterZoom) {
-            map.setCenter(new google.maps.LatLng($LatLngCentre));
-            console.log("T1 SET MAP CENTRE TO " + $LatLngCentre);
+            map.setCenter(new google.maps.LatLng(map_info.centreCoordinates));
+            console.log("T1 SET MAP CENTRE TO " + map_info.centreCoordinates);
             var bds = new google.maps.LatLngBounds(new google.maps.LatLng($MinLat, $MinLng),
             new google.maps.LatLng($MaxLat, $MaxLng));
             console.log("BOUNDS");
@@ -168,7 +169,7 @@ function loadedGoogleMapsAPI() {
         } else {
             var centre = map_info.centreCoordinates;
             map.setCenter(new google.maps.LatLng(centre.lat,centre.lng));
-            map.setZoom(2); //map_info.zoom);
+            map.setZoom(map_info.zoom);
 //map.setCenter(new google.maps.LatLng(51.0453246, -114.0581012));
 
             console.log("T2 SET MAP CENTRE TO " + centre.lat+','+centre.lng);
