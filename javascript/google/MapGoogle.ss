@@ -51,6 +51,7 @@ var mappableMaps = [];
 */
 
 // mapping of google_map_N to an array of markers
+var infoWindows = [];
 var gmarkers = [];
 
     registerMap('$GoogleMapID', $LatLngCentre, $Zoom, $MinLat,$MinLng,$MaxLat,$MaxLng, $MapType, $MapMarkers, $Lines,$KmlFiles, $JsonMapStyles, $EnableAutomaticCenterZoom, $UseClusterer);
