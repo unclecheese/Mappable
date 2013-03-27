@@ -9,6 +9,7 @@
 class MappableData extends Extension {
 
 	public function RenderMap($width = null, $height = null, $zoom = 9) {
+		error_log("MAP ALREADY RENDERED? ".MapUtil::get_map_already_rendered());
 		$gmap = MapUtil::get_map(new ArrayList(array($this->owner)));
 		$w = $width ? $width : MapUtil::$map_width;
 		$h = $height ? $height : MapUtil::$map_height;
@@ -21,10 +22,15 @@ class MappableData extends Extension {
 			$this->owner->getMappableLatitude(),
 			$this->owner->getMappableLongitude()
 		));
+
+		MapUtil::set_map_already_rendered(true);
 		
 		return $gmap;
 	}
-        public function StaticMap($width = null, $height = null) {
+    
+
+
+    public function StaticMap($width = null, $height = null) {
 		$w = $width ? $width : MapUtil::$map_width;
 		$h = $height ? $height : MapUtil::$map_height;
 
