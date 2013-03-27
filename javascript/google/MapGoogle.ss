@@ -1,12 +1,15 @@
+CLP = $ClustererLibraryPath
 <% if DownloadJS %>
 <script src="http://maps.google.com/maps/api/js?sensor=false&amp;hl=$Lang" type="text/javascript"></script>
 <% if UseClusterer %>
-  <script src="$ClusterLibraryPath" type="text/javascript"></script>
+  <script src="$ClustererLibraryPath" type="text/javascript"></script>
  <% end_if %>
 
- <% else %>
- no need for JS
+<!-- common functions -->
+<script type="text/javascript" src="/mappable/javascript/google/maputil.js"></script>
+<!-- end of common js --> 
 <% end_if %>    
+
 <script type="text/javascript">
     var map;
     console.log('Map template JS loaded');
@@ -23,104 +26,7 @@
     var infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 400 });
 
 
-    function createMarker(lat,lng,html,category,icon) {
-  		var marker = new google.maps.Marker();
-    	marker.setPosition(new google.maps.LatLng(lat,lng));
-    	marker.mycategory = category;
-
-	    if (icon != '') {
-		    var image = new google.maps.MarkerImage(icon);
-	    	marker.setIcon(image);
-	    }
-
-	    <% if UseClusterer %>
-        fluster.addMarker(marker);
-	    <% else %>
-	   	marker.setMap(map);
-	    <% end_if %>
-
-	    google.maps.event.addListener(marker,"click",function() {
-		    <% if EnableWindowZoom %>
-		      map.setCenter(new google.maps.LatLng(lat,lng),$InfoWindowZoom);
-		    <% end_if %>
-
-	   		infoWindow.setContent(html);
-	    	infoWindow.open(map, this);
-	     });
-
-        gmarkers.push(marker);
-
-        <% if DefaultHiderMarker %>
-            marker.hide();
-        <% end_if %>
-    }
-
-
-
-    // JS public function to get current Lat & Lng
-    function getCurrentLat() {
-        return current_lat;
-    }
-
-    function getCurrentLng() {
-        return current_lng;
-    }
-
-
-
-    // JS public function to center the gmaps dynamically
-    function showAddress(address) {
-        if (geocoder) {
-            geocoder.getLatLng(
-                address,
-                function(point) {
-                    if (!point) { alert(address + " not found"); }
-                    else {
-                        map.setCenter(point);
-                        map.setZoom($Zoom);
-                    }
-            });
-        }
-    }
-
-    function addAllMarkers() {
-        var markers = $MapMarkers;
-        for (var i=0; i<markers.length;i++) {
-            var marker = markers[i];
-            createMarker(marker.latitude, marker.longitude, marker.html, marker.category, marker.icon);
-        }
-
-    }
-
-    function addLines(lines) {
-        for (i=0; i<lines.length;i++) {
-            var line = lines[i];
-            console.log("LINE:");
-            console.log(line);
-            var point1 = new google.maps.LatLng(line.lat1, line.lon1);
-            var point2 = new google.maps.LatLng(line.lat2, line.lon2);
-            var points = [point1, point2];
-            var pl = new google.maps.Polyline({
-                path: points,
-                strokeColor: line.color,
-                strokeWeight: 4,
-                strokeOpacity: 0.8
-                });
-            pl.setMap(map);
-        }
-       
-        
-    }
-
-    function addKmlFiles(kmlFiles) {
-        for (var i=0; i< kmlFiles.length; i++) {
-            var kmlFile = kmlFiles[i];
-            var kmlLayer = new google.maps.KmlLayer(kmlFile, {
-                suppressInfoWindows:true,
-                map: map
-            });
-        }
-    }
+    
 
 
 
@@ -133,7 +39,7 @@
 
 <script type="text/javascript">
 function loadmaps() {
-console.log('mapping service load');
+    console.log('mapping service load');
     map = new google.maps.Map(document.getElementById("$GoogleMapID"));
     <% if UseClusterer %>
     fluster = new Fluster2(map);
@@ -180,7 +86,7 @@ console.log('mapping service load');
         }
     });
 
-    addAllMarkers();  
+    addAllMarkers($MapMarkers,$UseClusterer,$EnableAutomaticCenterZoom, $DefaultHideMarker);  
     addLines($Lines);
     addKmlFiles($KmlFiles);
     <% if UseClusterer %>fluster.initialize();<% end_if %>
