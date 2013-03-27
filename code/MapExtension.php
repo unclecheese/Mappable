@@ -12,6 +12,9 @@ class MapExtension extends DataExtension implements Mappable {
   );
 
 
+  static $defaults = array ('Lat' =>0, 'Lon' => 0, 'Zoom' => 4);
+
+
   /*
   Add a Location tab containing the map
   */
