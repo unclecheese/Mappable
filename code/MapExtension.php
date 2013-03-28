@@ -67,9 +67,10 @@ class MapExtension extends DataExtension implements Mappable {
     $map->setZoom( $this->owner->ZoomLevel );
     $map->setAdditionalCSSClasses( 'fullWidthMap' );
     $map->setShowInlineMapDivStyle( true );
-    //$map->addMarkerAsObject($this->owner);
-
-    //$map->addKML('http://assets.tripodtravel.co.nz/cycling/meuang-nont-to-bang-sue-loop.kml');
+    foreach($this->owner->MapLayers() as $layer) {
+      error_log("LINK".$layer->KmlFile()->getAbsoluteURL());
+      $map->addKML($layer->KmlFile()->getAbsoluteURL());
+    }
     return $map;
   }
 
