@@ -28,6 +28,8 @@ function createMarker(map,lat, lng, html, category, icon, useClusterer, enableWi
         infoWindow.open(map, this);
     });
 
+    console.log("PUSHING MARKER TO "+mapId);
+    console.log(gmarkers);
     gmarkers[mapId].push(marker);
 
     if (defaultHideMarker) {
@@ -100,13 +102,17 @@ function addLines(lines) {
 
 }
 
-function addKmlFiles(kmlFiles) {
+function addKmlFiles(map, kmlFiles) {
+    console.log("Adding KML files");
     for (var i = 0; i < kmlFiles.length; i++) {
         var kmlFile = kmlFiles[i];
+        console.log("KML FILE:"+kmlFiles);
         var kmlLayer = new google.maps.KmlLayer(kmlFile, {
             suppressInfoWindows: true,
             map: map
         });
+
+        console.log(kmlLayer);
     }
 }
 
@@ -131,16 +137,23 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
     // initialise gmarkers array for this map
     gmarkers[googleMapID] = [];
 
+    gmarkers['wibble'] = googleMapID;
+
+    console.log("GMARKERS ARRAY CREATED FOR "+googleMapID);
+    console.log(gmarkers);
+
     var infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 400 });
     infoWindows[googleMapID] = infoWindow;
+
+    mapLayers[googleMapID] = kmlFiles;
 
 }
 
 
 
 function loadedGoogleMapsAPI() {
-    console.log("google maps api callback");
-    console.log(mappableMaps);
+    console.log("google maps api callback - GMARKERS:");
+    console.log(gmarkers);
 
     for (var i = 1; i <= Object.keys(mappableMaps).length; i++) {
         console.log("MAP LOOP " + i);
@@ -185,9 +198,7 @@ function loadedGoogleMapsAPI() {
             console.log("MAP TYPE: T1 ");
             map.setMapTypeId(mapType);
         } else {
-                        console.log("MAP TYPE: T2 ");
-
-            map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+            map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
         }
 
         console.log("MARKERS:");
@@ -196,7 +207,7 @@ function loadedGoogleMapsAPI() {
         //addAllMarkers($MapMarkers,$UseClusterer,$EnableAutomaticCenterZoom, $DefaultHideMarker);
         addAllMarkers(map, map_info.markers, map_info.useClusterer, map_info.enableAutomaticCenterZoom, map_info.defaultHideMarker);
         //addLines($Lines);
-        //addKmlFiles(map_info.kmlFiles);
+        addKmlFiles(map,map_info.kmlFiles);
         if (map_info.useClusterer) {fluster.initialize()};
 
 
