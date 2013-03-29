@@ -14,7 +14,6 @@ google.maps.event.addDomListener(window, 'load', loadedGoogleMapsAPI);
 <% end_if %>
 
 
-<script type="text/javascript" src="/mappable/javascript/stacktrace-min-0.4.js"></script>
 
 <script type="text/javascript">
 // map details are stored here and used to invoke maps in the loadedGoogleMapsAPI function
