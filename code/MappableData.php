@@ -8,7 +8,7 @@
  */
 class MappableData extends Extension {
 
-	public function RenderMap($width = null, $height = null, $zoom = 9) {
+	public function getRenderableMap($width = null, $height = null, $zoom = 9) {
 		error_log("MAP ALREADY RENDERED? ".MapUtil::get_map_already_rendered());
 		$gmap = MapUtil::get_map(new ArrayList(array($this->owner)));
 		$w = $width ? $width : MapUtil::$map_width;
