@@ -62,7 +62,7 @@ class MapExtension extends DataExtension implements Mappable {
   Render a map at the provided lat,lon, zoom from the editing functions, 
   */
   public function BasicMap() {
-    $map = $this->owner->RenderMap();
+    $map = $this->owner->getRenderableMap();
     // $map->setDelayLoadMapFunction( true );
     $map->setZoom( $this->owner->ZoomLevel );
     $map->setAdditionalCSSClasses( 'fullWidthMap' );
