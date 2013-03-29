@@ -82,7 +82,7 @@ function addAllMarkers(map, markers, useClusterer, enableWindowZoom, defaultHide
 
 }
 
-function addLines(lines) {
+function addLines(map, lines) {
     for (i = 0; i < lines.length; i++) {
         var line = lines[i];
         console.log("LINE:");
@@ -98,8 +98,6 @@ function addLines(lines) {
         });
         pl.setMap(map);
     }
-
-
 }
 
 function addKmlFiles(map, kmlFiles) {
@@ -124,6 +122,7 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
     newMap['minLat'] = minLat;
     newMap['minLng'] = minLng;
     newMap['maxLng'] = maxLng;
+    newMap['maxLat'] = maxLat;
     newMap['markers'] = markers;
     newMap['googleMapID'] = googleMapID;
     newMap['mapType'] = mapType;
@@ -146,6 +145,7 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
     infoWindows[googleMapID] = infoWindow;
 
     mapLayers[googleMapID] = kmlFiles;
+    mapLines[googleMapID] = lines;
 
 }
 
@@ -176,14 +176,21 @@ function loadedGoogleMapsAPI() {
 
 
         if (map_info.enableAutomaticCenterZoom) {
-            map.setCenter(new google.maps.LatLng(map_info.centreCoordinates));
-            console.log("T1 SET MAP CENTRE TO " + map_info.centreCoordinates);
-            var bds = new google.maps.LatLngBounds(new google.maps.LatLng($MinLat, $MinLng),
-            new google.maps.LatLng($MaxLat, $MaxLng));
+            centre = map_info.centreCoordinates;
+            map.setCenter(new google.maps.LatLng(centre.lat,centre.lng));
+            console.log("T1 SET MAP CENTRE TO " + centre.lat+','+centre.lng);
+
+            console.log(map_info.minLat+','+map_info.minLng);
+            console.log(map_info.maxLat+','+map_info.maxLng);
+
+            
+            var bds = new google.maps.LatLngBounds(new google.maps.LatLng(map_info.minLat, map_info.minLng),
+                new google.maps.LatLng(map_info.maxLat, map_info.maxLng));
             console.log("BOUNDS");
             console.log(bds);
             map.fitBounds(bds);
-            // map.setZoom();
+            
+            map.setZoom(map_info.zoom);
         } else {
             var centre = map_info.centreCoordinates;
             map.setCenter(new google.maps.LatLng(centre.lat,centre.lng));
@@ -195,8 +202,8 @@ function loadedGoogleMapsAPI() {
         }
 
         if (map_info.mapType) {
-            console.log("MAP TYPE: T1 ");
-            map.setMapTypeId(mapType);
+            console.log("MAP TYPE: T1 "+map_info.mapType);
+            map.setMapTypeId(map_info.mapType);
         } else {
             map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
         }
@@ -204,11 +211,12 @@ function loadedGoogleMapsAPI() {
         console.log("MARKERS:");
         console.log(map_info.markers);
 
-        //addAllMarkers($MapMarkers,$UseClusterer,$EnableAutomaticCenterZoom, $DefaultHideMarker);
         addAllMarkers(map, map_info.markers, map_info.useClusterer, map_info.enableAutomaticCenterZoom, map_info.defaultHideMarker);
-        //addLines($Lines);
+        addLines(map, map_info.lines);
         addKmlFiles(map,map_info.kmlFiles);
-        if (map_info.useClusterer) {fluster.initialize()};
+        if (map_info.useClusterer) {
+            fluster.initialize()
+        };
 
 
     };
