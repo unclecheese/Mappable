@@ -8,7 +8,7 @@
  */
 class MappableDataObjectSet extends Extension {
 
-	public function RenderMap($width = null, $height = null) {
+	public function getRenderableMap($width = null, $height = null) {
 		$gmap = MapUtil::get_map($this->owner);
 		$w = $width ? $width : MapUtil::$map_width;
 		$h = $height ? $height : MapUtil::$map_height;
