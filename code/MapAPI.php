@@ -516,6 +516,7 @@ var styles = [
    */
 
   public function addMarkerByCoords( $lat, $lng, $html='', $category='', $icon='' ) {
+
     // Save the lat/lon to enable the automatic center/zoom
     $this->maxLng = (float) max( (float)$lng, $this->maxLng );
     $this->minLng = (float) min( (float)$lng, $this->minLng );
@@ -585,7 +586,7 @@ var styles = [
       $this->addMarkerByCoords( $obj->getMappableLatitude(), $obj->getMappableLongitude(), $obj->getMapContent(), $cat, $obj->getMapPin() );
       //}
     } else {
-      error_log("Unable to add object ".$obj." of ID ".$obj->ID." to map as it does not implement mappable");
+      error_log("Unable to add object ".$obj." of ID ".$obj->ID." to map as it does not implement mappable or use MapExtension");
     }
   }
 
@@ -656,6 +657,10 @@ var styles = [
   }
 
 
+  /*
+  Add a line to the map
+
+  */
   public function addLine( $from = array(), $to = array(), $color = "#FF3300" ) {
     $line = array(
       'lat1' => $from[0],
