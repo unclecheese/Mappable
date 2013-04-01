@@ -67,10 +67,14 @@ class MapExtension extends DataExtension implements Mappable {
     $map->setZoom( $this->owner->ZoomLevel );
     $map->setAdditionalCSSClasses( 'fullWidthMap' );
     $map->setShowInlineMapDivStyle( true );
-    foreach($this->owner->MapLayers() as $layer) {
-      error_log("LINK".$layer->KmlFile()->getAbsoluteURL());
-      $map->addKML($layer->KmlFile()->getAbsoluteURL());
+
+    if (Object::has_extension($this->owner->ClassName, 'MapLayersExtension')) {
+      foreach($this->owner->MapLayers() as $layer) {
+        error_log("LINK".$layer->KmlFile()->getAbsoluteURL());
+        $map->addKML($layer->KmlFile()->getAbsoluteURL());
+      }
     }
+   
     return $map;
   }
 
