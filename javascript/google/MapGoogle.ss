@@ -6,7 +6,6 @@ console.log('delay map loading');
 <script type="text/javascript" src="/mappable/javascript/google/maputil.js"></script>
 
 <script type="text/javascript">
-console.log("adding google maps load callback");
 
 
 google.maps.event.addDomListener(window, 'load', loadedGoogleMapsAPI);
