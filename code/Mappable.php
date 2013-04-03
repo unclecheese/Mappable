@@ -43,7 +43,7 @@ interface Mappable {
 	 *
 	 * @return string
 	 */	
-	public function getMapPin();
+	public function getMappableMapPin();
 	
 	
 	/**
@@ -61,6 +61,6 @@ interface Mappable {
 	 *
 	 * @return string
 	 */	
-	public function getMapContent();
+	public function getMappableMapContent();
 
 }
