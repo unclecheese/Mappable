@@ -39,14 +39,14 @@ class MapExtension extends DataExtension implements Mappable {
     return $this->owner->Lon;
   }
 
-  public function getMapContent() {
+  public function getMappableMapContent() {
     return MapUtil::sanitize($this->owner->renderWith($this->owner->ClassName.'MapInfoWindow'));
   }
-  public function getMapCategory() {
+  public function getMappableMapCategory() {
     return 'photo';
   }
 
-  public function getMapPin() {
+  public function getMappableMapPin() {
     return false; //standard pin
   }
 
@@ -70,7 +70,6 @@ class MapExtension extends DataExtension implements Mappable {
 
     if (Object::has_extension($this->owner->ClassName, 'MapLayersExtension')) {
       foreach($this->owner->MapLayers() as $layer) {
-        error_log("LINK".$layer->KmlFile()->getAbsoluteURL());
         $map->addKML($layer->KmlFile()->getAbsoluteURL());
       }
     }
