@@ -42,9 +42,7 @@ class MapExtension extends DataExtension implements Mappable {
   public function getMappableMapContent() {
     return MapUtil::sanitize($this->owner->renderWith($this->owner->ClassName.'MapInfoWindow'));
   }
-  public function getMappableMapCategory() {
-    return 'photo';
-  }
+
 
   public function getMappableMapPin() {
     return false; //standard pin
