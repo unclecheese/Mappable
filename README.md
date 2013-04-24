@@ -1,7 +1,1 @@
-== Mappable
-
-
-== Configuring Load Time Event
-By default the map invocation is called immediately.  In some cases this does not work, as such the load event can be delayed as follows:
-
-
+I will update this later at my earliest convenience, but meanwhile see http://demo.weboftalent.asia/mappable/ for worked examples of the module.  I will transfer this into 'README' form
