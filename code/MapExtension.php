@@ -71,7 +71,7 @@ class MapExtension extends DataExtension implements Mappable {
         $map->addKML($layer->KmlFile()->getAbsoluteURL());
       }
     }
-   
+
     return $map;
   }
 

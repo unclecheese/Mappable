@@ -34,20 +34,20 @@ var bounds ;
       var guidePointsAttr = gm.attr('data-GuidePoints');
 
       // if we have emtpy initial values, set them appropriately, otherwise google maps code goes into an infinite tailspin
-      if (latField.val() == '') {
+      if (latField.val() === '') {
         latField.val(0);
       }
 
-      if (lonField.val() == '') {
+      if (lonField.val() === '') {
         lonField.val(0);
       }
 
-      if (zoomField.val() == '') {
+      if (zoomField.val() === '') {
         zoomField.val(2);
       }
 
 
-      var guidePoints = new Array();
+      var guidePoints = [];
       if (typeof guidePointsAttr != "undefined") {
         guidePoints = JSON.parse(guidePointsAttr);
       }
@@ -56,7 +56,7 @@ var bounds ;
        myOptions.center = new google.maps.LatLng(latField.val(), lonField.val());
 
        if (zoomField.length) {
-          myOptions['zoom'] = parseInt(zoomField.val());
+          myOptions.zoom = parseInt(zoomField.val(),10);
        }
 
 
@@ -78,10 +78,10 @@ var bounds ;
 
           // extend bounds
           bounds.extend (latlng);
-        };
+        }
 
 
-        if ((latField.val() == 0) && (lonField.val() == 0)) {
+        if ((latField.val() === 0) && (lonField.val() === 0)) {
           var nPoints = guidePoints.length;
           var newMarkerPos = new google.maps.LatLng(sumlat/nPoints, sumlon/nPoints);
         }
@@ -163,7 +163,7 @@ var bounds ;
    }
 
    function setMarker(location, recenter) {
-     if (marker != null) {
+     if (marker !== null) {
        marker.setPosition(location);
      } else {
        marker = new google.maps.Marker({
@@ -176,7 +176,7 @@ var bounds ;
      }
 
      if (recenter) {
-       map.setCenter(location)
+       map.setCenter(location);
      }
    }
 
@@ -230,14 +230,14 @@ var bounds ;
 
              if (l > 0) {
                statusMessage("Places found");
-             } else if (l == 0) {
+             } else if (l === 0) {
                errorMessage("No places found");
              }
 
              var html = '<ul class="geocodedSearchResults">';
              //mapSearchResults
              $.each(results, function(index, value) {
-               var address = new Array();
+               var address = [];
                $.each(value.address_components, function(i, v) {
                  address.push(v.long_name);
                });
