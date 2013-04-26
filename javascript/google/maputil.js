@@ -1,11 +1,11 @@
 function createMarker(map,lat, lng, html, category, icon, useClusterer, enableWindowZoom, defaultHideMarker) {
-    mapId = map.getDiv().attributes['id'].textContent;
+    mapId = map.getDiv().attributes.id.textContent;
     var marker = new google.maps.Marker();
 
     marker.setPosition(new google.maps.LatLng(lat, lng));
     marker.mycategory = category;
 
-    if (icon != '') {
+    if (icon !== '') {
         var image = new google.maps.MarkerImage(icon);
         marker.setIcon(image);
     }
@@ -106,22 +106,22 @@ function addKmlFiles(map, kmlFiles) {
 }
 
 function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLat, maxLng, mapType, markers, lines, kmlFiles, jsonMapStyles, enableAutomaticCenterZoom, useClusterer) {
-    var newMap = new Array();
-    newMap['googleMapID'] = googleMapID;
-    newMap['zoom'] = zoom;
-    newMap['centreCoordinates'] = centreCoordinates;
-    newMap['minLat'] = minLat;
-    newMap['minLng'] = minLng;
-    newMap['maxLng'] = maxLng;
-    newMap['maxLat'] = maxLat;
-    newMap['markers'] = markers;
-    newMap['googleMapID'] = googleMapID;
-    newMap['mapType'] = mapType;
-    newMap['lines'] = lines;
-    newMap['kmlFiles'] = kmlFiles;
-    newMap['jsonMapStyles'] = jsonMapStyles;
-    newMap['enableAutomaticCenterZoom'] = enableAutomaticCenterZoom;
-    newMap['useClusterer'] = useClusterer;
+    var newMap = [];
+    newMap.googleMapID = googleMapID;
+    newMap.zoom = zoom;
+    newMap.centreCoordinates = centreCoordinates;
+    newMap.minLat = minLat;
+    newMap.minLng = minLng;
+    newMap.maxLng = maxLng;
+    newMap.maxLat = maxLat;
+    newMap.markers = markers;
+    newMap.googleMapID = googleMapID;
+    newMap.mapType = mapType;
+    newMap.lines = lines;
+    newMap.kmlFiles = kmlFiles;
+    newMap.jsonMapStyles = jsonMapStyles;
+    newMap.enableAutomaticCenterZoom = enableAutomaticCenterZoom;
+    newMap.useClusterer = useClusterer;
     mappableMaps[googleMapID] = newMap;
 
     // initialise gmarkers array for this map
@@ -178,9 +178,7 @@ function loadedGoogleMapsAPI() {
         addLines(map, map_info.lines);
         addKmlFiles(map,map_info.kmlFiles);
         if (map_info.useClusterer) {
-            fluster.initialize()
-        };
-
-
-    };
+            fluster.initialize();
+        }
+    }
 }
