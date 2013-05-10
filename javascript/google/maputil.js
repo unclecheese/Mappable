@@ -1,11 +1,14 @@
+var mappableMapCtr = 0;
+
 function createMarker(map,lat, lng, html, category, icon, useClusterer, enableWindowZoom, defaultHideMarker) {
-    mapId = map.getDiv().attributes.id.textContent;
-    var marker = new google.maps.Marker();
+    mapId = map.getDiv().getAttribute('id');
+    
+var marker = new google.maps.Marker();
 
     marker.setPosition(new google.maps.LatLng(lat, lng));
     marker.mycategory = category;
 
-    if (icon !== '') {
+    if (icon && icon !== '') {
         var image = new google.maps.MarkerImage(icon);
         marker.setIcon(image);
     }
@@ -124,6 +127,9 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
     newMap.useClusterer = useClusterer;
     mappableMaps[googleMapID] = newMap;
 
+    // increment map counter
+    mappableMapCtr++;
+
     // initialise gmarkers array for this map
     gmarkers[googleMapID] = [];
     var infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 400 });
@@ -137,7 +143,7 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
 
 
 function loadedGoogleMapsAPI() {
-    for (var i = 1; i <= Object.keys(mappableMaps).length; i++) {
+    for (var i = 1; i <= mappableMapCtr; i++) {
         var map_info = mappableMaps['google_map_' + i];
         var map = new google.maps.Map(document.getElementById(map_info.googleMapID));
     
