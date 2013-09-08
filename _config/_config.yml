@@ -1,0 +1,18 @@
+---
+Name: mappable
+After: 'framework/*','cms/*'
+---
+
+DataObject:
+  extensions:
+    -  MappableData
+
+DataList:
+  extensions:
+    -  MappableDataObjectSet
+
+
+# allow geographical format files to be uploaded
+File:
+  $allowed_extensions: ['gpx', 'kml']
+
