@@ -164,7 +164,7 @@ class MapUtil
 	{
 		self::$instances++;
 
-		error_log("GOOGLE MAP INSTANCE:".self::$instances);
+//		error_log("GOOGLE MAP INSTANCE:".self::$instances);
 
 		$url = Director::absoluteBaseURL();
 
