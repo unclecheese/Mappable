@@ -34,8 +34,8 @@ class MappableData extends Extension {
 		$w = $width ? $width : MapUtil::$map_width;
 		$h = $height ? $height : MapUtil::$map_height;
 
-                $lat = $this->owner->getLatitude();
-                $lng = $this->owner->getLongitude();
+                $lat = $this->owner->getMappableLatitude();
+                $lng = $this->owner->getMappableLongitude();
 
                 $src = htmlentities("http://maps.google.com/maps/api/staticmap?center=$lat,$lng&markers=$lat,$lng&zoom=13&size=${w}x$h&sensor=false");
 
