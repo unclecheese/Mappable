@@ -9,7 +9,7 @@
 class MappableData extends Extension {
 
 	public function getRenderableMap($width = null, $height = null, $zoom = 9) {
-		error_log("MAP ALREADY RENDERED? ".MapUtil::get_map_already_rendered());
+		//error_log("MAP ALREADY RENDERED? ".MapUtil::get_map_already_rendered());
 		$gmap = MapUtil::get_map(new ArrayList(array($this->owner)));
 		$w = $width ? $width : MapUtil::$map_width;
 		$h = $height ? $height : MapUtil::$map_height;
@@ -34,8 +34,8 @@ class MappableData extends Extension {
 		$w = $width ? $width : MapUtil::$map_width;
 		$h = $height ? $height : MapUtil::$map_height;
 
-                $lat = $this->owner->getLatitude();
-                $lng = $this->owner->getLongitude();
+                $lat = $this->owner->getMappableLatitude();
+                $lng = $this->owner->getMappableLongitude();
 
                 $src = htmlentities("http://maps.google.com/maps/api/staticmap?center=$lat,$lng&markers=$lat,$lng&zoom=13&size=${w}x$h&sensor=false");
 
