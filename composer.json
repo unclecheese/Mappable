@@ -1,16 +1,21 @@
 {
 	"name": "weboftalent/mappable",
-	"description": "An upgraded version of Uncle Cheese's Mappable module compatible with Silverstripe 3",
+	"description": "Fork of Uncle Cheese's original Mappable module.  Inline JavaScript is minimal, and templated such that other mapping systems can be added later.  A map editing interface is also included, addable by a one line configuration call.",
 	"type": "silverstripe-module",
-	"keywords": ["silverstripe", "googlemaps","weboftalent"],
+	"keywords": ["silverstripe", "google maps", "maps", "mappable"],
 	"authors": [
-	{
-		"name": "Gordon Anderson",
-		"email": "gordon@weboftalent.asia"
-	}
+		{
+			"name": "Gordon Anderson",
+			"email": "gordon.b.anderson@gmail.com",
+			"homepage": "https://github.com/gordonbanderson/Mappable",
+			"role": "Developer"
+		}
 	],
+    "support": {
+        "issues": "https://github.com/gordonbanderson/Mappable/issues"
+    },
 	"require":
 	{
-		"silverstripe/framework": "3.*"
+		"silverstripe/framework": "~3.1"
 	}
 }
