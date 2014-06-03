@@ -11,6 +11,10 @@ DataList:
   extensions:
     -  MappableDataObjectSet
 
+ArrayList:
+  extensions:
+    -  MappableDataObjectSet
+
 
 # allow geographical format files to be uploaded
 File:

@@ -209,12 +209,12 @@ class MapUtil
 	
 	/**
 	 * Creates a new {@link GoogleMapsAPI} object loaded with the default settings
-	 * and places all of the items in a {@link DataObjectSet} on the map
+	 * and places all of the items in a {@link SS_List}, e.g. {@link DataList} or {@link ArrayList} on the map
 	 *
-	 * @param DataObjectSet $set
-	 * @return GoogleMapsAPI
+	 * @param SS_List $set
+	 * @return MapAPI
 	 */
-	public static function get_map(DataList $list) {
+	public static function get_map(SS_List $list) {
 		$gmap = self::instance();
 		if($list) {
 			$arr = $list->toArray();
