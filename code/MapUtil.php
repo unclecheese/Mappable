@@ -19,13 +19,13 @@ class MapUtil
 	/**
 	 * @var int The default width of a Google Map
 	 */
-	public static $map_width = 400;
+	public static $map_width = '100%';
 	
 	
 	/**
 	 * @var int The default height of a Google Map
 	 */
-	public static $map_height = 400;
+	public static $map_height = '400px';
 
         /** @var int Icon width of the gmarker **/
         public static $iconWidth = 24;
