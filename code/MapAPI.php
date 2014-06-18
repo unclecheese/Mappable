@@ -260,8 +260,6 @@ var styles = [
     $this->gridSize = $gridSize;
     $this->maxZoom = $maxZoom;
     $this->clustererLibraryPath = $clustererLibraryPath;
-
-    error_log('T1 Set cluster pathj to '.$clustererLibraryPath);
   }
 
   /**
@@ -580,13 +578,21 @@ var styles = [
    * @param ViewableData $obj
    */
   public function addMarkerAsObject( ViewableData $obj ) {
-    if ( ($obj instanceof Mappable) || (Object::has_extension($obj->ClassName, 'MapExtension')) ) {
+    $extensionsImplementMappable = false;
+    $extensions = Object::get_extensions(get_class($obj));
+
+    foreach ($extensions as $extension) {
+      $class = new ReflectionClass($extension);
+      if ($class->implementsInterface('Mappable')) {
+                $extensionsImplementMappable = true;
+      }
+
+    }
+    if ( $extensionsImplementMappable || ($obj instanceof Mappable) || (Object::has_extension($obj->ClassName, 'MapExtension')) ) {
       //if(($obj->getMappableLatitude() > 0) || ($obj->getMappableLongitude() > 0)) {
       $cat = $obj->hasMethod( 'getMappableMapCategory' ) ? $obj->getMappableMapCategory() : "default";
       $this->addMarkerByCoords( $obj->getMappableLatitude(), $obj->getMappableLongitude(), $obj->getMappableMapContent(), $cat, $obj->getMappableMapPin() );
       //}
-    } else {
-      error_log("Unable to add object ".$obj." of ID ".$obj->ID." to map as it does not implement mappable or use MapExtension");
     }
   }
 
