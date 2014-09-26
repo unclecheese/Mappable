@@ -52,7 +52,7 @@ class MapAPI extends ViewableData
    *
    * @var int Infowindow width of the gmarker
    * */
-  protected $infoWindowWidth = 250;
+  protected $infoWindowWidth = 500;
 
   /** Default zoom of the gmap **/
   protected $zoom = 9;
@@ -689,6 +689,12 @@ var styles = [
 
 
 
+/*
+For php 5.3
+*/
+function jsonRemoveUnicodeSequences($struct) {
+   return preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", json_encode($struct));
+}
   
 
   /**
@@ -699,10 +705,11 @@ var styles = [
 
   public function generate() {
     // from http://stackoverflow.com/questions/3586401/cant-decode-json-string-in-php
-    $jsonMarkers = stripslashes(json_encode($this->markers));
+    $jsonMarkers = stripslashes($this->jsonRemoveUnicodeSequences($this->markers));
 
-    $linesJson = stripslashes(json_encode($this->lines));
-    $kmlJson = stripslashes(json_encode($this->kmlFiles));
+
+    $linesJson = stripslashes($this->jsonRemoveUnicodeSequences($this->lines));
+    $kmlJson = stripslashes($this->jsonRemoveUnicodeSequences($this->kmlFiles));
 
      // Center of the GMap
     $geocodeCentre = ( $this->latLongCenter ) ? $this->latLongCenter : $this->geocoding( $this->center );
@@ -774,9 +781,6 @@ var styles = [
         'KmlFiles' => $kmlJson
       )
     );
-
-
-
 
     $this->content = $this->processTemplate('Map', $vars);
   }
