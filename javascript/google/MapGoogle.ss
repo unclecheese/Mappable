@@ -37,6 +37,6 @@ var mappableMaps = [];
     registerMap('$GoogleMapID', $LatLngCentre, $Zoom, $MinLat,$MinLng,$MaxLat,$MaxLng, $MapType, $MapMarkers, $Lines,$KmlFiles, $JsonMapStyles, $EnableAutomaticCenterZoom, $UseClusterer);
 </script>
 
- <div id="$GoogleMapID" <% if ShowInlineMapDivStyle %>style="width:{$Width}; height: {$Height};"<% end_if %><% if AdditionalCssClasses %> class="$AdditionalCssClasses"<% end_if %>
+ <div id="$GoogleMapID" <% if ShowInlineMapDivStyle %>style="width:{$Width}; height: {$Height};"<% end_if %><% if AdditionalCssClasses %> class="$AdditionalCssClasses"<% end_if %>>
 </div>
 
