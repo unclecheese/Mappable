@@ -705,11 +705,22 @@ function jsonRemoveUnicodeSequences($struct) {
 
   public function generate() {
     // from http://stackoverflow.com/questions/3586401/cant-decode-json-string-in-php
-    $jsonMarkers = stripslashes($this->jsonRemoveUnicodeSequences($this->markers));
+    $jsonMarkers = null;
+    $linesJson = null;
+    $kmlJson = null;
 
+    // prior to PHP version 5.4, one needs to use regex
+    if (PHP_VERSION_ID < 50400) {
+      $jsonMarkers = stripslashes($this->jsonRemoveUnicodeSequences($this->markers));
+      $linesJson = stripslashes($this->jsonRemoveUnicodeSequences($this->lines));
+      $kmlJson = stripslashes($this->jsonRemoveUnicodeSequences($this->kmlFiles));
+    } else {
+      $jsonMarkers = stripslashes(json_encode($this->markers,JSON_UNESCAPED_UNICODE));
+      $linesJson = stripslashes(json_encode($this->lines,JSON_UNESCAPED_UNICODE));
+      $kmlJson = stripslashes(json_encode($this->kmlFiles,JSON_UNESCAPED_UNICODE));
+    }
 
-    $linesJson = stripslashes($this->jsonRemoveUnicodeSequences($this->lines));
-    $kmlJson = stripslashes($this->jsonRemoveUnicodeSequences($this->kmlFiles));
+    
 
      // Center of the GMap
     $geocodeCentre = ( $this->latLongCenter ) ? $this->latLongCenter : $this->geocoding( $this->center );
