@@ -2,7 +2,7 @@
 <% if DelayLoadMapFunction %>
 console.log('delay map loading');
 <% else %>
-<script src="http://maps.google.com/maps/api/js?sensor=false&amp;hl=$Lang" type="text/javascript"></script>
+<script src="//maps.google.com/maps/api/js?sensor=false&amp;hl=$Lang" type="text/javascript"></script>
 <script type="text/javascript" src="/mappable/javascript/google/maputil.js"></script>
 
 <script type="text/javascript">
