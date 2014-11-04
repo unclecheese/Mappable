@@ -37,7 +37,7 @@ class MappableData extends Extension {
                 $lat = $this->owner->getMappableLatitude();
                 $lng = $this->owner->getMappableLongitude();
 
-                $src = htmlentities("http://maps.google.com/maps/api/staticmap?center=$lat,$lng&markers=$lat,$lng&zoom=13&size=${w}x$h&sensor=false");
+                $src = htmlentities("//maps.google.com/maps/api/staticmap?center=$lat,$lng&markers=$lat,$lng&zoom=13&size=${w}x$h&sensor=false");
 
                 return '<img src="'.$src.'" width="'.$w.'" height="'.$h.'" alt="'.$this->owner->Title.'" />';
 
