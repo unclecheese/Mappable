@@ -41,19 +41,19 @@ function Fluster2(_map, _debug)
 	this.currentZoomLevel = -1;
 	this.styles = {
 		0: {
-			image: 'http://gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/1.0/images/m1.png',
+			image: '//gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/1.0/images/m1.png',
 			textColor: '#FFFFFF',
 			width: 53,
 			height: 52
 		},
 		10: {
-			image: 'http://gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/1.0/images/m2.png',
+			image: '//gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/1.0/images/m2.png',
 			textColor: '#FFFFFF',
 			width: 56,
 			height: 55
 		},
 		20: {
-			image: 'http://gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/1.0/images/m3.png',
+			image: '//gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/1.0/images/m3.png',
 			textColor: '#FFFFFF',
 			width: 66,
 			height: 65
