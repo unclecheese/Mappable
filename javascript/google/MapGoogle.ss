@@ -5,11 +5,7 @@ console.log('delay map loading');
 <script src="//maps.google.com/maps/api/js?sensor=false&amp;hl=$Lang" type="text/javascript"></script>
 <script type="text/javascript" src="/mappable/javascript/google/maputil.js"></script>
 
-<script type="text/javascript">
-
-
-google.maps.event.addDomListener(window, 'load', loadedGoogleMapsAPI);
-</script>
+<script type="text/javascript">google.maps.event.addDomListener(window, 'load', loadedGoogleMapsAPI);</script>
 <% end_if %>
 
 
@@ -30,22 +26,6 @@ var mappableMaps = [];
  
 
 <script type="text/javascript">
-/*
-    var map;
-    console.log('Map template JS loading: $GoogleMapID');
-    
-    var gicons = [];
-    var fluster = null;
-    var current_lat = 0;
-    var current_lng = 0;
-    var layer_wikipedia = null;
-    var layer_panoramio = null;
-    var trafficInfo = null;
-    var directions = null;
-    var geocoder = null;
-    var infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 400 });
-*/
-
 // mapping of google_map_N to an array of markers
 
 <% if DownloadJS %>
@@ -57,7 +37,6 @@ var mappableMaps = [];
     registerMap('$GoogleMapID', $LatLngCentre, $Zoom, $MinLat,$MinLng,$MaxLat,$MaxLng, $MapType, $MapMarkers, $Lines,$KmlFiles, $JsonMapStyles, $EnableAutomaticCenterZoom, $UseClusterer);
 </script>
 
- <div id="$GoogleMapID" <% if ShowInlineMapDivStyle %>style="width:{$Width}; height: {$Height};"<% end_if %><% if AdditionalCssClasses %>class="$AdditionalCssClasses"<% end_if %>
->
+ <div id="$GoogleMapID" <% if ShowInlineMapDivStyle %>style="width:{$Width}; height: {$Height};"<% end_if %><% if AdditionalCssClasses %> class="$AdditionalCssClasses"<% end_if %>>
 </div>
 
