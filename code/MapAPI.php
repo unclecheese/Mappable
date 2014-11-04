@@ -481,7 +481,7 @@ var styles = [
 
   public function geocoding( $address ) {
     $encodeAddress = urlencode( $address );
-    $url = "http://maps.google.com/maps/geo?q=".$encodeAddress."&output=csv&key=".$this->googleMapKey;
+    $url = "//maps.google.com/maps/geo?q=".$encodeAddress."&output=csv&key=".$this->googleMapKey;
 
     if ( function_exists( 'curl_init' ) ) {
       $data = $this->getContent( $url );
