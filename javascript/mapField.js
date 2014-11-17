@@ -144,11 +144,11 @@ var bounds ;
     //console.log("LON:"+lon);
     var latlng = new google.maps.LatLng(lat, lon);
     var pinColor = "CCCCCC";
-    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+    var pinImage = new google.maps.MarkerImage("//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0,0),
         new google.maps.Point(10, 34));
-    var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+    var pinShadow = new google.maps.MarkerImage("//chart.apis.google.com/chart?chst=d_map_pin_shadow",
         new google.maps.Size(40, 37),
         new google.maps.Point(0, 0),
         new google.maps.Point(12, 35));
@@ -335,7 +335,7 @@ var bounds ;
      function loadGoogleMapsAPI() {
        var script = document.createElement("script");
        script.type = "text/javascript";
-       script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=gmloaded";
+       script.src = "//maps.googleapis.com/maps/api/js?sensor=false&callback=gmloaded";
        document.body.appendChild(script);
      }
 
