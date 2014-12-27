@@ -115,7 +115,7 @@ See http://demo.weboftalent.asia/mappable/multiple-maps-on-the-same-page/ for a 
 
 
 #Map Layers
-KML layers can be added through the CMS using only a line of configuration.
+KML layers can be added through the CMS by adding an extension to the class in question.
 
 ```
 <?php
@@ -140,15 +140,13 @@ PageWithMapAndLayers:
     ['MapExtension', 'MapLayersExtension']
 ```
 
-Do a /dev/build to update your database with the map layers relationship.
+Execute a /dev/build to update your database with the map layers relationship.
 
 When you add a new page of type PageWithMapAndLayers, there is now an extra tab called 'Map Layers'.  Each layer consists of a human readable name and a file attachment, which in this case have to be KML files.
 Templating is the same as before, the $BasicMap method takes account of layers when rendering a map.
 
 ##Gotchas
-Note that by default, one cannot upload KML files to the assets area, as .gpx and .kml files are blocked by default.  Add them to /assets/.htacces.  I've create a pull request to fix this, https://github.com/silverstripe/silverstripe-installer/pull/56
-
-Also note you will not be able to see map layers in your dev environment, as the KML file URL needs to be publicly visible.
+Note you will not be able to see map layers in your dev environment, as the KML file URL needs to be publicly visible in order that Google's servers can 
 
 #Adding Lines to Maps
 A line can be added to a map with the following API call:
@@ -233,3 +231,4 @@ For clustered and unclustered examples, see http://demo.weboftalent.asia/mappabl
 #TODO
 * Render different markers or icons as map pointers
 * Add map marker sets, where a set of markers e.g. of underground stations can be added to multiple maps on your website.
+* Add mapping services other than Google
