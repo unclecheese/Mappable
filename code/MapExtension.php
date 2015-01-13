@@ -83,11 +83,11 @@ class MapExtension extends DataExtension implements Mappable {
     $map->setZoom( $this->owner->ZoomLevel );
     $map->setAdditionalCSSClasses( 'fullWidthMap' );
     $map->setShowInlineMapDivStyle( true );
-    error_log('Rendering basic map');
     if (Object::has_extension($this->owner->ClassName, 'MapLayerExtension')) {
       foreach($this->owner->MapLayers() as $layer) {
         $map->addKML($layer->KmlFile()->getAbsoluteURL());
       }
+        $map->setEnableAutomaticCenterZoom(true);
     }
 
     if (Object::has_extension($this->owner->ClassName, 'PointsOfInterestLayerExtension')) {
@@ -96,6 +96,7 @@ class MapExtension extends DataExtension implements Mappable {
           $map->addMarkerAsObject($poi);
         }
       }
+      $map->setEnableAutomaticCenterZoom(true);
     }
 
     return $map;
