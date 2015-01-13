@@ -19,15 +19,19 @@ class MapExtension extends DataExtension implements Mappable {
   Add a Location tab containing the map
   */
   public function updateCMSFields( FieldList $fields ) {
-    $fields->addFieldToTab( "Root.Location", new LatLongField( array(
-          new TextField( 'Lat', 'Latitude' ),
-          new TextField( 'Lon', 'Longitude' ),
-          new TextField( 'ZoomLevel', 'Zoom' )
-        ),
-          array( 'Address' )
-          ) 
-       );
+    // These fields need removed, as they may have already been created by the form scaffolding
+    $fields->removeByName('Lat');
+    $fields->removeByName('Lon');
+    $fields->removeByName('ZoomLevel');
 
+    $fields->addFieldToTab( "Root.Location", new LatLongField( array(
+        new TextField( 'Lat', 'Latitude' ),
+        new TextField( 'Lon', 'Longitude' ),
+        new TextField( 'ZoomLevel', 'Zoom' )
+      ),
+        array( 'Address' )
+        ) 
+    );
   }
 
 
