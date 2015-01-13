@@ -63,6 +63,12 @@ class MapExtension extends DataExtension implements Mappable {
       }
     }
 
+    if ($this->owner->hasExtension('PointsOfInterestLayersExtension')) {
+      if ($this->owner->PointsOfInterestLayers()->count() > 0) {
+        $result = true;
+      }
+    }
+
     return $result;
 
   }
@@ -77,19 +83,22 @@ class MapExtension extends DataExtension implements Mappable {
     $map->setZoom( $this->owner->ZoomLevel );
     $map->setAdditionalCSSClasses( 'fullWidthMap' );
     $map->setShowInlineMapDivStyle( true );
-
+    error_log('Rendering basic map');
     if (Object::has_extension($this->owner->ClassName, 'MapLayerExtension')) {
       foreach($this->owner->MapLayers() as $layer) {
         $map->addKML($layer->KmlFile()->getAbsoluteURL());
       }
     }
 
+    if (Object::has_extension($this->owner->ClassName, 'PointsOfInterestLayerExtension')) {
+      foreach($this->owner->PointsOfInterestLayers() as $layer) {
+        foreach ($layer->PointsOfInterest() as $poi) {
+          $map->addMarkerAsObject($poi);
+        }
+      }
+    }
+
     return $map;
   }
 
-
- 
-
 }
-
-?>
