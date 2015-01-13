@@ -2,13 +2,14 @@
 
 class MapExtension extends DataExtension implements Mappable {
 
-  
-
-
   static $db = array(
     'Lat' => 'Decimal(18,15)',
     'Lon' => 'Decimal(18,15)',
     'ZoomLevel' => 'Int'
+  );
+
+  static $has_one = array(
+      'MapPinIcon' => 'Image'
   );
 
 
@@ -23,6 +24,7 @@ class MapExtension extends DataExtension implements Mappable {
     $fields->removeByName('Lat');
     $fields->removeByName('Lon');
     $fields->removeByName('ZoomLevel');
+    $fields->removeByName('MapPinIcon');
 
     $fields->addFieldToTab( "Root.Location", new LatLongField( array(
         new TextField( 'Lat', 'Latitude' ),
@@ -32,6 +34,9 @@ class MapExtension extends DataExtension implements Mappable {
         array( 'Address' )
         ) 
     );
+
+    $fields->addFieldToTab( 'Root.Location', $uf = new UploadField('MapPinIcon', _t('Mappable.MAP_PIN', 'Map Pin Icon.  Leave this blank for default pin to show')));
+    $uf->setFolderName('mapicons');
   }
 
 
@@ -47,9 +52,16 @@ class MapExtension extends DataExtension implements Mappable {
     return MapUtil::sanitize($this->owner->renderWith($this->owner->ClassName.'MapInfoWindow'));
   }
 
-
+  /*
+  If a user has uploaded a map pin icon display that, otherwise
+  */
   public function getMappableMapPin() {
-    return false; //standard pin
+    $result = false;
+    if ($this->owner->MapPinIconID != 0) {
+      $mappin = $this->owner->MapPinIcon();
+      $result = $mappin->getAbsoluteURL();
+    }
+    return $result;
   }
 
   /*
