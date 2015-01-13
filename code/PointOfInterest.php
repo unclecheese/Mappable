@@ -7,17 +7,11 @@ class PointOfInterest extends DataObject {
 
 	private static $db = array('Name' => 'Varchar');
 
-	static $has_one = array(
-	    'Icon' => 'Image'
-	);
-
 	private static $summary_fields = array('Name');
 
 	function getCMSFields() {
 	    $fields = parent::getCMSFields();
 	    $fields->addFieldToTab( 'Root.Main', new TextField('Name', 'Name of the item on the map'));
-	    $fields->addFieldToTab( 'Root.Main', $uf = new UploadField('Icon', _t('PointsOfInterest.ICON', 'Optional Override Icon')));
-	    $uf->setFolderName('mapicons');
 	    return $fields;
 	}
 
