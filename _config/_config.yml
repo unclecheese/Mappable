@@ -2,6 +2,9 @@
 Name: mappable
 After: 'framework/*','cms/*'
 ---
+PointOfInterest:
+  extensions:
+    - MapExtension
 
 DataObject:
   extensions:
@@ -14,7 +17,6 @@ DataList:
 ArrayList:
   extensions:
     -  MappableDataObjectSet
-
 
 # allow geographical format files to be uploaded
 File:
