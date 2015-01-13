@@ -60,6 +60,11 @@ class MapExtension extends DataExtension implements Mappable {
     if ($this->owner->MapPinIconID != 0) {
       $mappin = $this->owner->MapPinIcon();
       $result = $mappin->getAbsoluteURL();
+    } else {
+      // check for a cached map pin already having been provided
+      if ($this->owner->CachedMapPin) {
+        $result = $this->owner->CachedMapPin;
+      }
     }
     return $result;
   }
@@ -95,6 +100,8 @@ class MapExtension extends DataExtension implements Mappable {
     $map->setZoom( $this->owner->ZoomLevel );
     $map->setAdditionalCSSClasses( 'fullWidthMap' );
     $map->setShowInlineMapDivStyle( true );
+
+    // add any KML map layers
     if (Object::has_extension($this->owner->ClassName, 'MapLayerExtension')) {
       foreach($this->owner->MapLayers() as $layer) {
         $map->addKML($layer->KmlFile()->getAbsoluteURL());
@@ -102,9 +109,14 @@ class MapExtension extends DataExtension implements Mappable {
         $map->setEnableAutomaticCenterZoom(true);
     }
 
+    // add points of interest taking into account the default icon of the layer as an override
     if (Object::has_extension($this->owner->ClassName, 'PointsOfInterestLayerExtension')) {
       foreach($this->owner->PointsOfInterestLayers() as $layer) {
+        $layericon = $layer->DefaultIcon();
         foreach ($layer->PointsOfInterest() as $poi) {
+          if ($poi->MapPinIconID == 0) {
+            $poi->CachedMapPin = $layericon;
+          }
           $map->addMarkerAsObject($poi);
         }
       }
