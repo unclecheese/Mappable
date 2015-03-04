@@ -164,8 +164,6 @@ class MapUtil
 	{
 		self::$instances++;
 
-//		error_log("GOOGLE MAP INSTANCE:".self::$instances);
-
 		$url = Director::absoluteBaseURL();
 
 		// remove http and https
@@ -223,9 +221,5 @@ class MapUtil
 			}
 		}
 		return $gmap;	
-	}
-
-
-	
-		
+	}		
 }
