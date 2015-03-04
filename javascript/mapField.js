@@ -5,15 +5,12 @@ var bounds ;
 
 
    function gmloaded() {
-    //console.log('google maps call back');
      initLivequery();
    }
 
    // initialise the map
 
    function initMap() {
-    //console.log('init map');
-
      var myOptions = {
        zoom: 16,
        disableDefaultUI: false,
@@ -105,8 +102,6 @@ var bounds ;
          setMarker(event.latLng, false);
          statusMessage('Location changed to '+lat+','+lng);
        });
-
-
       
        google.maps.event.addListener(map, "zoom_changed", function(e) {
          if (zoomField.length) {
@@ -118,12 +113,10 @@ var bounds ;
       map.setZoom( map.getZoom() );
 
 
-
      // When any tab is clicked, resize the map
      $('.ui-tabs-anchor').click(function() {
         google.maps.event.trigger(map, 'resize');
         var gm = $('#GoogleMap');
-        //console.log(gm);
         var useMapBounds = gm.attr('data-usemapbounds');
         if (useMapBounds) {
             map.fitBounds(bounds);
@@ -140,8 +133,6 @@ var bounds ;
    // utility functions
 
    function addGuideMarker(lat,lon) {
-    //console.log("LAT:"+lat);
-    //console.log("LON:"+lon);
     var latlng = new google.maps.LatLng(lat, lon);
     var pinColor = "CCCCCC";
     var pinImage = new google.maps.MarkerImage("//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
@@ -290,8 +281,6 @@ var bounds ;
        $('.geocodedSearchResults li').livequery('click', function(e) {
          // get the data needed to ask coords
          var t = $(this);
-         //console.log("ENTRY CLICKED");
-         //console.log(t);
          var lat = t.attr("lat");
          var lon = t.attr("lon");
          var address = t.html();
@@ -331,7 +320,6 @@ var bounds ;
 
 
    (function($) {
-
      function loadGoogleMapsAPI() {
        var script = document.createElement("script");
        script.type = "text/javascript";
@@ -340,13 +328,8 @@ var bounds ;
      }
 
 
-
      // deal with document ready - note this only gets called once due to the way silverstripe works, until the CMS is refreshed
      $(document).ready(function() {
-
        loadGoogleMapsAPI();
-
-
-
      });
    })(jQuery);
