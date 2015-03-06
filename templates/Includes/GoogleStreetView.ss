@@ -1,6 +1,8 @@
 <% include GoogleJavaScript %>
+<div class="streetviewContainer">
 <div id="$DomID" class="streetview googlestreetview"></div>
-<% if $Caption %><caption>$Caption</caption><% end_if %>
+<% if $Caption %><p class="caption">$Caption</p><% end_if %>
+</div>
 <script type="text/javascript">
 function initialize_{$DomID}() {
   var place_$DomID = new google.maps.LatLng($Latitude,$Longitude);
