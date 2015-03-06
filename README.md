@@ -227,6 +227,26 @@ The map is positioned so that it shows all of the points automatically.  Also no
 
 For clustered and unclustered examples, see http://demo.weboftalent.asia/mappable/map-from-a-datalist-unclustered/ and http://demo.weboftalent.asia/mappable/map-with-datalist-clustered-markers/ respectively.
 
+# Google Street View
+One can embed Google Street View in a page as an editor using a short code of the following format:
+
+    [GoogleStreetView latitude="13.811841" longitude="100.527309" heading="162.43" pitch="-10" caption="Canal south from Pracha Rat 1 Soi 28"]
+
+The parameters latitude, longitude, and heading are required.  If not provided the short code will return an empty string.
+
+For rendering purposes including CSS similar to below in your theme:
+```
+.streetview {
+  width: 100%;
+  height: 500px;
+  background: #EEE;
+}
+
+.streetviewContainer p.caption {
+  text-align: center;
+}
+```
+
 
 #TODO
 * Render different markers or icons as map pointers
