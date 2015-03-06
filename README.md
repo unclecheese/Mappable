@@ -246,7 +246,8 @@ For rendering purposes including CSS similar to below in your theme:
   text-align: center;
 }
 ```
-
+## Example Rendering
+![Example Google Street View Rendering](https://raw.githubusercontent.com/gordonbanderson/Mappable/screenshots/screenshots/google-streeview-shortcode-example.png?raw=true "Example Google Street View Rendering")
 
 #TODO
 * Render different markers or icons as map pointers
