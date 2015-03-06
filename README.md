@@ -242,6 +242,13 @@ For rendering purposes including CSS similar to below in your theme:
   background: #EEE;
 }
 
+/* Ensure map controls are correct aspect ration, and thatFirefox rendering work, 
+see http://stackoverflow.com/questions/11340468/street-view-not-working-in-firefox */
+.streetview img {
+    border: none !important;
+    max-width: none !important;
+}
+
 .streetviewContainer p.caption {
   text-align: center;
 }
