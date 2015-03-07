@@ -80,14 +80,12 @@ class MapExtension extends DataExtension implements Mappable {
       }
     }
 
-    if ($this->owner->hasExtension('PointsOfInterestLayersExtension')) {
+    if ($this->owner->hasExtension('PointsOfInterestLayerExtension')) {
       if ($this->owner->PointsOfInterestLayers()->count() > 0) {
         $result = true;
       }
     }
-
     return $result;
-
   }
 
 
@@ -122,6 +120,11 @@ class MapExtension extends DataExtension implements Mappable {
       }
       $map->setEnableAutomaticCenterZoom(true);
     }
+
+    $map->setZoom( 10 );
+    $map->setAdditionalCSSClasses( 'fullWidthMap' );
+    $map->setShowInlineMapDivStyle( true );
+    $map->setClusterer(true);
 
     return $map;
   }
