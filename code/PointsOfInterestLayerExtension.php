@@ -6,11 +6,10 @@ class PointsOfInterestLayerExtension extends DataExtension {
       'PointsOfInterestLayers' => 'PointsOfInterestLayer'
    );
 
-
   static $belongs_many_many_extraFields = array(
-    'PointsOfInterestLayers' => array(
-      'SortOrder' => "Int"
-    )
+      'PointsOfInterestLayers' => array(
+        'SortOrder' => "Int"
+      )
   );
 
 
