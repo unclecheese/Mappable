@@ -5,7 +5,9 @@ class PointOfInterest extends DataObject {
 
 	private static $belongs_many_many = array('PointsOfInterestLayer' => 'PointsOfInterestLayer');
 
-	private static $db = array('Name' => 'Varchar');
+	private static $db = array(
+		'Name' => 'Varchar'
+	);
 
 	private static $summary_fields = array('Name');
 
