@@ -3,7 +3,7 @@ var mappableMapCtr = 0;
 function createMarker(map,lat, lng, html, category, icon, useClusterer, enableWindowZoom, defaultHideMarker) {
     mapId = map.getDiv().getAttribute('id');
     
-var marker = new google.maps.Marker();
+    var marker = new google.maps.Marker();
 
     marker.setPosition(new google.maps.LatLng(lat, lng));
     marker.mycategory = category;
