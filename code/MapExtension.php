@@ -5,7 +5,8 @@ class MapExtension extends DataExtension implements Mappable {
   static $db = array(
     'Lat' => 'Decimal(18,15)',
     'Lon' => 'Decimal(18,15)',
-    'ZoomLevel' => 'Int'
+    'ZoomLevel' => 'Int',
+    'MapPinEdited' => 'Boolean'
   );
 
   static $has_one = array(
@@ -13,7 +14,12 @@ class MapExtension extends DataExtension implements Mappable {
   );
 
 
-  static $defaults = array ('Lat' =>0, 'Lon' => 0, 'Zoom' => 4);
+  static $defaults = array (
+    'Lat' =>0,
+    'Lon' => 0,
+    'Zoom' => 4,
+    'MapPinEdited' => false
+  );
 
 
   /*
@@ -50,6 +56,16 @@ class MapExtension extends DataExtension implements Mappable {
 
   public function getMappableMapContent() {
     return MapUtil::sanitize($this->owner->renderWith($this->owner->ClassName.'MapInfoWindow'));
+  }
+
+  /*
+  If the marker pin is not at position 0,0 mark the pin as edited. This provides the option of
+  filtering out (0,0) point which is often irrelevant for plots
+  */
+  public function onBeforeWrite() {
+    if (($this->Lat !== 0) || ($this->Lon !== 0)) {
+      $this->MapPinEdited = true;
+    }
   }
 
   /*
@@ -111,13 +127,19 @@ class MapExtension extends DataExtension implements Mappable {
     if (Object::has_extension($this->owner->ClassName, 'PointsOfInterestLayerExtension')) {
       foreach($this->owner->PointsOfInterestLayers() as $layer) {
         $layericon = $layer->DefaultIcon();
+        if ($layericon->ID === 0) {
+          $layericon = null;
+        }
         foreach ($layer->PointsOfInterest() as $poi) {
-          if ($poi->MapPinIconID == 0) {
-            $poi->CachedMapPin = $layericon;
+          if ($poi->MapPinEdited) {
+            if ($poi->MapPinIconID == 0) {
+              $poi->CachedMapPin = $layericon;
+            }
+            $map->addMarkerAsObject($poi);
           }
-          $map->addMarkerAsObject($poi);
         }
       }
+      $map->setClusterer( true );
       $map->setEnableAutomaticCenterZoom(true);
     }
 
