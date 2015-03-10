@@ -522,6 +522,10 @@ var styles = [
     $this->minLat = (float) min( (float)$lat, $this->minLat );
     $this->centerLng = (float) ( $this->minLng + $this->maxLng ) / 2;
     $this->centerLat = (float) ( $this->minLat + $this->maxLat ) / 2;
+    $iconURL = null;
+    if ($icon) {
+      $iconURL = $icon->getURL();
+    }
 
     //$this->contentMarker .= "\t\t\t".'createMarker('.$lat.','.$lng.',"'.$html.'","'.$category.'","'.$icon.'");'."\n";
     $m = array(
@@ -529,7 +533,7 @@ var styles = [
       'longitude' => $lng,
       'html' => $html,
       'category' => $category,
-      'icon' => $icon
+      'icon' => $iconURL
     );
     array_push($this->markers, $m);
   }
