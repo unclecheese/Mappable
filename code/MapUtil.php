@@ -217,7 +217,9 @@ class MapUtil
 		if($list) {
 			$arr = $list->toArray();
 			foreach ($arr as $mappable) {
-				$gmap->addMarkerAsObject($mappable);
+				if ($mappable->MapPinEdited) {
+					$gmap->addMarkerAsObject($mappable);
+				}
 			}
 		}
 		return $gmap;	
