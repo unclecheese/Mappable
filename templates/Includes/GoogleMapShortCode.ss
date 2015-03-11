@@ -1,10 +1,8 @@
 <% include GoogleJavaScript %>
 <div class="googlemapcontainer">
-Test
 <div id="$DomID" class="map googlemap"><!-- map is rendered here --></div>
 <% if $Caption %><p class="caption">$Caption</p><% end_if %>
 </div>
-
 <script type="text/javascript">
   function initialize() {
     var mapOptions = {
