@@ -7,4 +7,4 @@ if(!defined('MAPPABLE_MODULE_PATH'))
 }
 
 ShortcodeParser::get('default')->register('GoogleStreetView',array('GoogleStreetViewShortCodeHandler','parse_googlestreetview'));
-
+ShortcodeParser::get('default')->register('GoogleMap',array('GoogleMapShortCodeHandler','parse_googlemap'));
