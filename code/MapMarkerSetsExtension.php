@@ -15,15 +15,12 @@ class MapMarkerSetsExtension extends DataExtension {
 
 
   public function updateCMSFields( FieldList $fields ) {
-
-        
     $gridConfig2 = GridFieldConfig_RelationEditor::create();
     $gridConfig2->getComponentByType( 'GridFieldAddExistingAutocompleter' )->setSearchFields( array( 'Title' ) );
     $gridConfig2->getComponentByType( 'GridFieldPaginator' )->setItemsPerPage( 100 );
 
     $gridField2 = new GridField( "MapMarkerSets", "MapMarkers", $this->owner->MapMarkerSets(), $gridConfig2 );
     $fields->addFieldToTab( "Root.MapMarkerSets", $gridField2 );
-
   }
 
 }
