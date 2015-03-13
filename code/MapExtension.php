@@ -31,6 +31,7 @@ class MapExtension extends DataExtension implements Mappable {
     $fields->removeByName('Lon');
     $fields->removeByName('ZoomLevel');
     $fields->removeByName('MapPinIcon');
+    $fields->removeByName('MapPinEdited');
 
     $fields->addFieldToTab( "Root.Location", new LatLongField( array(
         new TextField( 'Lat', 'Latitude' ),
