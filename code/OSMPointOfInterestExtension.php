@@ -10,5 +10,10 @@ class OSMPointOfInterestExtension extends DataExtension {
 	private static $indexes = array(
         'OpenStreetMapID' => true
     );
-}
 
+
+	/* The openstreetmap id is only for scripting purposes */
+    public function updateCMSFields( FieldList $fields ) {
+	    $osmid = $fields->removeByName('OpenStreetMapID');
+	}
+}
