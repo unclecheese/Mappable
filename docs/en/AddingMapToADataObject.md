@@ -29,3 +29,8 @@ $BasicMap
 ```
 
 For an example of this, see http://demo.weboftalent.asia/mappable/quick-map-adding-a-map-to-a-dataobject/
+
+##Custom Popup
+When clicking on the pin a popup with the name of the pin will occur.
+
+If you want to change the information displayed there you have to setup a template named by the decorated DataObject suffixed with `_MapInfoWindow`, e.g. `MyPage_MapInfoWindow`.
