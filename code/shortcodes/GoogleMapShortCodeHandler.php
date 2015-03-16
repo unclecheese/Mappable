@@ -5,7 +5,7 @@ class GoogleMapShortCodeHandler {
     /* Counter used to ensure unique div ids to allow for multiple maps on on page */
     private static $gsv_ctr = 1;
 
-    public static function parse_googlemap( $arguments, $caption = null, $parser = null ) {
+    public static function parse_googlemap($arguments, $caption = null, $parser = null) {
         // each of latitude and longitude are required at a bare minimum
         if(!isset($arguments['latitude'])){
             return '';
@@ -20,7 +20,7 @@ class GoogleMapShortCodeHandler {
         $defaults = array(
             'Zoom' => 5,
             'MapType' => 'ROAD'
-        );
+      );
 
         // ensure JavaScript for the map service is only downloaded once
         $arguments['DownloadJS'] = !MapUtil::get_map_already_rendered();
@@ -52,7 +52,7 @@ class GoogleMapShortCodeHandler {
                 case 'terrain':
                     $arguments['MapType'] = 'TERRAIN';
                     break;
-                
+
                 default:
                     $arguments['MapType'] = 'ROAD';
                     break;
@@ -63,7 +63,7 @@ class GoogleMapShortCodeHandler {
         if (isset($arguments['zoom'])) {
             $arguments['Zoom'] = $arguments['zoom'];
         }
-        
+
         // the id of the dom element to be used to render the street view
         $arguments['DomID'] = 'google_sc_map_'.self::$gsv_ctr;
 
@@ -77,9 +77,9 @@ class GoogleMapShortCodeHandler {
         $customised = array_merge($defaults, $arguments);
 
         //get streetview template template
-        $template = new SSViewer( 'GoogleMapShortCode' );
+        $template = new SSViewer('GoogleMapShortCode');
 
         //return the template customised with the parmameters
-        return $template->process( new ArrayData( $customised ) );
+        return $template->process(new ArrayData($customised));
     }
 }

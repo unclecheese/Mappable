@@ -15,6 +15,6 @@ class MappableDataObjectSet extends Extension {
 		$gmap->setSize($w,$h);
 		return $gmap;
 	}
-	
-	
+
+
 }

@@ -29,13 +29,15 @@ class MappableData extends Extension {
 		return $gmap;
 	}
 
-    public function StaticMap($width = null, $height = null) {
+	public function StaticMap($width = null, $height = null) {
 		$w = $width ? $width : MapUtil::$map_width;
 		$h = $height ? $height : MapUtil::$map_height;
-        $lat = $this->owner->getMappableLatitude();
-        $lng = $this->owner->getMappableLongitude();
-        $src = htmlentities("//maps.google.com/maps/api/staticmap?center=$lat,$lng&markers=$lat,$lng&zoom=13&size=${w}x$h&sensor=false");
-        return '<img src="'.$src.'" width="'.$w.'" height="'.$h.'" alt="'.$this->owner->Title.'" />';
+		$lat = $this->owner->getMappableLatitude();
+		$lng = $this->owner->getMappableLongitude();
+		$url = "//maps.google.com/maps/api/staticmap?center=$lat,$lng&markers=$lat,".
+				"$lng&zoom=13&size=${w}x$h&sensor=false";
+		$src = htmlentities($url);
+		return '<img src="'.$src.'" width="'.$w.'" height="'.$h.'" alt="'.$this->owner->Title.'" />';
 	}
 
 }

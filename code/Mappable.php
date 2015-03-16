@@ -19,7 +19,7 @@ interface Mappable {
 	 * @return string
 	 */
 	public function getMappableLatitude();
-	
+
 
 	/**
 	 * An accessor method for the longitude field.
@@ -31,10 +31,10 @@ interface Mappable {
 	 * @return string
 	 */
 	public function getMappableLongitude();
-	
-	
+
+
 	/**
-	 * An accessor method for the path to the marker pin for this point on the map. 
+	 * An accessor method for the path to the marker pin for this point on the map.
 	 * If null or false, use the default Google Maps icon.
 	 * @example
 	 * <code>
@@ -42,10 +42,10 @@ interface Mappable {
 	 * </code>
 	 *
 	 * @return string
-	 */	
+	 */
 	public function getMappableMapPin();
-	
-	
+
+
 	/**
 	 * An accessor method that returns the content for the map bubble popup.
 	 * It is best to use the {@see ViewableData::renderWith()} method to take advantaging
@@ -60,7 +60,7 @@ interface Mappable {
 	 * </code>
 	 *
 	 * @return string
-	 */	
+	 */
 	public function getMappableMapContent();
 
 }

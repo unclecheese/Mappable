@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class PointOfInterest extends DataObject {
 	private static $description = 'Represents a point of interest on a map, e.g. railway station';
@@ -13,7 +13,7 @@ class PointOfInterest extends DataObject {
 
 	function getCMSFields() {
 	    $fields = parent::getCMSFields();
-	    $fields->addFieldToTab( 'Root.Main', new TextField('Name', 'Name of the item on the map'));
+	    $fields->addFieldToTab('Root.Main', new TextField('Name', 'Name of the item on the map'));
 	    return $fields;
 	}
 
