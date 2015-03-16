@@ -776,11 +776,14 @@ function jsonRemoveUnicodeSequences($struct) {
     }
 
     // initialise full screen as the config value if not already set
-    if ($this->allowFullScreen == null) {
+    if ($this->allowFullScreen === null) {
       $this->allowFullScreen = Config::inst()->get('Mappable', 'allow_full_screen');
     }
 
-  
+    if (!$this->allowFullScreen) {
+      $this->allowFullScreen = 'false';
+    }
+
     $vars = new ArrayData(array(
         'JsonMapStyles' => $this->jsonMapStyles,
         'AdditionalCssClasses' => $this->additional_css_classes,
