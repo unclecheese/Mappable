@@ -18,6 +18,10 @@ ArrayList:
   extensions:
     -  MappableDataObjectSet
 
+POIMapPage:
+  extensions:
+    ['PointsOfInterestLayerExtension','MapExtension']
+
 # allow geographical format files to be uploaded
 File:
   $allowed_extensions: ['gpx', 'kml']
