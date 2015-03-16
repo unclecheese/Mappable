@@ -15,41 +15,36 @@ class MapUtil
 	 */
 	protected static $instances = 0;
 
-
 	/**
 	 * @var int The default width of a Google Map
 	 */
 	public static $map_width = '100%';
-	
 	
 	/**
 	 * @var int The default height of a Google Map
 	 */
 	public static $map_height = '400px';
 
-        /** @var int Icon width of the gmarker **/
-        public static $iconWidth = 24;
+    /** @var int Icon width of the gmarker **/
+    public static $iconWidth = 24;
 
-        /** @var int Icon height of the gmarker **/
-        public static $iconHeight = 24;
+    /** @var int Icon height of the gmarker **/
+    public static $iconHeight = 24;
 		
 	/**
 	 * @var int Prefix for the div ID of the map
 	 */
 	public static $div_id = "google_map";
 	
-	
 	/**
 	 * @var boolean Automatic center/zoom for the map
 	 */
 	public static $automatic_center = true;
 	
-	
 	/**
 	 * @var boolean Show directions fields on the map
 	 */
 	public static $direction_fields = false;
-	
 	
 	/**
 	 * @var boolean Show the marker fields on the map
@@ -70,8 +65,10 @@ class MapUtil
 	 * @var int info_window_width Width of info window
 	 */
 
+	/* Width of the map information window */
 	public static $info_window_width = 250;
 
+	/* Signals whether at least one map has already been rendered */
 	private static $map_already_rendered = false;
 	
 	
