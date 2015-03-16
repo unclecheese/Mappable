@@ -209,7 +209,7 @@ class MapUtil
 	 * @return string
 	 */
 	public static function sanitize($content) {
-		return addslashes(str_replace(array("\n","\r"),array("",""),$content));
+		return addslashes(str_replace(array("\n","\r", "\t"), '' ,$content));
 	}
 
 
