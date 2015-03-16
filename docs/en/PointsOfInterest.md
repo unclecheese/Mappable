@@ -62,3 +62,8 @@ public function BicycleRideMap() {
 	return $map;
 }
 ```
+
+#Page with Points of Interest Layer
+A page type, POIMapPage, is included in the Mappable module.  It is the same as 
+a page, with the addition of MapExtension and PointsOfInterestLayerException.  You
+will probably have to override the template, POIMapPage.ss in your theme.
