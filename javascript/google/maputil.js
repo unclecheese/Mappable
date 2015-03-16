@@ -108,7 +108,8 @@ function addKmlFiles(map, kmlFiles) {
     }
 }
 
-function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLat, maxLng, mapType, markers, lines, kmlFiles, jsonMapStyles, enableAutomaticCenterZoom, useClusterer) {
+function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLat, maxLng, mapType, markers, lines, kmlFiles,
+                     jsonMapStyles, enableAutomaticCenterZoom, useClusterer, allowFullScreen) {
     var newMap = [];
     newMap.googleMapID = googleMapID;
     newMap.zoom = zoom;
@@ -125,6 +126,7 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
     newMap.jsonMapStyles = jsonMapStyles;
     newMap.enableAutomaticCenterZoom = enableAutomaticCenterZoom;
     newMap.useClusterer = useClusterer;
+    newMap.allowFullScreen = allowFullScreen;
     mappableMaps[googleMapID] = newMap;
 
     // increment map counter
@@ -145,6 +147,7 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
 function loadedGoogleMapsAPI() {
     for (var i = 1; i <= mappableMapCtr; i++) {
         var map_info = mappableMaps['google_map_' + i];
+        console.log(map_info);
         var map = new google.maps.Map(document.getElementById(map_info.googleMapID));
     
         if (map_info.useClusterer) {
@@ -158,7 +161,11 @@ function loadedGoogleMapsAPI() {
             //map.setOptions({styles: map_info.jsonMapStyles});
         //};
 
-
+        if (map_info.allowFullScreen) {
+           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
+             FullScreenControl(map, "Full Screen", "Original Size")
+            ); 
+        }
         if (map_info.enableAutomaticCenterZoom) {
             centre = map_info.centreCoordinates;
             map.setCenter(new google.maps.LatLng(centre.lat,centre.lng));
