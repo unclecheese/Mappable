@@ -2,6 +2,11 @@
 
 class MapExtension extends DataExtension implements Mappable {
 
+	/*
+	 * Template suffix for rendering MapInfoWindow aka  map bubble
+	 */
+	private static $map_info_window_suffix = '_MapInfoWindow';
+
   static $db = array(
     'Lat' => 'Decimal(18,15)',
     'Lon' => 'Decimal(18,15)',
@@ -39,7 +44,7 @@ class MapExtension extends DataExtension implements Mappable {
         new TextField( 'ZoomLevel', 'Zoom' )
       ),
         array( 'Address' )
-        ) 
+        )
     );
 
     $fields->addFieldToTab( 'Root.Location', $uf = new UploadField('MapPinIcon', _t('Mappable.MAP_PIN', 'Map Pin Icon.  Leave this blank for default pin to show')));
@@ -55,9 +60,22 @@ class MapExtension extends DataExtension implements Mappable {
     return $this->owner->Lon;
   }
 
-  public function getMappableMapContent() {
-    return MapUtil::sanitize($this->owner->renderWith($this->owner->ClassName.'MapInfoWindow'));
-  }
+	/**
+	 * Renders the map info window for the DataObject.
+	 *
+	 * Be sure to define a template for that, named by the decorated class suffixed with _MapInfoWindow,
+	 * e.g. MyPage_MapInfoWindow
+	 *
+	 * You can change the suffix globally by editing the MapExtension.map_info_window_suffix config value.
+	 *
+	 * @return string
+	 */
+	public function getMappableMapContent() {
+		$defaultTemplate = 'MapInfoWindow';
+		$classTemplate = SSViewer::get_templates_by_class($this->owner->ClassName, Config::inst()->get('MapExtension', 'map_info_window_suffix'));
+	  	$template = count($classTemplate) ? $classTemplate : $defaultTemplate;
+	  	return MapUtil::sanitize($this->owner->renderWith($template));
+  	}
 
   /*
   If the marker pin is not at position 0,0 mark the pin as edited. This provides the option of
@@ -107,7 +125,7 @@ class MapExtension extends DataExtension implements Mappable {
 
 
   /*
-  Render a map at the provided lat,lon, zoom from the editing functions, 
+  Render a map at the provided lat,lon, zoom from the editing functions,
   */
   public function BasicMap() {
     $map = $this->owner->getRenderableMap();
