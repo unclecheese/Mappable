@@ -12,6 +12,11 @@
     };
     var map = new google.maps.Map(document.getElementById('$DomID'),
         mapOptions);
+    if ($AllowFullScreen) {
+	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
+		FullScreenControl(map, "Full Screen", "Original Size")
+	);
+    }
   }
   google.maps.event.addDomListener(window, 'load', initialize);
 </script>
