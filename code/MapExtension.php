@@ -82,8 +82,8 @@ class MapExtension extends DataExtension implements Mappable {
   filtering out (0,0) point which is often irrelevant for plots
   */
   public function onBeforeWrite() {
-    if (($this->Lat !== 0) || ($this->Lon !== 0)) {
-      $this->MapPinEdited = true;
+    if (($this->owner->Lat !== 0) || ($this->owner->Lon !== 0)) {
+      $this->owner->MapPinEdited = true;
     }
   }
 
