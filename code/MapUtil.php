@@ -8,8 +8,6 @@ class MapUtil
 	 */
 	protected static $api_key;
 	
-	
-	
 	/**
 	 * @var int Number of active {@see GoogleMapsAPI} instances (for the HTML ID)
 	 */
@@ -61,15 +59,14 @@ class MapUtil
 	 */
 	public static $center = 'Paris, France';
 
-	/**
-	 * @var int info_window_width Width of info window
-	 */
-
 	/* Width of the map information window */
 	public static $info_window_width = 250;
 
 	/* Signals whether at least one map has already been rendered */
 	private static $map_already_rendered = false;
+
+	/* Whether or not to allow full screen */
+	private static $allow_full_screen = null;
 	
 	
 	/**
@@ -102,56 +99,57 @@ class MapUtil
 		self::$map_height = $height;
 	}
 	
-        /**
-          * Set the type of the gmap
-          *
-          * @param string $mapType ( can be 'google.maps.MapTypeId.ROADMAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
-          *
-          * @return void
-          */
-        public function set_map_type($mapType)
-        {
-            self::$map_type = $mapType;
-        }
+    /**
+      * Set the type of the gmap
+      *
+      * @param string $mapType ( can be 'google.maps.MapTypeId.ROADMAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
+      *
+      * @return void
+      */
+    public function set_map_type($mapType)
+    {
+        self::$map_type = $mapType;
+    }
 
-        /**
-          * Set the with of the gmap infowindow (on marker clik)
-          *
-          * @param int $info_window_width GoogleMap info window width
-          *
-          * @return void
-          */
-        public function set_info_window_width($info_window_width)
-        {
-            self::$info_window_width = $info_window_width;
-        }
+    /**
+      * Set the with of the gmap infowindow (on marker clik)
+      *
+      * @param int $info_window_width GoogleMap info window width
+      *
+      * @return void
+      */
+    public function set_info_window_width($info_window_width)
+    {
+        self::$info_window_width = $info_window_width;
+    }
 
-        /**
-          * Set the center of the gmap (an address)
-          *
-          * @param string $center GoogleMap  center (an address)
-          *
-          * @return void
-          */
-        public function set_center($center)
-        {
-            self::$center = $center;
-        }
+    /**
+      * Set the center of the gmap (an address)
+      *
+      * @param string $center GoogleMap  center (an address)
+      *
+      * @return void
+      */
+    public function set_center($center)
+    {
+        self::$center = $center;
+    }
 
-        /**
-          * Set the size of the icon markers
-          *
-          * @param int $iconWidth GoogleMap  marker icon width
-          * @param int $iconHeight GoogleMap  marker icon height
-          *
-          * @return void
-          */
+    /**
+      * Set the size of the icon markers
+      *
+      * @param int $iconWidth GoogleMap  marker icon width
+      * @param int $iconHeight GoogleMap  marker icon height
+      *
+      * @return void
+      */
 
-        public function set_icon_size($iconWidth,$iconHeight)
-        {
-            self::$iconWidth = $iconWidth;
-            self::$iconHeight = $iconHeight;
-        }
+    public function set_icon_size($iconWidth,$iconHeight)
+    {
+        self::$iconWidth = $iconWidth;
+        self::$iconHeight = $iconHeight;
+    }
+
 	/**
 	 * Get a new GoogleMapAPI object and load it with the default settings
 	 *
@@ -160,6 +158,15 @@ class MapUtil
 	public static function instance()
 	{
 		self::$instances++;
+
+		if (self::$allow_full_screen == null) {
+			self::$allow_full_screen = Config::inst()->get('Mappable', 'allow_full_screen');
+		}
+
+		// for JS
+		if (self::$allow_full_screen === false) {
+			self:$allow_full_screen = 'asdfsda';
+		}
 
 		$url = Director::absoluteBaseURL();
 
@@ -176,6 +183,8 @@ class MapUtil
 			$key = $key[$host];
 		}
 
+
+
 		$gmap = new MapAPI($key);
 		$gmap->setDivId(self::$div_id."_".self::$instances);
 		$gmap->setEnableAutomaticCenterZoom(self::$automatic_center);
@@ -187,6 +196,7 @@ class MapUtil
         $gmap->setCenter(self::$center);
         $gmap->setIconSize(self::$iconWidth, self::$iconHeight);
         $gmap->setIncludeDownloadJavascript(self::$map_already_rendered);
+        $gmap->setAllowFullScreen(self::$allow_full_screen);
 		return $gmap;
 	}
 

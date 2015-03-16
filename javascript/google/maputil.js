@@ -2,7 +2,7 @@ var mappableMapCtr = 0;
 
 function createMarker(map,lat, lng, html, category, icon, useClusterer, enableWindowZoom, defaultHideMarker) {
     mapId = map.getDiv().getAttribute('id');
-    
+
     var marker = new google.maps.Marker();
 
     marker.setPosition(new google.maps.LatLng(lat, lng));
@@ -18,8 +18,6 @@ function createMarker(map,lat, lng, html, category, icon, useClusterer, enableWi
     } else {
         marker.setMap(map);
     }
-
-
 
     google.maps.event.addListener(marker, "click", function() {
         if (enableWindowZoom) {
@@ -108,7 +106,8 @@ function addKmlFiles(map, kmlFiles) {
     }
 }
 
-function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLat, maxLng, mapType, markers, lines, kmlFiles, jsonMapStyles, enableAutomaticCenterZoom, useClusterer) {
+function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLat, maxLng, mapType, markers, lines, kmlFiles,
+                     jsonMapStyles, enableAutomaticCenterZoom, useClusterer, allowFullScreen) {
     var newMap = [];
     newMap.googleMapID = googleMapID;
     newMap.zoom = zoom;
@@ -125,6 +124,7 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
     newMap.jsonMapStyles = jsonMapStyles;
     newMap.enableAutomaticCenterZoom = enableAutomaticCenterZoom;
     newMap.useClusterer = useClusterer;
+    newMap.allowFullScreen = allowFullScreen;
     mappableMaps[googleMapID] = newMap;
 
     // increment map counter
@@ -145,8 +145,9 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
 function loadedGoogleMapsAPI() {
     for (var i = 1; i <= mappableMapCtr; i++) {
         var map_info = mappableMaps['google_map_' + i];
+        console.log(map_info);
         var map = new google.maps.Map(document.getElementById(map_info.googleMapID));
-    
+
         if (map_info.useClusterer) {
             fluster = new Fluster2(map);
         }
@@ -158,15 +159,19 @@ function loadedGoogleMapsAPI() {
             //map.setOptions({styles: map_info.jsonMapStyles});
         //};
 
-
+        if (map_info.allowFullScreen) {
+           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
+             FullScreenControl(map, "Full Screen", "Original Size")
+            );
+        }
         if (map_info.enableAutomaticCenterZoom) {
             centre = map_info.centreCoordinates;
             map.setCenter(new google.maps.LatLng(centre.lat,centre.lng));
-               
+
             var bds = new google.maps.LatLngBounds(new google.maps.LatLng(map_info.minLat, map_info.minLng),
                 new google.maps.LatLng(map_info.maxLat, map_info.maxLng));
             map.fitBounds(bds);
-            
+
             map.setZoom(map_info.zoom);
         } else {
             var centre = map_info.centreCoordinates;

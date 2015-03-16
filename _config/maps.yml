@@ -1,0 +1,6 @@
+---
+Name: mappable
+After: 'framework/*','cms/*'
+---
+Mappable:
+  allow_full_screen: true

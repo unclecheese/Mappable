@@ -190,6 +190,9 @@ var styles = [
   /** factor by which to fudge the boundaries so that when we zoom encompass, the markers aren't too close to the edge **/
   protected $coordCoef = 0.01;
 
+  /* set this to true to render button to maximize / minimize a map */
+  protected $allowFullScreen = null;
+
 
   protected static $includeDownloadJavascript = false;
 
@@ -410,14 +413,22 @@ var styles = [
     $this->mapType = $mapType;
   }
 
+  /*
+  Set whether or not to allow the full screen tools
+  */
+  public function setAllowFullScreen( $allowed ) {
+    $this->allowFullScreen = $allowed;
+  }
 
-
+  /**
+  * Set the center of the gmap
+  **/
   public function setLatLongCenter( $center ) {
     $this->latLongCenter = $center;
   }
 
   /**
-   * Set the center of the gmap
+   * Decide whether or not to show direction controls
    *
    * @param boolean $displayDirectionFields display directions or not in the info window
    *
@@ -764,7 +775,15 @@ function jsonRemoveUnicodeSequences($struct) {
       $this->MapTypeId = 'false';
     }
 
-  
+    // initialise full screen as the config value if not already set
+    if ($this->allowFullScreen === null) {
+      $this->allowFullScreen = Config::inst()->get('Mappable', 'allow_full_screen');
+    }
+
+    if (!$this->allowFullScreen) {
+      $this->allowFullScreen = 'false';
+    }
+
     $vars = new ArrayData(array(
         'JsonMapStyles' => $this->jsonMapStyles,
         'AdditionalCssClasses' => $this->additional_css_classes,
@@ -793,7 +812,8 @@ function jsonRemoveUnicodeSequences($struct) {
         'DownloadJS' => !(self::$includeDownloadJavascript),
         'ClustererLibraryPath' => $this->clustererLibraryPath,
         'Lines' => $linesJson,
-        'KmlFiles' => $kmlJson
+        'KmlFiles' => $kmlJson,
+        'AllowFullScreen' => $this->allowFullScreen
       )
     );
 

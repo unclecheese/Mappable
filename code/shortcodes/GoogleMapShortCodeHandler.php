@@ -67,7 +67,8 @@ class GoogleMapShortCodeHandler {
         // the id of the dom element to be used to render the street view
         $arguments['DomID'] = 'google_sc_map_'.self::$gsv_ctr;
 
-        
+        // fullscreen
+        $arguments['AllowFullScreen'] = Config::inst()->get('Mappable', 'allow_full_screen');
 
         // incrememt the counter to ensure a unique id for each map canvas
         self::$gsv_ctr++;
