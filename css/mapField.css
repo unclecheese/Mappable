@@ -7,8 +7,19 @@
 }
 
 .editableMap {
-	display: block;
 	height: 300px;
-	width: 700px;
+	/* width: 90%;*/
 	float: none;
+}
+
+.editableMapWrapper {
+	display: inline-block;
+	width: 900px;
+	float: none;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.fieldholder-small {
+	display: none;
 }
