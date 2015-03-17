@@ -86,7 +86,7 @@ function FullScreenControl(map, enterFull, exitFull) {
         fullScreen = true;
         google.maps.event.trigger(map, "resize");
         map.setCenter(center);
-        // this works around street view causing the map to disappear, which is caused by Google Maps setting the 
+        // this works around street view causing the map to disappear, which is caused by Google Maps setting the
         // CSS position back to relative. There is no event triggered when Street View is shown hence the use of setInterval
         interval = setInterval(function () {
             if (mapDiv.style.position !== "fixed") {
@@ -124,5 +124,14 @@ function FullScreenControl(map, enterFull, exitFull) {
             controlDiv.exitFullScreen();
         }
     });
+
+    document.onkeydown = function(evt) {
+	    evt = evt || window.event;
+	    if (evt.keyCode == 27) {
+	    	if (fullScreen) {
+	    		controlDiv.exitFullScreen();
+	    	}
+	    }
+	};
     return controlDiv;
 }
