@@ -1,10 +1,14 @@
 #Multiple Maps on the Same Page
-Multiple maps can be added to a page.  One option is to associate maps with a DataObject whose relationship to the parent page is 'has many', as in this example of contact page addresses.
+Multiple maps can be added to a page.  One option is to associate maps with a DataObject whose
+relationship to the parent page is 'has many', as in this example of contact page addresses.
 ##Example
-Often a company will have more than one office location that they wish to display, this is a an example of that use case.  It would probably need expanding in order to show the likes of email address and telephone number,  left as an exercise for the reader.
+Often a company will have more than one office location that they wish to display, this is a an
+example of that use case.  It would probably need expanding in order to show the likes of email
+address and telephone number,  left as an exercise for the reader.
 
-Firstly, create a parent container page called ContactPage, this has many locations of type ContactPageAddress.
-```
+Firstly, create a parent container page called ContactPage, this has many locations of type
+ContactPageAddress.
+```php
 <?php
 class ContactPage extends DemoPage {
  
@@ -29,13 +33,12 @@ class ContactPage_Controller extends Page_Controller {
  
  
 }
- 
-?>
+
 ```
 
 The latter contains the actual map for each location, configured as above using extensions.yml
 
-```
+```php
 <?php
 class ContactPageAddress extends DataObject {
 	static $db = array(
@@ -61,7 +64,6 @@ class ContactPageAddress extends DataObject {
 		return $fields;
 	}
 }
-?>
 ```
 
 The template simply loops through the contact page addresses, rendering a map.

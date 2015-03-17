@@ -1,38 +1,56 @@
 #Points of Interest
-A point of interest (or POI) denotes a location on a map that is of interest, for example a bridge, a railway station, or a level crossing.  They are grouped together in layers, a PointOfInterest having a many many relationship with PointsOfInterestLayer.  This allows for the use case where "Crewe Railway Station" can appear in a "Railway Stations of Great Britain" layer as well as a "Railway Stations of England" layer.
+A point of interest (or POI) denotes a location on a map that is of interest, for example a bridge,
+a railway station, or a level crossing.  They are grouped together in layers, a PointOfInterest
+having a many many relationship with PointsOfInterestLayer.  This allows for the use case where
+"Crewe Railway Station" can appear in a "Railway Stations of Great Britain" layer as well as a
+"Railway Stations of England" layer.
 
 #Adding Points of Interest to a Page Type
-Whilst points of interest layers are available to edit after installing the Mappable module, they need to be added to a DataObject for rendering purposes.  Do this using the standard extensions mechanism in a yml file.  Note that MapExtension is also required, as this has the method
+Whilst points of interest layers are available to edit after installing the Mappable module, they
+need to be added to a DataObject for rendering purposes.  Do this using the standard extensions
+mechanism in a yml file.  Note that MapExtension is also required, as this has the method
 BasicMap() for rendering the map in a template.
-```
+
+```yml
 PageWithPointsOfInterest:
   extensions:
     ['MapExtension', 'PointsOfInterestLayerExtension']
 ```
 If you wish to remove the Location tab in this case add the following in your equivalent class:
+
 ```php
 	function getCMSFields() {
 	    $fields = parent::getCMSFields();
 	    $fields->removeByName('Location');
 	    return $fields;
 	}
-```php
+```
 
 #Editing
-A new model admin tab is available called "Points of Interest".  Here you can add new layers or edit existing ones.
+A new model admin tab is available called "Points of Interest".  Here you can add new layers or
+edit existing ones.
 
 ##Adding a New Layer
 Add a new layer, in this case "Supermarkets of Bangkok" and save it.
-![Adding a new layer](https://github.com/gordonbanderson/Mappable/blob/screenshots/screenshots/001-poi-create-new-layer.png?raw=true "Adding a new layer")
+![Adding a new layer]
+(https://github.com/gordonbanderson/Mappable/blob/screenshots/screenshots/001-poi-create-new-layer.png?raw=true 
+"Adding a new layer")
 
 
 ##Adding a new Point of Interest to that Layer
-![Adding a new supermarket](https://github.com/gordonbanderson/Mappable/blob/screenshots/screenshots/003-poi-create-new-point-location.png?raw=true "Adding a new supermarket")
-![Editing Location](https://github.com/gordonbanderson/Mappable/blob/screenshots/screenshots/004-poi-create-new-point-location.png?raw=true "Editing Location")
-![Point of Interest Saved](https://github.com/gordonbanderson/Mappable/blob/screenshots/screenshots/005-poi-saved.png?raw=true "Point of Interest Saved")
+![Adding a new supermarket]
+(https://github.com/gordonbanderson/Mappable/blob/screenshots/screenshots/003-poi-create-new-point-location.png?raw=true
+"Adding a new supermarket")
+![Editing Location]
+(https://github.com/gordonbanderson/Mappable/blob/screenshots/screenshots/004-poi-create-new-point-location.png?raw=true "Editing Location")
+![Point of Interest Saved]
+(https://github.com/gordonbanderson/Mappable/blob/screenshots/screenshots/005-poi-saved.png?raw=true
+"Point of Interest Saved")
 
 #Rendering
-The method BasicMap in MapExtension takes into account points of interest when rendering a map.  If you full control of the rendering from within the object containing POIs then use this code as a basis:
+The method BasicMap in MapExtension takes into account points of interest when rendering a map.  
+If you full control of the rendering from within the object containing POIs then use this code as
+a basis:
 
 ```php
 public function BicycleRideMap() {

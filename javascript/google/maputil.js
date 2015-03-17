@@ -1,10 +1,10 @@
 var mappableMapCtr = 0;
 
-function createMarker(map,lat, lng, html, category, icon, useClusterer, enableWindowZoom, defaultHideMarker) {
+
+function createMarker(map, lat, lng, html, category, icon, useClusterer, enableWindowZoom, defaultHideMarker) {
     mapId = map.getDiv().getAttribute('id');
 
     var marker = new google.maps.Marker();
-
     marker.setPosition(new google.maps.LatLng(lat, lng));
     marker.mycategory = category;
 
@@ -33,51 +33,47 @@ function createMarker(map,lat, lng, html, category, icon, useClusterer, enableWi
     if (defaultHideMarker) {
         marker.hide();
     }
-
 }
-
 
 
 // JS public function to get current Lat & Lng
-
 function getCurrentLat() {
     return current_lat;
 }
+
 
 function getCurrentLng() {
     return current_lng;
 }
 
 
-
 // JS public function to center the gmaps dynamically
-
 function showAddress(address) {
     if (geocoder) {
         geocoder.getLatLng(
-        address,
+            address,
 
-        function(point) {
-            if (!point) {
-                alert(address + " not found");
-            } else {
-                map.setCenter(point);
-                map.setZoom($Zoom);
-            }
-        });
+            function(point) {
+                if (!point) {
+                    alert(address + " not found");
+                } else {
+                    map.setCenter(point);
+                    map.setZoom($Zoom);
+                }
+            });
     }
 }
-
 
 
 function addAllMarkers(map, markers, useClusterer, enableWindowZoom, defaultHideMarker) {
     for (var i = 0; i < markers.length; i++) {
         var marker = markers[i];
-        createMarker(map,marker.latitude, marker.longitude, marker.html, marker.category, marker.icon,
-        useClusterer, enableWindowZoom, defaultHideMarker);
+        createMarker(map, marker.latitude, marker.longitude, marker.html, marker.category, marker.icon,
+            useClusterer, enableWindowZoom, defaultHideMarker);
     }
 
 }
+
 
 function addLines(map, lines) {
     for (i = 0; i < lines.length; i++) {
@@ -95,6 +91,7 @@ function addLines(map, lines) {
     }
 }
 
+
 function addKmlFiles(map, kmlFiles) {
     for (var i = 0; i < kmlFiles.length; i++) {
         var kmlFile = kmlFiles[i];
@@ -107,7 +104,7 @@ function addKmlFiles(map, kmlFiles) {
 }
 
 function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLat, maxLng, mapType, markers, lines, kmlFiles,
-                     jsonMapStyles, enableAutomaticCenterZoom, useClusterer, allowFullScreen) {
+    jsonMapStyles, enableAutomaticCenterZoom, useClusterer, allowFullScreen) {
     var newMap = [];
     newMap.googleMapID = googleMapID;
     newMap.zoom = zoom;
@@ -132,14 +129,16 @@ function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLa
 
     // initialise gmarkers array for this map
     gmarkers[googleMapID] = [];
-    var infoWindow = new google.maps.InfoWindow({ content: 'test', maxWidth: 400 });
+    var infoWindow = new google.maps.InfoWindow({
+        content: 'test',
+        maxWidth: 400
+    });
     infoWindows[googleMapID] = infoWindow;
 
     mapLayers[googleMapID] = kmlFiles;
     mapLines[googleMapID] = lines;
 
 }
-
 
 
 function loadedGoogleMapsAPI() {
@@ -156,17 +155,17 @@ function loadedGoogleMapsAPI() {
 
         // FIXME - to do
         // if (map_info.jsonMapStyles) {
-            //map.setOptions({styles: map_info.jsonMapStyles});
+        //map.setOptions({styles: map_info.jsonMapStyles});
         //};
 
         if (map_info.allowFullScreen) {
-           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
-             FullScreenControl(map, "Full Screen", "Original Size")
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
+                FullScreenControl(map, "Full Screen", "Original Size")
             );
         }
         if (map_info.enableAutomaticCenterZoom) {
             centre = map_info.centreCoordinates;
-            map.setCenter(new google.maps.LatLng(centre.lat,centre.lng));
+            map.setCenter(new google.maps.LatLng(centre.lat, centre.lng));
 
             var bds = new google.maps.LatLngBounds(new google.maps.LatLng(map_info.minLat, map_info.minLng),
                 new google.maps.LatLng(map_info.maxLat, map_info.maxLng));
@@ -175,7 +174,7 @@ function loadedGoogleMapsAPI() {
             map.setZoom(map_info.zoom);
         } else {
             var centre = map_info.centreCoordinates;
-            map.setCenter(new google.maps.LatLng(centre.lat,centre.lng));
+            map.setCenter(new google.maps.LatLng(centre.lat, centre.lng));
             map.setZoom(map_info.zoom);
         }
 
@@ -187,7 +186,7 @@ function loadedGoogleMapsAPI() {
 
         addAllMarkers(map, map_info.markers, map_info.useClusterer, map_info.enableAutomaticCenterZoom, map_info.defaultHideMarker);
         addLines(map, map_info.lines);
-        addKmlFiles(map,map_info.kmlFiles);
+        addKmlFiles(map, map_info.kmlFiles);
         if (map_info.useClusterer) {
             fluster.initialize();
         }
