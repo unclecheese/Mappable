@@ -173,4 +173,12 @@ class MapExtension extends DataExtension implements Mappable {
 
 		return $map;
 	}
+
+	/**
+	 * Template helper, used to decide whether or not to use compressed assets
+	 */
+	public function UseCompressedAssets() {
+		error_log('***** USE COMPRESSED ASSETS ******');
+		return Config::inst()->get('Mappable', 'use_compressed_assets');
+	}
 }

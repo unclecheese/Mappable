@@ -833,7 +833,8 @@ function jsonRemoveUnicodeSequences($struct) {
 				'ClustererLibraryPath' => $this->clustererLibraryPath,
 				'Lines' => $linesJson,
 				'KmlFiles' => $kmlJson,
-				'AllowFullScreen' => $this->allowFullScreen
+				'AllowFullScreen' => $this->allowFullScreen,
+				'UseCompressedAssets' => Config::inst()->get('Mappable', 'use_compressed_assets')
 			)
 		);
 
