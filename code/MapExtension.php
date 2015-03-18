@@ -146,32 +146,31 @@ class MapExtension extends DataExtension implements Mappable {
 			$map->setEnableAutomaticCenterZoom(true);
 		}
 
-	// add points of interest taking into account the default icon of the layer as an override
-	if (Object::has_extension($this->owner->ClassName, 'PointsOfInterestLayerExtension')) {
-	  foreach($this->owner->PointsOfInterestLayers() as $layer) {
-		$layericon = $layer->DefaultIcon();
-		if ($layericon->ID === 0) {
-		  $layericon = null;
-		}
-		foreach ($layer->PointsOfInterest() as $poi) {
-		  if ($poi->MapPinEdited) {
-			if ($poi->MapPinIconID == 0) {
-			  $poi->CachedMapPin = $layericon;
+		// add points of interest taking into account the default icon of the layer as an override
+		if (Object::has_extension($this->owner->ClassName, 'PointsOfInterestLayerExtension')) {
+			foreach($this->owner->PointsOfInterestLayers() as $layer) {
+				$layericon = $layer->DefaultIcon();
+				if ($layericon->ID === 0) {
+					$layericon = null;
+				}
+				foreach ($layer->PointsOfInterest() as $poi) {
+					if ($poi->MapPinEdited) {
+						if ($poi->MapPinIconID == 0) {
+							$poi->CachedMapPin = $layericon;
+						}
+						$map->addMarkerAsObject($poi);
+					}
+				}
 			}
-			$map->addMarkerAsObject($poi);
-		  }
+			$map->setClusterer(true);
+			$map->setEnableAutomaticCenterZoom(true);
 		}
-	  }
-	  $map->setClusterer(true);
-	  $map->setEnableAutomaticCenterZoom(true);
+
+		$map->setZoom(10);
+		$map->setAdditionalCSSClasses('fullWidthMap');
+		$map->setShowInlineMapDivStyle(true);
+		$map->setClusterer(true);
+
+		return $map;
 	}
-
-	$map->setZoom(10);
-	$map->setAdditionalCSSClasses('fullWidthMap');
-	$map->setShowInlineMapDivStyle(true);
-	$map->setClusterer(true);
-
-	return $map;
-	}
-
 }
