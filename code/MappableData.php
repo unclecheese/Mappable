@@ -15,7 +15,6 @@ class MappableData extends Extension {
 		$gmap->setSize($w,$h);
 		$gmap->setZoom($zoom);
 		$gmap->setEnableAutomaticCenterZoom(false);
-
 		if ($this->owner->MapPinEdited) {
 			$gmap->setLatLongCenter(array(
 				'200',
