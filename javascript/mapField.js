@@ -28,6 +28,8 @@ function initMap() {
 		var lonField = $('input[name=' + gm.attr('data-lonfieldname') + ']');
 		var zoomField = $('input[name=' + gm.attr('data-zoomfieldname') + ']');
 		var guidePointsAttr = gm.attr('data-GuidePoints');
+		console.log('guidepoints');
+		console.log(guidePointsAttr);
 
 		// if we have emtpy initial values, set them appropriately,
 		// otherwise googlemaps codegoes into an infinite tailspin

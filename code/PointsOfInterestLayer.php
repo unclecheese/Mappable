@@ -1,6 +1,9 @@
 <?php
 class PointsOfInterestLayer extends DataObject {
-	private static $db = array('Name' => 'Varchar');
+	private static $db = array(
+		'Name' => 'Varchar',
+		'ShowGuideMarkers' => 'Boolean'
+	);
 
 	private static $many_many = array('PointsOfInterest' => 'PointOfInterest');
 
@@ -15,8 +18,15 @@ class PointsOfInterestLayer extends DataObject {
 	    	$uf = new UploadField('DefaultIcon',
 	    	_t('PointsOfInterest.ICON',
 	    	'Default Icon'))
-	   );
+	   	);
+	   	$fields->addFieldToTab('Root.Main', new CheckboxField('ShowGuideMarkers',
+	    				'Show grey guide markers of others points in this layer'));
 	    $uf->setFolderName('mapicons');
+
 	    return $fields;
+	}
+
+	function Wibble() {
+		return 'wibble';
 	}
 }

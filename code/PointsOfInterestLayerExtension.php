@@ -3,13 +3,13 @@
 class PointsOfInterestLayerExtension extends DataExtension {
 
 	static $many_many = array(
-			'PointsOfInterestLayers' => 'PointsOfInterestLayer'
+		'PointsOfInterestLayers' => 'PointsOfInterestLayer'
 	);
 
 	static $belongs_many_many_extraFields = array(
-			'PointsOfInterestLayers' => array(
-				'SortOrder' => "Int"
-			)
+		'PointsOfInterestLayers' => array(
+			'SortOrder' => "Int"
+		)
 	);
 
 
@@ -26,5 +26,4 @@ class PointsOfInterestLayerExtension extends DataExtension {
 		);
 		$fields->addFieldToTab("Root.MapLayers", $gridField2);
 	}
-
 }

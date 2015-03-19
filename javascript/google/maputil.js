@@ -60,6 +60,7 @@ function getCurrentLat() {
 	return current_lat;
 }
 
+
 /**
  * Get the current longitude
  * @return {float} The current longitude
@@ -90,6 +91,7 @@ function addAllMarkers(map, markers, useClusterer, enableWindowZoom, defaultHide
 	return allmarkers;
 }
 
+
 /**
  * Add lines to a Google map
  * @param {googleMap} map   Google map instance
@@ -110,6 +112,7 @@ function addLines(map, lines) {
 		pl.setMap(map);
 	}
 }
+
 
 /**
  * Add one or more (max of 25) KML files to a Google map

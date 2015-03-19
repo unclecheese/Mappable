@@ -16,7 +16,16 @@ class LatLongField extends FieldGroup {
 
 	protected $buttonText;
 
+	private static $ctr = 0;
+
 	public function __construct($children = array(), $addressFields = array(), $buttonText = null) {
+		$id = spl_object_hash($this);
+
+		self::$ctr++;
+		if (self::$ctr == 2) {
+			//asdfsda;
+		}
+
 		if ((sizeof($children) < 2) ||
 			 (!$children[0] instanceof FormField) ||
 			 (!$children[1] instanceof FormField)
@@ -52,6 +61,7 @@ class LatLongField extends FieldGroup {
 		return true;
 	}
 
+
 	public function FieldHolder($properties = array()) {
 		Requirements::javascript(THIRDPARTY_DIR.'/jquery/jquery.js');
 		Requirements::javascript(THIRDPARTY_DIR.'/jquery-livequery/jquery.livequery.js');
@@ -79,7 +89,15 @@ var zoomFieldName = "'.$this->zoomField.'";
         Requirements::css('mappable/css/mapField.css');
         $guidePointsJSON = '';
         if (isset($this->guidePoints)) {
-        	$guidePointsJSON = json_encode($this->guidePoints);
+        	$latlongps = array();
+        	foreach ($this->guidePoints as $guidepoint) {
+        		array_push($latlongps, array('latitude' => $guidepoint->Lat, 'longitude' => $guidepoint->Lon));
+
+        	}
+
+        	$guidePointsJSON = json_encode($latlongps);
+        	// convert the mappable guidepoints to lat lon
+
         	$attributes['data-GuidePoints'] = $guidePointsJSON;
 
         	// we only wish to change the bounds to those of all the points iff
@@ -93,8 +111,6 @@ var zoomFieldName = "'.$this->zoomField.'";
 
         $this->FieldList()->push(new LiteralField('locationEditor', $content));
 
-
-
 		$content2 = '<div id="mapSearch">
 		 <input name="location_search" id="location_search" size=80/>
     	<button class="action" id="searchLocationButton">Search Location Name</button>
@@ -107,6 +123,7 @@ var zoomFieldName = "'.$this->zoomField.'";
 
 		return parent::FieldHolder();
 	}
+
 
 	/*
 	Perform place name search as a means of navigation when editing locations
@@ -129,8 +146,8 @@ var zoomFieldName = "'.$this->zoomField.'";
 	position of some other images so that subsequent photo edits do not start with a map centred
 	on the horizon
 	*/
-	public function setGuidePoints($guidePoints) {
-		$this->guidePoints = $guidePoints;
+	public function setGuidePoints($newGuidePoints) {
+		$this->guidePoints = $newGuidePoints;
 	}
 
 }

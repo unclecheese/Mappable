@@ -1,4 +1,4 @@
-<?php
+1<?php
 
 class MapExtension extends DataExtension implements Mappable {
 
@@ -38,13 +38,7 @@ class MapExtension extends DataExtension implements Mappable {
 		$fields->removeByName('MapPinEdited');
 
 		$fields->addFieldToTab("Root.Location",
-			new LatLongField(array(
-			new TextField('Lat', 'Latitude'),
-			new TextField('Lon', 'Longitude'),
-			new TextField('ZoomLevel', 'Zoom')
-		),
-			array('Address')
-		)
+			$this->getMapField()
 		);
 
 		$fields->addFieldToTab('Root.Location', $uf = new UploadField('MapPinIcon',
@@ -173,4 +167,23 @@ class MapExtension extends DataExtension implements Mappable {
 
 		return $map;
 	}
+
+
+	/**
+	 * Access the map editing field for the purpose of adding guide points
+	 * @return [LatLongField] instance of location editing field
+	 */
+	public function getMapField() {
+		if (!isset($this->mapField)) {
+			$this->mapField = new LatLongField(array(
+				new TextField('Lat', 'Latitude'),
+				new TextField('Lon', 'Longitude'),
+				new TextField('ZoomLevel', 'Zoom')
+				),
+				array('Address')
+			);
+		}
+		return $this->mapField;
+	}
+
 }
