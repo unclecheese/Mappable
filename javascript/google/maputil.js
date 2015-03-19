@@ -223,3 +223,5 @@ function loadedGoogleMapsAPI() {
 		addKmlFiles(map, map_info.kmlFiles);
 	}
 }
+
+alert('maputil');

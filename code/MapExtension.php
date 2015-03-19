@@ -186,4 +186,11 @@ class MapExtension extends DataExtension implements Mappable {
 		return $this->mapField;
 	}
 
+
+	/**
+	 * Template helper, used to decide whether or not to use compressed assets
+	 */
+	public function UseCompressedAssets() {
+		return Config::inst()->get('Mappable', 'use_compressed_assets');
+	}
 }
