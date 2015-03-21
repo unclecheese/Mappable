@@ -12,8 +12,6 @@ class PointOfInterest extends DataObject {
 	private static $summary_fields = array('Name');
 
 	function getCMSFields() {
-		error_log('++++++++++++++++++++++');
-		error_log(parent::Wibble());
 	    $fields = parent::getCMSFields();
 	    $fields->addFieldToTab('Root.Main', new TextField('Name', 'Name of the item on the map'));
 
