@@ -28,6 +28,7 @@ class MappableData extends Extension {
 		return $gmap;
 	}
 
+
 	public function StaticMap($width = null, $height = null) {
 		$w = $width ? $width : MapUtil::$map_width;
 		$h = $height ? $height : MapUtil::$map_height;
