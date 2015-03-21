@@ -838,16 +838,41 @@ function jsonRemoveUnicodeSequences($struct) {
 			)
 		);
 
-		$this->content = $this->processTemplate('Map', $vars);
+		// HTML component of the map
+		$this->content = $this->processTemplateHTML('Map', $vars);
+
+		$javascript = $this->processTemplateJS('Map', $vars);
+
+		Requirements::customScript(<<<JS
+$javascript
+JS
+);
+
+		if (self::$include_download_javascript === false) {
+			Requirements::customScript(<<<JS
+google.maps.event.addDomListener(window, 'load', loadedGoogleMapsAPI);
+JS
+);
+
+		}
+
 	}
 
-
-	 function processTemplate($templateName, $templateVariables = null ) {
+	function processTemplateJS($templateName, $templateVariables = null) {
 		if (!$templateVariables) {
 			$templateVariables = new ArrayList();
 		}
 
-		$result = $templateVariables->renderWith($templateName.$this->mappingService);
+		$result = $templateVariables->renderWith($templateName.$this->mappingService.'JS');
+		return $result;
+	}
+
+	function processTemplateHTML($templateName, $templateVariables = null ) {
+		if (!$templateVariables) {
+			$templateVariables = new ArrayList();
+		}
+
+		$result = $templateVariables->renderWith($templateName.$this->mappingService.'HTML');
 		return $result;
 	}
 }
