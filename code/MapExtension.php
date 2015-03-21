@@ -1,4 +1,4 @@
-1<?php
+<?php
 
 class MapExtension extends DataExtension implements Mappable {
 
