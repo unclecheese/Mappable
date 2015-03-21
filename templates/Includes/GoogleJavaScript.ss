@@ -1,13 +1,14 @@
 <% if DownloadJS %>
 <% if DelayLoadMapFunction %>
 <% else %>
-<script src="//maps.google.com/maps/api/js?sensor=false&amp;hl=$Lang" type="text/javascript"></script>
+<% require javascript("//maps.google.com/maps/api/js?sensor=false&amp;hl=$Lang") %>
+
 <% if $UseCompressedAssets %>
-<script type="text/javascript" src="/mappable/javascript/google/mappablegoogle.min.js"></script>
+<% require javascript("mappable/javascript/google/mappablegoogle.min.js") %>
 <% else %>
-<script type="text/javascript" src="/mappable/javascript/google/FullScreenControl.js"></script>
-<script type="text/javascript" src="/mappable/javascript/google/markerclusterer.js"></script>
-<script type="text/javascript" src="/mappable/javascript/google/maputil.js"></script>
+<% require javascript("mappable/javascript/google/FullScreenControl.js") %>
+<% require javascript("mappable/javascript/google/markerclusterer.js") %>
+<% require javascript("mappable/javascript/google/maputil.js") %>
 <% end_if %>
 
 <script type="text/javascript">google.maps.event.addDomListener(window, 'load', loadedGoogleMapsAPI);</script>
