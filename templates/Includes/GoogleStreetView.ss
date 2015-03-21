@@ -15,7 +15,6 @@ function initialize_{$DomID}() {
     zoom: $Zoom
   };
   var domNode = document.getElementById('$DomID');
-  console.log(domNode);
   var myPano = new google.maps.StreetViewPanorama(
       domNode,
       panoramaOptions);
