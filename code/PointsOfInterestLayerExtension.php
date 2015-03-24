@@ -12,7 +12,10 @@ class PointsOfInterestLayerExtension extends DataExtension {
 		)
 	);
 
-
+	/**
+	 * Update cms fields - add list of POIs
+	 * @param  FieldList $fields list of existing fields on the object
+	 */
 	public function updateCMSFields(FieldList $fields) {
 		$gridConfig2 = GridFieldConfig_RelationEditor::create();
 		$gridConfig2->getComponentByType(
