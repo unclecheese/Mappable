@@ -80,14 +80,50 @@ function getCurrentLng() {
  * * @return array of Google map markers converted from the JSON data
  */
 function addAllMarkers(map, markers, useClusterer, enableWindowZoom, defaultHideMarker) {
+
+	// these will be altered by adding markers
+	map.minLat = 1000000;
+	map.minLng = 1000000;
+	map.maxLat = -1000000;
+	map.maxLng = -1000000;
+
+
 	var allmarkers = [];
 	for (var i = 0; i < markers.length; i++) {
 		var markerinfo = markers[i];
 		var marker = createMarker(map, markerinfo.latitude, markerinfo.longitude, markerinfo.html,
 			markerinfo.category, markerinfo.icon, useClusterer, enableWindowZoom,
 			defaultHideMarker);
+
+		var latitude = parseFloat(markerinfo.latitude);
+		var longitude = parseFloat(markerinfo.longitude);
+
+		// update lat,lon min to lat,lon max
+		if (latitude < map.minLat) {
+			map.minLat = latitude;
+
+		}
+		if (latitude > map.maxLat) {
+			map.maxLat = latitude;
+		}
+
+		if (longitude > map.maxLng) {
+			map.maxLng = longitude;
+
+		}
+
+		if (longitude < map.minLng) {
+			map.minLng = longitude;
+		}
+
 		allmarkers.push(marker);
 	}
+
+
+	var centreCoordinates = [];
+	centreCoordinates.lat = (parseFloat(map.minLat)+parseFloat(map.maxLat))/2;;
+	centreCoordinates.lng = (parseFloat(map.minLng)+parseFloat(map.maxLng))/2;
+	map.centreCoordinates = centreCoordinates;
 	return allmarkers;
 }
 
@@ -131,17 +167,14 @@ function addKmlFiles(map, kmlFiles) {
 }
 
 
-function registerMap(googleMapID, centreCoordinates, zoom, minLat, minLng, maxLat, maxLng, mapType,
+function registerMap(googleMapID, centreCoordinates, zoom, mapType,
 	markers, lines, kmlFiles, jsonMapStyles, enableAutomaticCenterZoom, useClusterer,
 	allowFullScreen) {
 	var newMap = [];
 	newMap.googleMapID = googleMapID;
 	newMap.zoom = zoom;
 	newMap.centreCoordinates = centreCoordinates;
-	newMap.minLat = minLat;
-	newMap.minLng = minLng;
-	newMap.maxLng = maxLng;
-	newMap.maxLat = maxLat;
+
 	newMap.markers = markers;
 	newMap.googleMapID = googleMapID;
 	newMap.mapType = mapType;
@@ -191,14 +224,24 @@ function loadedGoogleMapsAPI() {
 				FullScreenControl(map, "Full Screen", "Original Size")
 			);
 		}
+
+
+		var markers = addAllMarkers(map, map_info.markers, map_info.useClusterer,
+			map_info.enableAutomaticCenterZoom, map_info.defaultHideMarker);
+
+
 		if (map_info.enableAutomaticCenterZoom) {
-			centre = map_info.centreCoordinates;
+			centre = map.centreCoordinates;
 			map.setCenter(new google.maps.LatLng(centre.lat, centre.lng));
+
+			map_info.minLat = map.minLat;
+			map_info.maxLat = map.maxLat;
+			map_info.minLng = map.minLng;
+			map_info.maxLng = map.maxLng;
 
 			var bds = new google.maps.LatLngBounds(new google.maps.LatLng(map_info.minLat, map_info.minLng),
 				new google.maps.LatLng(map_info.maxLat, map_info.maxLng));
 			map.fitBounds(bds);
-			map.setZoom(map_info.zoom);
 		} else {
 			var centre = map_info.centreCoordinates;
 			map.setCenter(new google.maps.LatLng(centre.lat, centre.lng));
@@ -210,9 +253,6 @@ function loadedGoogleMapsAPI() {
 		} else {
 			map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
 		}
-
-		var markers = addAllMarkers(map, map_info.markers, map_info.useClusterer,
-			map_info.enableAutomaticCenterZoom, map_info.defaultHideMarker);
 
 		if (map_info.useClusterer) {
 			var mcOptions = {gridSize: 50, maxZoom: 17};
