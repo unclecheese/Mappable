@@ -55,6 +55,7 @@ class MapExtension extends DataExtension implements Mappable {
 		return $this->owner->Lon;
 	}
 
+
 	/**
 	 * Renders the map info window for the DataObject.
 	 *
@@ -76,15 +77,22 @@ class MapExtension extends DataExtension implements Mappable {
 		return MapUtil::sanitize($this->owner->renderWith($template));
 	}
 
+
 	/*
 	If the marker pin is not at position 0,0 mark the pin as edited. This provides the option of
 	filtering out (0,0) point which is often irrelevant for plots
 	*/
 	public function onBeforeWrite() {
-		if (($this->owner->Lat !== 0) || ($this->owner->Lon !== 0)) {
+		$latzero = ($this->owner->Lat == 0);
+		$lonzero = ($this->owner->Lon == 0);
+		$latlonzero = $latzero && $lonzero;
+
+		// if both latitude and longitude still default, do not set the map location as edited
+		if (!$latlonzero) {
 		  $this->owner->MapPinEdited = true;
 		}
 	}
+
 
 	/*
 	If a user has uploaded a map pin icon display that, otherwise
@@ -102,6 +110,7 @@ class MapExtension extends DataExtension implements Mappable {
 		}
 		return $result;
 	}
+
 
 	/*
 		Check for non zero coordinates, on the assumption that (0,0) will never be the desired coordinates
