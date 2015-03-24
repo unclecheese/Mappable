@@ -4,4 +4,4 @@ After: 'framework/*','cms/*'
 ---
 Mappable:
   allow_full_screen: true
-  use_compressed_assets: true
+  use_compressed_assets: false
