@@ -5,6 +5,6 @@ var gmarkers = [];
 var mapLayers = [];
 var mapLines = [];
 <% end_if %>
-registerMap('$GoogleMapID', $LatLngCentre, $Zoom, $MinLat,$MinLng,$MaxLat,$MaxLng, $MapType,
+registerMap('$GoogleMapID', $LatLngCentre, $Zoom, $MapType,
 $MapMarkers,$Lines,$KmlFiles, $JsonMapStyles, $EnableAutomaticCenterZoom, $UseClusterer,
 $AllowFullScreen);
