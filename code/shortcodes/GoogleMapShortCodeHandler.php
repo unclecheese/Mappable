@@ -75,7 +75,10 @@ class GoogleMapShortCodeHandler {
 		// merge defaults and arguments
 		$customised = array_merge($defaults, $arguments);
 
-		//get streetview template template
+		// include JavaScript to be appended at the end of the page
+		Requirements::javascriptTemplate("mappable/javascript/google/map.google.template.js", $customised);
+
+		//get map view template template
 		$template = new SSViewer('GoogleMapShortCode');
 
 		//return the template customised with the parmameters
