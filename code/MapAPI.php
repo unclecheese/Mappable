@@ -702,26 +702,17 @@ var styles = [
 		);
 
 		array_push($this->lines, $line);
-
-
 	}
 
-	/**
-	 * Initialize the javascript code
-	 *
-	 * @return void
-	 */
 
-
-
-/*
-For php 5.3
-*/
-function jsonRemoveUnicodeSequences($struct) {
-	 return preg_replace("/\\\\u([a-f0-9]{4})/e",
-	 					"iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))",
-	 					json_encode($struct));
-}
+	/*
+	For php 5.3
+	*/
+	function jsonRemoveUnicodeSequences($struct) {
+		 return preg_replace("/\\\\u([a-f0-9]{4})/e",
+		 					"iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))",
+		 					json_encode($struct));
+	}
 
 
 	/**
@@ -837,15 +828,7 @@ $javascript
 JS
 );
 
-		if (self::$include_download_javascript === false) {
-			Requirements::customScript(<<<JS
-google.maps.event.addDomListener(window, 'load', loadedGoogleMapsAPI);
-JS
-);
-
 		}
-
-	}
 
 	function processTemplateJS($templateName, $templateVariables = null) {
 		if (!$templateVariables) {
