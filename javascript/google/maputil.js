@@ -167,23 +167,63 @@ function addKmlFiles(map, kmlFiles) {
 }
 
 
-function registerMap(googleMapID, centreCoordinates, zoom, mapType,
-	markers, lines, kmlFiles, jsonMapStyles, enableAutomaticCenterZoom, useClusterer,
-	allowFullScreen) {
-	var newMap = [];
-	newMap.googleMapID = googleMapID;
-	newMap.zoom = zoom;
-	newMap.centreCoordinates = centreCoordinates;
+/**
+ * Register a short code generated map, namely storing parameters for later rendering
+ * once google maps API loaded
+ * @param  array options lat,lon,zoom,type
+ */
+function registerShortcodeMap(options) {
+	newMap = [];
+	newMap.latitude = options.latitude;
+	newMap.longitude = options.longitude;
+	newMap.zoom = options.zoom;
+	newMap.maptype = options.maptype;
+	newMap.allowfullscreen = options.allowfullscreen;
+	newMap.caption = options.caption;
+	newMap.domid = options.domid;
+	shortcodeMaps.push(newMap);
+}
 
-	newMap.markers = markers;
-	newMap.googleMapID = googleMapID;
-	newMap.mapType = mapType;
-	newMap.lines = lines;
-	newMap.kmlFiles = kmlFiles;
-	newMap.jsonMapStyles = jsonMapStyles;
-	newMap.enableAutomaticCenterZoom = enableAutomaticCenterZoom;
-	newMap.useClusterer = useClusterer;
-	newMap.allowFullScreen = allowFullScreen;
+/**
+ * Register a short code generated streetview, namely storing parameters for later rendering
+ * once google maps API loaded
+ * @param  array options lat,lon,zoom,pitch,heading,caption,domid
+ */
+function registerStreetView(options) {
+	newView = [];
+	newView.latitude = options.latitude;
+	newView.longitude = options.longitude;
+	newView.zoom = options.zoom;
+	newView.pitch = options.pitch;
+	newView.heading = options.heading;
+	newView.caption = options.caption;
+	newView.domid = options.domid;
+	shortcodeStreetview.push(newView);
+}
+
+
+//function registerMap(googleMapID, centreCoordinates, zoom, mapType,
+//	markers, lines, kmlFiles, jsonMapStyles, enableAutomaticCenterZoom, useClusterer,
+//	allowFullScreen) {
+
+function registerMap(options) {
+	console.log("REGISTERING MAP");
+	console.log(options);
+
+	var newMap = [];
+	newMap.googleMapID = options.domid;
+	newMap.zoom = options.zoom;
+	newMap.centreCoordinates = options.centre;
+
+	newMap.markers = options.mapmarkers;
+	newMap.mapType = options.maptype;
+	newMap.lines = options.lines;
+	newMap.kmlFiles = options.kmlfiles;
+	newMap.jsonMapStyles = options.mapstyles;
+	newMap.enableAutomaticCenterZoom = options.enableautocentrezoom;
+	newMap.useClusterer = options.useclusterer;
+	newMap.allowFullScreen = options.allowfullscreen;
+	var googleMapID = options.domid;
 	mappableMaps[googleMapID] = newMap;
 
 	// increment map counter
@@ -191,14 +231,98 @@ function registerMap(googleMapID, centreCoordinates, zoom, mapType,
 
 	// initialise gmarkers array for this map
 	gmarkers[googleMapID] = [];
-	var infoWindow = new google.maps.InfoWindow({
+	/*
+	
+	 var infoWindow = new google.maps.InfoWindow({
 		content: 'test',
 		maxWidth: 400
 	});
 	infoWindows[googleMapID] = infoWindow;
+	*/
 
-	mapLayers[googleMapID] = kmlFiles;
-	mapLines[googleMapID] = lines;
+	mapLayers[googleMapID] = options.kmlfiles;
+	mapLines[googleMapID] = options.lines;
+}
+
+
+/**
+ * After the Google Maps API has been loaded init the relevant Google maps
+ */
+function loadShortCodeStreetView() {
+	for (var i = 0; i < shortcodeStreetview.length; i++) {
+		console.log("STREETVIEW");
+
+		view = shortcodeStreetview[i];
+		console.log(view);
+
+		var location = new google.maps.LatLng(view.latitude, view.longitude);
+		console.log(location);
+
+		var mapOptions = {
+		  center: location,
+		  zoom: view.zoom
+		};
+
+		console.log(mapOptions);
+
+		var map = new google.maps.Map(
+    		document.getElementById(view.domid), mapOptions);
+
+		  var panoramaOptions = {
+		    position: location,
+		    pov: {
+		      heading: view.heading,
+		      pitch: view.pitch
+		    },
+		    zoom: view.zoom
+		  };
+		  var domNode = document.getElementById(view.domid);
+		  console.log(domNode);
+		  var pano = new google.maps.StreetViewPanorama(
+		      domNode,
+		      panoramaOptions);
+		  pano.setVisible(true);
+	}
+
+}
+
+
+/**
+ * After the Google Maps API has been loaded init the relevant Google maps
+ */
+function loadShortCodeMaps() {
+	for (var i = 0; i < shortcodeMaps.length; i++) {
+		map = shortcodeMaps[i];
+
+		// deal with map type
+		var maptype = google.maps.MapTypeId.ROAD;
+		switch (map.maptype) {
+			case 'aerial':
+				maptype = google.maps.MapTypeId.SATELLITE;
+				break;
+			case 'hybrid':
+				maptype = google.maps.MapTypeId.HYBRID;
+				break;
+			case 'terrain':
+				maptype = google.maps.MapTypeId.TERRAIN;
+				break;
+		}
+
+		// Google Maps API has already been loaded, so init Google Map
+		var mapOptions = {
+			center: { lat: map.latitude, lng: map.longitude},
+			zoom: map.zoom,
+			mapTypeId: maptype
+		};
+		var gmap = new google.maps.Map(document.getElementById(map.domid),
+			mapOptions);
+		if (map.allowfullscreen == 1) {
+			gmap.controls[google.maps.ControlPosition.TOP_RIGHT].push(
+				FullScreenControl(gmap, "Full Screen", "Original Size")
+			);
+		}
+	}
+
 }
 
 
@@ -207,8 +331,13 @@ function registerMap(googleMapID, centreCoordinates, zoom, mapType,
  * associated points of interest and layers
  */
 function loadedGoogleMapsAPI() {
+	loadShortCodeMaps();
+	loadShortCodeStreetView();
+
 	for (var i = 1; i <= mappableMapCtr; i++) {
 		var map_info = mappableMaps['google_map_' + i];
+		console.log("MAP INFO");
+		console.log(map_info);
 		var map = new google.maps.Map(document.getElementById(map_info.googleMapID));
 
 		// initialise geocoder
@@ -253,6 +382,9 @@ function loadedGoogleMapsAPI() {
 		} else {
 			map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
 		}
+
+					map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+
 
 		if (map_info.useClusterer) {
 			var mcOptions = {gridSize: 50, maxZoom: 17};
