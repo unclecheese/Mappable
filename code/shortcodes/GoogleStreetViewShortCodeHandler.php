@@ -59,6 +59,10 @@ class GoogleStreetViewShortCodeHandler {
 		// merge defaults and arguments
 		$customised = array_merge($defaults, $arguments);
 
+		// Include google maps JS at the end of the page
+		Requirements::javascriptTemplate("mappable/javascript/google/streetview.google.template.js", $customised);
+
+
 		//get streetview template template
 		$template = new SSViewer('GoogleStreetView');
 
