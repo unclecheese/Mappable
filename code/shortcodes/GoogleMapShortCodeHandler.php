@@ -18,7 +18,7 @@ class GoogleMapShortCodeHandler {
 		// defaults - can be overriden by using zoom and FIXME in the shortcode
 		$defaults = array(
 			'Zoom' => 5,
-			'MapType' => 'ROAD'
+			'MapType' => 'road'
 		);
 
 		// ensure JavaScript for the map service is only downloaded once
@@ -34,28 +34,8 @@ class GoogleMapShortCodeHandler {
 			$arguments['Caption'] = $arguments['caption'];
 		}
 
-		// optional parameter pitch
 		if (isset($arguments['maptype'])) {
 			$arguments['MapType'] = $arguments['maptype'];
-
-			switch ($arguments['MapType']) {
-				case 'road':
-					$arguments['MapType'] = 'ROAD';
-					break;
-				case 'aerial':
-					$arguments['MapType'] = 'SATELLITE';
-					break;
-				case 'hybrid':
-					$arguments['MapType'] = 'HYBRID';
-					break;
-				case 'terrain':
-					$arguments['MapType'] = 'TERRAIN';
-					break;
-
-				default:
-					$arguments['MapType'] = 'ROAD';
-					break;
-			}
 		}
 
 		// optional parameter zoom
@@ -75,10 +55,10 @@ class GoogleMapShortCodeHandler {
 		// merge defaults and arguments
 		$customised = array_merge($defaults, $arguments);
 
-		// include JavaScript to be appended at the end of the page
+		// include JavaScript to be appended at the end of the page, namely params for map rendering
 		Requirements::javascriptTemplate("mappable/javascript/google/map.google.template.js", $customised);
 
-		//get map view template template
+		//get map view template and render the HTML
 		$template = new SSViewer('GoogleMapShortCode');
 
 		//return the template customised with the parmameters
