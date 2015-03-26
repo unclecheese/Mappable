@@ -25,8 +25,4 @@ class PointsOfInterestLayer extends DataObject {
 
 	    return $fields;
 	}
-
-	function Wibble() {
-		return 'wibble';
-	}
 }
