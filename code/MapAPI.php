@@ -136,13 +136,15 @@ var styles = [
 
 	/**
 	 * Type of the gmap, can be:
-	 *  'google.maps.MapTypeId.ROAD' (roadmap),
-	 *  'google.maps.MapTypeId.SATELLITE' (sattelite)
-	 *  'google.maps.MapTypeId.HYBRID' (hybrid)
-	 *  'google.maps.MapTypeId.TERRAIN' (terrain)
+	 *  'road' (roadmap),
+	 *  'satellite' (sattelite/aerial photographs)
+	 *  'hybrid' (hybrid of road and satellite)
+	 *  'terrain' (terrain)
+	 *  The JavaScript for the mapping service will convert this into a suitable mapping type
 	 */
 
-	protected $mapType = 'google.maps.MapTypeId.ROAD';
+	protected $mapType = 'road';
+
 
 	/** Content of the HTML generated **/
 	protected $content = '';
@@ -407,16 +409,31 @@ var styles = [
 	}
 
 	/**
-	 * Set the type of the gmap
+	 * Set the type of the gmap.  Also takes into account legacy settings
 	 *
-	 * @param string  $mapType (can be 'google.maps.MapTypeId.ROADMAP',
-	 * 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
+	 * @param string  $mapType  Can be one of road,satellite,hybrid or terrain. Defaults to road
 	 *
 	 * @return void
 	 */
 
 	public function setMapType($mapType) {
 		$this->mapType = $mapType;
+
+		// deal with legacy values for backwards compatbility
+		switch ($mapType) {
+			case 'google.maps.MapTypeId.SATELLITE':
+				$this->mapType = "satellite";
+				break;
+			case 'google.maps.MapTypeId.SATELLITE':
+				$this->mapType = "satellite";
+				break;
+			case 'google.maps.MapTypeId.SATELLITE':
+				$this->mapType = "satellite";
+				break;
+			default:
+				$this->MapType = "road";
+				break;
+		}
 	}
 
 	/*
