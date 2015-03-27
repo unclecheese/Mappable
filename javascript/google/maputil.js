@@ -168,6 +168,28 @@ function addKmlFiles(map, kmlFiles) {
 
 
 /**
+ * Convert a map type name (road,satellite,hybrid,terrain) to Google map types
+ * @param  String mapTypeName  		generic name of the map type
+ * @return google.maps.MapTypeId 	map type in Google format
+ */
+function convertMapType(mapTypeName) {
+	var result = google.maps.MapTypeId.ROADMAP;
+	switch (mapTypeName) {
+		case 'aerial':
+			result = google.maps.MapTypeId.SATELLITE;
+			break;
+		case 'hybrid':
+			result = google.maps.MapTypeId.HYBRID;
+			break;
+		case 'terrain':
+			result = google.maps.MapTypeId.TERRAIN;
+			break;
+	}
+	return result;
+}
+
+
+/**
  * Register a short code generated map, namely storing parameters for later rendering
  * once google maps API loaded
  * @param  array options lat,lon,zoom,type
@@ -207,9 +229,6 @@ function registerStreetView(options) {
 //	allowFullScreen) {
 
 function registerMap(options) {
-	console.log("REGISTERING MAP");
-	console.log(options);
-
 	var newMap = [];
 	newMap.googleMapID = options.domid;
 	newMap.zoom = options.zoom;
@@ -231,14 +250,7 @@ function registerMap(options) {
 
 	// initialise gmarkers array for this map
 	gmarkers[googleMapID] = [];
-	/*
 	
-	 var infoWindow = new google.maps.InfoWindow({
-		content: 'test',
-		maxWidth: 400
-	});
-	infoWindows[googleMapID] = infoWindow;
-	*/
 
 	mapLayers[googleMapID] = options.kmlfiles;
 	mapLines[googleMapID] = options.lines;
@@ -295,18 +307,7 @@ function loadShortCodeMaps() {
 		map = shortcodeMaps[i];
 
 		// deal with map type
-		var maptype = google.maps.MapTypeId.ROAD;
-		switch (map.maptype) {
-			case 'aerial':
-				maptype = google.maps.MapTypeId.SATELLITE;
-				break;
-			case 'hybrid':
-				maptype = google.maps.MapTypeId.HYBRID;
-				break;
-			case 'terrain':
-				maptype = google.maps.MapTypeId.TERRAIN;
-				break;
-		}
+		var maptype = convertMapType(map.maptype);
 
 		// Google Maps API has already been loaded, so init Google Map
 		var mapOptions = {
@@ -335,7 +336,8 @@ function loadedGoogleMapsAPI() {
 	loadShortCodeStreetView();
 
 	for (var i = 1; i <= mappableMapCtr; i++) {
-		var map_info = mappableMaps['google_map_' + i];
+		var mapdomid = 'google_map_' + i;
+		var map_info = mappableMaps[mapdomid];
 		console.log("MAP INFO");
 		console.log(map_info);
 		var map = new google.maps.Map(document.getElementById(map_info.googleMapID));
@@ -377,14 +379,8 @@ function loadedGoogleMapsAPI() {
 			map.setZoom(map_info.zoom);
 		}
 
-		if (map_info.mapType) {
-			map.setMapTypeId(map_info.mapType);
-		} else {
-			map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
-		}
-
-					map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
-
+		var googlemaptype = convertMapType(map_info.mapType);
+		map.setMapTypeId(googlemaptype);
 
 		if (map_info.useClusterer) {
 			var mcOptions = {gridSize: 50, maxZoom: 17};
@@ -393,5 +389,11 @@ function loadedGoogleMapsAPI() {
 
 		addLines(map, map_info.lines);
 		addKmlFiles(map, map_info.kmlFiles);
+
+		var infoWindow = new google.maps.InfoWindow({
+			content: 'test',
+			maxWidth: 400
+		});
+		infoWindows[mapdomid] = infoWindow;
 	}
 }
