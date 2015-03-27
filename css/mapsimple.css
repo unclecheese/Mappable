@@ -1,0 +1,15 @@
+.streetview, .map {
+	width: 100%;
+	height: 500px;
+	background: none;
+}
+
+// see http://stackoverflow.com/questions/11340468/street-view-not-working-in-firefox
+.googlestreetview img, .map img {
+    border: none !important;
+    max-width: none !important;
+}
+
+.streetviewcontainer p.caption, .googlemapcontainer p.caption {
+	text-align: center;
+}
