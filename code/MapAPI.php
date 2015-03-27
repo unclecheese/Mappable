@@ -136,13 +136,13 @@ var styles = [
 
 	/**
 	 * Type of the gmap, can be:
-	 *  'google.maps.MapTypeId.ROADMAP' (roadmap),
-	 *  'G_SATELLITE_MAP' (sattelite)
-	 *  'G_HYBRID_MAP' (hybrid)
-	 *  'G_PHYSICAL_MAP' (terrain)
+	 *  'google.maps.MapTypeId.ROAD' (roadmap),
+	 *  'google.maps.MapTypeId.SATELLITE' (sattelite)
+	 *  'google.maps.MapTypeId.HYBRID' (hybrid)
+	 *  'google.maps.MapTypeId.TERRAIN' (terrain)
 	 */
 
-	protected $mapType = 'google.maps.MapTypeId.ROADMAP';
+	protected $mapType = 'google.maps.MapTypeId.ROAD';
 
 	/** Content of the HTML generated **/
 	protected $content = '';
