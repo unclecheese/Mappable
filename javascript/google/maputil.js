@@ -121,7 +121,7 @@ function addAllMarkers(map, markers, useClusterer, enableWindowZoom, defaultHide
 
 
 	var centreCoordinates = [];
-	centreCoordinates.lat = (parseFloat(map.minLat)+parseFloat(map.maxLat))/2;;
+	centreCoordinates.lat = (parseFloat(map.minLat)+parseFloat(map.maxLat))/2;
 	centreCoordinates.lng = (parseFloat(map.minLng)+parseFloat(map.maxLng))/2;
 	map.centreCoordinates = centreCoordinates;
 	return allmarkers;
