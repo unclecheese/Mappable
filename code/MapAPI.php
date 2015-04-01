@@ -82,7 +82,6 @@ class MapAPI extends ViewableData
 
 	protected $latLongCenter = null;
 
-	protected $mappingService = 'Google';
 
 
 
@@ -484,6 +483,7 @@ var styles = [
 		return $this->content;
 	}
 
+
 	/**
 	 * Get URL content using cURL.
 	 *
@@ -619,7 +619,7 @@ var styles = [
 		foreach ($extensions as $extension) {
 			$class = new ReflectionClass($extension);
 			if ($class->implementsInterface('Mappable')) {
-								$extensionsImplementMappable = true;
+				$extensionsImplementMappable = true;
 			}
 
 		}
@@ -851,8 +851,8 @@ JS
 		if (!$templateVariables) {
 			$templateVariables = new ArrayList();
 		}
-
-		$result = $templateVariables->renderWith($templateName.$this->mappingService.'JS');
+		$mappingService = Config::inst()->get('Mappable', 'mapping_service');
+		$result = $templateVariables->renderWith($templateName.$mappingService.'JS');
 		return $result;
 	}
 
@@ -860,8 +860,8 @@ JS
 		if (!$templateVariables) {
 			$templateVariables = new ArrayList();
 		}
-
-		$result = $templateVariables->renderWith($templateName.$this->mappingService.'HTML');
+		$mappingService = Config::inst()->get('Mappable', 'mapping_service');
+		$result = $templateVariables->renderWith($templateName.$mappingService.'HTML');
 		return $result;
 	}
 }
