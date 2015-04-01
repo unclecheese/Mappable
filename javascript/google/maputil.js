@@ -250,7 +250,7 @@ function registerMap(options) {
 
 	// initialise gmarkers array for this map
 	gmarkers[googleMapID] = [];
-	
+
 
 	mapLayers[googleMapID] = options.kmlfiles;
 	mapLines[googleMapID] = options.lines;
@@ -262,20 +262,13 @@ function registerMap(options) {
  */
 function loadShortCodeStreetView() {
 	for (var i = 0; i < shortcodeStreetview.length; i++) {
-		console.log("STREETVIEW");
-
 		view = shortcodeStreetview[i];
-		console.log(view);
-
 		var location = new google.maps.LatLng(view.latitude, view.longitude);
-		console.log(location);
 
 		var mapOptions = {
 		  center: location,
 		  zoom: view.zoom
 		};
-
-		console.log(mapOptions);
 
 		var map = new google.maps.Map(
     		document.getElementById(view.domid), mapOptions);
@@ -289,7 +282,6 @@ function loadShortCodeStreetView() {
 		    zoom: view.zoom
 		  };
 		  var domNode = document.getElementById(view.domid);
-		  console.log(domNode);
 		  var pano = new google.maps.StreetViewPanorama(
 		      domNode,
 		      panoramaOptions);
@@ -338,8 +330,6 @@ function loadedGoogleMapsAPI() {
 	for (var i = 1; i <= mappableMapCtr; i++) {
 		var mapdomid = 'google_map_' + i;
 		var map_info = mappableMaps[mapdomid];
-		console.log("MAP INFO");
-		console.log(map_info);
 		var map = new google.maps.Map(document.getElementById(map_info.googleMapID));
 
 		// initialise geocoder
@@ -359,7 +349,6 @@ function loadedGoogleMapsAPI() {
 
 		var markers = addAllMarkers(map, map_info.markers, map_info.useClusterer,
 			map_info.enableAutomaticCenterZoom, map_info.defaultHideMarker);
-
 
 		if (map_info.enableAutomaticCenterZoom) {
 			centre = map.centreCoordinates;
