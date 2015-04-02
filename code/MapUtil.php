@@ -185,7 +185,6 @@ class MapUtil
 		}
 
 
-
 		$gmap = new MapAPI($key);
 		$gmap->setDivId(self::$div_id."_".self::$instances);
 		$gmap->setEnableAutomaticCenterZoom(self::$automatic_center);
@@ -193,7 +192,6 @@ class MapUtil
 		$gmap->setSize(self::$map_width, self::$map_height);
 		$gmap->setDefaultHideMarker(self::$hide_marker);
         $gmap->setMapType(self::$map_type);
-        $gmap->setInfoWindowWidth(self::$info_window_width);
         $gmap->setCenter(self::$center);
         $gmap->setIconSize(self::$iconWidth, self::$iconHeight);
         $gmap->setIncludeDownloadJavascript(self::$map_already_rendered);
