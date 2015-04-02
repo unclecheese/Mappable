@@ -47,13 +47,6 @@ class MapAPI extends ViewableData
 	/* kml file to be rendered */
 	protected $kmlFiles = array();
 
-	/**
-	 *
-	 *
-	 * @var int Infowindow width of the gmarker
-	 * */
-	protected $infoWindowWidth = 500;
-
 	/** Default zoom of the gmap **/
 	protected $zoom = 9;
 
@@ -309,17 +302,6 @@ var styles = [
 		$this->height = $height;
 	}
 
-	/**
-	 * Set the with of the gmap infowindow (on marker clik)
-	 *
-	 * @param int     $infoWindowWidth GoogleMap  info window width
-	 *
-	 * @return void
-	 */
-
-	public function setInfoWindowWidth($infoWindowWidth) {
-		$this->infoWindowWidth = $infoWindowWidth;
-	}
 
 	/**
 	 * Set the size of the icon markers
@@ -810,7 +792,6 @@ var styles = [
 				'AdditionalCssClasses' => $this->additional_css_classes,
 				'Width' => $this->width,
 				'Height' => $this->height,
-				'InfoWindowWidth' => $this->infoWindowWidth,
 				'ShowInlineMapDivStyle' => $this->show_inline_map_div_style,
 				'InfoWindowZoom' => $this->infoWindowZoom,
 				'EnableWindowZoom' => $this->enableWindowZoom,
