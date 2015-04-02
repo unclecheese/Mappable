@@ -380,8 +380,7 @@ function loadedGoogleMapsAPI() {
 		addKmlFiles(map, map_info.kmlFiles);
 
 		var infoWindow = new google.maps.InfoWindow({
-			content: 'test',
-			maxWidth: 400
+			content: ''
 		});
 		infoWindows[mapdomid] = infoWindow;
 	}
