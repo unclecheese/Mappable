@@ -20,9 +20,3 @@ var options = {
 }
 
 registerMap(options);
-
-/*
-registerMap('$GoogleMapID', $LatLngCentre, $Zoom, $MapType,
-$MapMarkers,$Lines,$KmlFiles, $JsonMapStyles, $EnableAutomaticCenterZoom, $UseClusterer,
-$AllowFullScreen);
-*/
