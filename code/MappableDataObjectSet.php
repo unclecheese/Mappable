@@ -16,5 +16,4 @@ class MappableDataObjectSet extends Extension {
 		return $gmap;
 	}
 
-
 }
