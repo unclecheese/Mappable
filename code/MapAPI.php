@@ -217,30 +217,36 @@ var styles = [
 
 	public function setKey($googleMapKey) {
 		$this->googleMapKey = $googleMapKey;
+		return $this;
 	}
 
 	public function setIncludeDownloadJavascript($inclusion) {
 		self::$include_download_javascript = $inclusion;
+		return $this;
 	}
 
 
 	public function setShowInlineMapDivStyle($new_show_inline_map_div_style) {
 		$this->show_inline_map_div_style = $new_show_inline_map_div_style;
+		return $this;
 	}
 
 	public function setAdditionalCSSClasses($new_additional_css_classes) {
 		$this->additional_css_classes = $new_additional_css_classes;
+		return $this;
 	}
 
 
 	public function setMapStyles($newStyles) {
 		$this->jsonMapStyles = $newStyles;
+		return $this;
 	}
 
 
 
 	public function setDelayLoadMapFunction($newDelay) {
 		$this->delayLoadMapFunction = $newDelay;
+		return $this;
 	}
 
 	/**
@@ -262,6 +268,7 @@ var styles = [
 		$this->gridSize = $gridSize;
 		$this->maxZoom = $maxZoom;
 		$this->clustererLibraryPath = $clustererLibraryPath;
+		return $this;
 	}
 
 	/**
@@ -274,6 +281,7 @@ var styles = [
 
 	public function setDivId($googleMapId) {
 		$this->googleMapId = $googleMapId;
+		return $this;
 	}
 
 	/**
@@ -286,10 +294,12 @@ var styles = [
 
 	public function setDirectionDivId($googleMapDirectionId) {
 		$this->googleMapDirectionId = $googleMapDirectionId;
+		return $this;
 	}
 
 	/**
-	 * Set the size of the gmap
+	 * Set the size of the gmap.  If these values are not provided
+	 * then CSS is used instead
 	 *
 	 * @param int     $width  GoogleMap  width
 	 * @param int     $height GoogleMap  height
@@ -300,6 +310,7 @@ var styles = [
 	public function setSize($width, $height) {
 		$this->width = $width;
 		$this->height = $height;
+		return $this;
 	}
 
 
@@ -315,6 +326,7 @@ var styles = [
 	public function setIconSize($iconWidth, $iconHeight) {
 		$this->iconWidth = $iconWidth;
 		$this->iconHeight = $iconHeight;
+		return $this;
 	}
 
 	/**
@@ -327,6 +339,7 @@ var styles = [
 
 	public function setLang($lang) {
 		$this->lang = $lang;
+		return $this;
 	}
 
 	/**
@@ -339,6 +352,7 @@ var styles = [
 
 	public function setZoom($zoom) {
 		$this->zoom = $zoom;
+		return $this;
 	}
 
 	/**
@@ -351,6 +365,7 @@ var styles = [
 
 	public function setInfoWindowZoom($infoWindowZoom) {
 		$this->infoWindowZoom = $infoWindowZoom;
+		return $this;
 	}
 
 	/**
@@ -363,6 +378,7 @@ var styles = [
 
 	public function setEnableWindowZoom($enableWindowZoom) {
 		$this->enableWindowZoom = $enableWindowZoom;
+		return $this;
 	}
 
 	/**
@@ -375,6 +391,7 @@ var styles = [
 
 	public function setEnableAutomaticCenterZoom($enableAutomaticCenterZoom) {
 		$this->enableAutomaticCenterZoom = $enableAutomaticCenterZoom;
+		return $this;
 	}
 
 	/**
@@ -387,6 +404,7 @@ var styles = [
 
 	public function setCenter($center) {
 		$this->center = $center;
+		return $this;
 	}
 
 	/**
@@ -415,6 +433,8 @@ var styles = [
 				$this->MapType = "road";
 				break;
 		}
+
+		return $this;
 	}
 
 	/*
@@ -422,6 +442,7 @@ var styles = [
 	*/
 	public function setAllowFullScreen($allowed) {
 		$this->allowFullScreen = $allowed;
+		return $this;
 	}
 
 	/**
@@ -429,6 +450,7 @@ var styles = [
 	**/
 	public function setLatLongCenter($center) {
 		$this->latLongCenter = $center;
+		return $this;
 	}
 
 	/**
@@ -441,6 +463,7 @@ var styles = [
 
 	public function setDisplayDirectionFields($displayDirectionFields) {
 		$this->displayDirectionFields = $displayDirectionFields;
+		return $this;
 	}
 
 	/**
@@ -453,6 +476,7 @@ var styles = [
 
 	public function setDefaultHideMarker($defaultHideMarker) {
 		$this->defaultHideMarker = $defaultHideMarker;
+		return $this;
 	}
 
 	/**
@@ -535,7 +559,6 @@ var styles = [
 	 */
 
 	public function addMarkerByCoords($lat, $lng, $html='', $category='', $icon='') {
-
 		$iconURL = null;
 		if ($icon) {
 			$iconURL = $icon->getURL();
@@ -549,7 +572,9 @@ var styles = [
 			'icon' => $iconURL
 		);
 		array_push($this->markers, $m);
+		return $this;
 	}
+
 
 	/**
 	 * Add marker by his address
@@ -569,6 +594,7 @@ var styles = [
 		} else {
 			// throw new Exception('Adress not found : '.$address);
 		}
+		return $this;
 	}
 
 	/**
@@ -585,6 +611,7 @@ var styles = [
 		foreach ($coordtab as $coord) {
 			$this->addMarkerByCoords($coord[0], $coord[1], $coord[2], $category, $icon);
 		}
+		return $this;
 	}
 
 
@@ -619,6 +646,8 @@ var styles = [
 				$obj->getMappableMapPin()
 			);
 		}
+
+		return $this;
 	}
 
 
@@ -658,6 +687,7 @@ var styles = [
 		foreach ($coordtab as $coord) {
 			$this->addMarkerByAddress($coord[0], $coord[1], $category, $icon);
 		}
+		return $this;
 	}
 
 	/**
@@ -684,6 +714,7 @@ var styles = [
 
 	public function addKML($url) {
 		array_push($this->kmlFiles, $url);
+		return $this;
 	}
 
 
@@ -701,6 +732,7 @@ var styles = [
 		);
 
 		array_push($this->lines, $line);
+		return $this;
 	}
 
 
