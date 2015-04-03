@@ -19,6 +19,9 @@ class PointOfInterest extends DataObject {
 		$ids = array();
 		foreach ($layers->getIterator() as $layer) {
 			array_push($ids, $layer->ID);
+			if ($layer->ShowGuideMarkers) {
+				$this->ShowGuideMarkers = true;
+			}
 		}
 		$csv = implode(',', $ids);
 
