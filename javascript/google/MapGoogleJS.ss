@@ -16,6 +16,8 @@ var options = {
 	kmlfiles: $KmlFiles,
 	mapstyles: $JsonMapStyles,
 	useclusterer: $UseClusterer,
+	clusterergridsize: $ClustererGridSize,
+	clusterermaxzoom: $ClustererMaxZoom,
 	enableautocentrezoom: $EnableAutomaticCenterZoom
 }
 
