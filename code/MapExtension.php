@@ -136,10 +136,10 @@ class MapExtension extends DataExtension implements Mappable {
 	Render a map at the provided lat,lon, zoom from the editing functions,
 	*/
 	public function BasicMap() {
-		$map = $this->owner->getRenderableMap();
-		$map->setZoom($this->owner->ZoomLevel);
-		$map->setAdditionalCSSClasses('fullWidthMap');
-		$map->setShowInlineMapDivStyle(true);
+		$map = $this->owner->getRenderableMap()->
+			setZoom($this->owner->ZoomLevel)->
+			setAdditionalCSSClasses('fullWidthMap')->
+			setShowInlineMapDivStyle(true);
 
 		// add any KML map layers
 		if (Object::has_extension($this->owner->ClassName, 'MapLayerExtension')) {
