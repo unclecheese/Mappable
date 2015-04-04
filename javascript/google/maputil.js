@@ -372,7 +372,7 @@ function loadedGoogleMapsAPI() {
 		map.setMapTypeId(googlemaptype);
 
 		if (map_info.useClusterer) {
-			var mcOptions = {gridSize: 50, maxZoom: 17};
+			var mcOptions = {gridSize: options.clusterergridsize, maxZoom: options.clusterermaxzoom};
 			var markerCluster = new MarkerClusterer(map,markers,mcOptions);
 		}
 
