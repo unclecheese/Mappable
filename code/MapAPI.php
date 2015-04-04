@@ -157,9 +157,9 @@ var styles = [
 
 	/** Use clusterer to display a lot of markers on the gmap **/
 	protected $useClusterer = false;
-	protected $gridSize = 100;
-	protected $maxZoom = 9;
-	protected $clustererLibraryPath = '/mappable/javascript/Fluster2.packed.js';
+	protected $gridSize = 50;
+	protected $maxZoom = 17;
+	protected $clustererLibraryPath = "/mappable/javascript/google/markerclusterer.js";
 
 	/** Enable automatic center/zoom **/
 	protected $enableAutomaticCenterZoom = false;
@@ -262,8 +262,8 @@ var styles = [
 	 * @return void
 	 */
 
-	public function setClusterer($useClusterer, $gridSize=100, $maxZoom=9,
-			$clustererLibraryPath='mappable/javascript/Fluster2.packed.js') {
+	public function setClusterer($useClusterer, $gridSize=50, $maxZoom=17,
+			$clustererLibraryPath='/mappable/javascript/google/markerclusterer.js') {
 		$this->useClusterer = $useClusterer;
 		$this->gridSize = $gridSize;
 		$this->maxZoom = $maxZoom;
@@ -841,6 +841,8 @@ var styles = [
 				'UseClusterer'=>$this->useClusterer,
 				'DownloadJS' => !(self::$include_download_javascript),
 				'ClustererLibraryPath' => $this->clustererLibraryPath,
+				'ClustererMaxZoom' => $this->maxZoom,
+				'ClustererGridSize' => $this->gridSize,
 				'Lines' => $linesJson,
 				'KmlFiles' => $kmlJson,
 				'AllowFullScreen' => $this->allowFullScreen,
