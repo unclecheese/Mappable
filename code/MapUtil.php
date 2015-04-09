@@ -219,13 +219,13 @@ class MapUtil
 	 * @param SS_List $set
 	 * @return MapAPI
 	 */
-	public static function get_map(SS_List $list) {
+	public static function get_map(SS_List $list, $optionalinfowindowtemplatevalues) {
 		$gmap = self::instance();
 		if($list) {
 			$arr = $list->toArray();
 			foreach ($arr as $mappable) {
 				if ($mappable->MapPinEdited) {
-					$gmap->addMarkerAsObject($mappable);
+					$gmap->addMarkerAsObject($mappable, $optionalinfowindowtemplatevalues);
 				}
 			}
 		}
