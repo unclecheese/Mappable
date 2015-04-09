@@ -618,10 +618,11 @@ var styles = [
 	/**
 	 * Adds a {@link ViewableData} object that implements {@link Mappable}
 	 * to the map.
+	 * @param   $infowindowtemplateparams Optional array of extra parameters to pass to the map info window
 	 *
 	 * @param ViewableData $obj
 	 */
-	public function addMarkerAsObject(ViewableData $obj) {
+	public function addMarkerAsObject(ViewableData $obj, $infowindowtemplateparams = null) {
 		$extensionsImplementMappable = false;
 		$extensions = Object::get_extensions(get_class($obj));
 
@@ -638,6 +639,11 @@ var styles = [
 		) {
 			//if(($obj->getMappableLatitude() > 0) || ($obj->getMappableLongitude() > 0)) {
 			$cat = $obj->hasMethod('getMappableMapCategory') ? $obj->getMappableMapCategory() : "default";
+			if ($infowindowtemplateparams !== null) {
+				foreach ($infowindowtemplateparams as $key => $value) {
+					$obj->{$key} = $value;
+				}
+			}
 			$this->addMarkerByCoords(
 				$obj->getMappableLatitude(),
 				$obj->getMappableLongitude(),
