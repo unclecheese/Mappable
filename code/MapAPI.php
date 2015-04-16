@@ -559,17 +559,12 @@ var styles = [
 	 */
 
 	public function addMarkerByCoords($lat, $lng, $html='', $category='', $icon='') {
-		$iconURL = null;
-		if ($icon) {
-			$iconURL = $icon->getURL();
-		}
-
 		$m = array(
 			'latitude' => $lat,
 			'longitude' => $lng,
 			'html' => $html,
 			'category' => $category,
-			'icon' => $iconURL
+			'icon' => $icon
 		);
 		array_push($this->markers, $m);
 		return $this;
