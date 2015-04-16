@@ -103,9 +103,9 @@ class MapExtension extends DataExtension implements Mappable {
 			$mappin = $this->owner->MapPinIcon();
 			$result = $mappin->getAbsoluteURL();
 		} else {
-		  // check for a cached map pin already having been provided
-			if ($this->owner->CachedMapPin) {
-				$result = $this->owner->CachedMapPin;
+		  // check for a cached map pin already having been provided for the layer
+			if ($this->owner->CachedMapPinURL) {
+				$result = $this->owner->CachedMapPinURL;
 		  	}
 		}
 		return $result;
@@ -159,7 +159,7 @@ class MapExtension extends DataExtension implements Mappable {
 				foreach ($layer->PointsOfInterest() as $poi) {
 					if ($poi->MapPinEdited) {
 						if ($poi->MapPinIconID == 0) {
-							$poi->CachedMapPin = $layericon;
+							$poi->CachedMapPinURL = $layericon->getAbsoluteURL();
 						}
 						$map->addMarkerAsObject($poi);
 					}
