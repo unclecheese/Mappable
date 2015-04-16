@@ -9,7 +9,9 @@ class PointOfInterest extends DataObject {
 		'Name' => 'Varchar'
 	);
 
-	private static $summary_fields = array('Name');
+	private static $summary_fields = array('Name','Lat','Lon');
+
+	private static $default_sort = 'Name';
 
 	function getCMSFields() {
 	    $fields = parent::getCMSFields();
