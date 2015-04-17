@@ -222,13 +222,34 @@ class MapUtil
 	public static function get_map(SS_List $list, $optionalinfowindowtemplatevalues) {
 		$gmap = self::instance();
 		if($list) {
-			$arr = $list->toArray();
-			foreach ($arr as $mappable) {
-				if ($mappable->MapPinEdited) {
+			foreach ($list as $mappable) {
+				if (self::ChooseToAddDataobject($mappable)) {
 					$gmap->addMarkerAsObject($mappable, $optionalinfowindowtemplatevalues);
 				}
 			}
 		}
 		return $gmap;
+	}
+
+	/**
+	 * Determines if the current DataObject should be included to the map
+	 * Checks if it has Mappable interface implemented
+	 * If it has MapExtension included, the value of MapPinEdited is also checked
+	 *
+	 * @param DataObject $do
+	 * @return bool
+	 */
+	private static function ChooseToAddDataobject(DataObject $do) {
+		$isMappable = $do->is_a('Mappable');
+
+		foreach($do->getExtensionInstances() as $extension) {
+			$isMappable = $isMappable || $extension instanceof Mappable;
+		}
+
+		$filterMapPinEdited = $do->hasExtension('MapExtension')
+			? $do->MapPinEdited
+			: true;
+
+		return $isMappable && $filterMapPinEdited  ;
 	}
 }
