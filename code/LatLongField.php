@@ -90,10 +90,10 @@ var zoomFieldName = "'.$this->zoomField.'";
         $guidePointsJSON = '';
         if (isset($this->guidePoints)) {
         	$latlongps = array();
-        	foreach ($this->guidePoints as $guidepoint) {
-        		array_push($latlongps, array('latitude' => $guidepoint->Lat, 'longitude' => $guidepoint->Lon));
 
-        	}
+			foreach ($this->guidePoints as $guidepoint) {
+				array_push($latlongps, $guidepoint);
+			}
 
         	$guidePointsJSON = json_encode($latlongps);
         	// convert the mappable guidepoints to lat lon
