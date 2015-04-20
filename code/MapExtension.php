@@ -158,7 +158,7 @@ class MapExtension extends DataExtension implements Mappable {
 				}
 				foreach ($layer->PointsOfInterest() as $poi) {
 					if ($poi->MapPinEdited) {
-						if ($poi->MapPinIconID == 0) {
+						if ($poi->MapPinIconID == 0 && $layericon) {
 							$poi->CachedMapPinURL = $layericon->getAbsoluteURL();
 						}
 						$map->addMarkerAsObject($poi);
