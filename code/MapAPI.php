@@ -820,6 +820,8 @@ var styles = [
 			$this->allowFullScreen = 'false';
 		}
 
+
+
 		$vars = new ArrayData(array(
 				'JsonMapStyles' => $this->jsonMapStyles,
 				'AdditionalCssClasses' => $this->additional_css_classes,
@@ -851,17 +853,13 @@ var styles = [
 			)
 		);
 
+		// JavaScript required to prime the map
+		$javascript = $this->processTemplateJS('Map', $vars);
+		$vars->setField('JavaScript', $javascript);
+
 		// HTML component of the map
 		$this->content = $this->processTemplateHTML('Map', $vars);
-
-		$javascript = $this->processTemplateJS('Map', $vars);
-
-		Requirements::customScript(<<<JS
-$javascript
-JS
-);
-
-		}
+	}
 
 	function processTemplateJS($templateName, $templateVariables = null) {
 		if (!$templateVariables) {
