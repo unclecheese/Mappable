@@ -237,7 +237,7 @@ var styles = [
 	}
 
 
-	public function setMapStyles($newStyles) {
+	public function setMapStyle($newStyles) {
 		$this->jsonMapStyles = $newStyles;
 		return $this;
 	}
