@@ -56,7 +56,7 @@ class GoogleMapShortCodeHandler {
 		$customised = array_merge($defaults, $arguments);
 
 		// include JavaScript to be appended at the end of the page, namely params for map rendering
-		Requirements::javascriptTemplate("mappable/javascript/google/map.google.template.js", $customised);
+		//Requirements::javascriptTemplate("mappable/javascript/google/map.google.template.js", $customised);
 
 		//get map view template and render the HTML
 		$template = new SSViewer('GoogleMapShortCode');
