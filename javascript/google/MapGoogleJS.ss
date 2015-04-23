@@ -5,7 +5,7 @@ var gmarkers = [];
 var mapLayers = [];
 var mapLines = [];
 <% end_if %>
-var options = {
+var options_$GoogleMapID = {
 	centre: $LatLngCentre,
 	zoom: $Zoom,
 	maptype: '$MapType',
@@ -20,5 +20,4 @@ var options = {
 	clusterermaxzoom: $ClustererMaxZoom,
 	enableautocentrezoom: $EnableAutomaticCenterZoom
 }
-
-registerMap(options);
+registerMap(options_$GoogleMapID);
