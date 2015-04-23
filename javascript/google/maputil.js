@@ -1,10 +1,4 @@
 /**
- * Counter used for uniquely identifying each Google map
- * @type {Number}
- */
-var mappableMapCtr = 0;
-
-/**
  * Create a google map pin from data provided
  * @param  {GoogleMap} map             Instance of a google map
  * @param  {Number} lat                Latitude of pin
@@ -190,74 +184,6 @@ function convertMapType(mapTypeName) {
 
 
 /**
- * Register a short code generated map, namely storing parameters for later rendering
- * once google maps API loaded
- * @param  array options lat,lon,zoom,type
- */
-function registerShortcodeMap(options) {
-	newMap = [];
-	newMap.latitude = options.latitude;
-	newMap.longitude = options.longitude;
-	newMap.zoom = options.zoom;
-	newMap.maptype = options.maptype;
-	newMap.allowfullscreen = options.allowfullscreen;
-	newMap.caption = options.caption;
-	newMap.domid = options.domid;
-	shortcodeMaps.push(newMap);
-}
-
-/**
- * Register a short code generated streetview, namely storing parameters for later rendering
- * once google maps API loaded
- * @param  array options lat,lon,zoom,pitch,heading,caption,domid
- */
-function registerStreetView(options) {
-	newView = [];
-	newView.latitude = options.latitude;
-	newView.longitude = options.longitude;
-	newView.zoom = options.zoom;
-	newView.pitch = options.pitch;
-	newView.heading = options.heading;
-	newView.caption = options.caption;
-	newView.domid = options.domid;
-	shortcodeStreetview.push(newView);
-}
-
-
-//function registerMap(googleMapID, centreCoordinates, zoom, mapType,
-//	markers, lines, kmlFiles, jsonMapStyles, enableAutomaticCenterZoom, useClusterer,
-//	allowFullScreen) {
-
-function registerMap(options) {
-	var newMap = [];
-	newMap.googleMapID = options.domid;
-	newMap.zoom = options.zoom;
-	newMap.centreCoordinates = options.centre;
-
-	newMap.markers = options.mapmarkers;
-	newMap.mapType = options.maptype;
-	newMap.lines = options.lines;
-	newMap.kmlFiles = options.kmlfiles;
-	newMap.jsonMapStyles = options.mapstyles;
-	newMap.enableAutomaticCenterZoom = options.enableautocentrezoom;
-	newMap.useClusterer = options.useclusterer;
-	newMap.allowFullScreen = options.allowfullscreen;
-	var googleMapID = options.domid;
-	mappableMaps[googleMapID] = newMap;
-
-	// increment map counter
-	mappableMapCtr++;
-
-	// initialise gmarkers array for this map
-	gmarkers[googleMapID] = [];
-
-
-	mapLayers[googleMapID] = options.kmlfiles;
-	mapLines[googleMapID] = options.lines;
-}
-
-
-/**
  * After the Google Maps API has been loaded init the relevant Google maps
  */
 function loadShortCodeStreetView() {
@@ -372,7 +298,7 @@ function loadedGoogleMapsAPI() {
 		map.setMapTypeId(googlemaptype);
 
 		if (map_info.useClusterer) {
-			var mcOptions = {gridSize: options.clusterergridsize, maxZoom: options.clusterermaxzoom};
+			var mcOptions = {gridSize: map_info.clustererGridSize, maxZoom: map_info.clustererMaxZoom};
 			var markerCluster = new MarkerClusterer(map,markers,mcOptions);
 		}
 
