@@ -261,10 +261,10 @@ function loadedGoogleMapsAPI() {
 		// initialise geocoder
 		geocoder = new google.maps.Geocoder();
 
-		// TODO
-		// if (map_info.jsonMapStyles) {
-		//		map.setOptions({styles: map_info.jsonMapStyles});
-		//	};
+		// default of [] renders google maps as per normal
+		if (map_info.jsonMapStyles) {
+			map.setOptions({styles: map_info.jsonMapStyles});
+		};
 
 		if (map_info.allowFullScreen) {
 			map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
