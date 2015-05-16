@@ -854,8 +854,8 @@ var styles = [
 		);
 
 		// JavaScript required to prime the map
-		$javascript = $this->processTemplateJS('Map', $vars);
-		$vars->setField('JavaScript', $javascript);
+		//$javascript = $this->processTemplateJS('Map', $vars);
+		//$vars->setField('JavaScript', $javascript);
 
 		// HTML component of the map
 		$this->content = $this->processTemplateHTML('Map', $vars);
