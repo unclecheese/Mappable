@@ -57,16 +57,7 @@ function registerMap(options) {
 	mapLines[googleMapID] = options.lines;
 }
 
-function loadScript() {
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src = 'https://maps.googleapis.com/maps/api/js?' +
-      '&sensor=false&callback=loadedGoogleMapsAPI&hl=en';
-  document.body.appendChild(script);
-}
-window.addEventListener ?
-        window.addEventListener("load",loadScript,false) :
-window.attachEvent && window.attachEvent("onload",loadScript);
+
 </script>
 <% if $UseCompressedAssets %>
 <% require javascript("mappable/javascript/google/mappablegoogle.min.js") %>
