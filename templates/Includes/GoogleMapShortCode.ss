@@ -1,17 +1,11 @@
 <% include GoogleJavaScript %>
 <div class="googlemapcontainer">
-<div id="$DomID" class="map googlemap"><!-- map is rendered here --></div>
+<div id="$DomID" class="map googlemap" data-shortcode-map
+data-latitude=$Latitude
+data-longitude=$Longitude
+data-zoom=$Zoom
+data-maptype=$MapType
+data-allowfullscreen=$AllowFullScreen
+></div>
 <% if $Caption %><p class="caption">$Caption</p><% end_if %>
 </div>
-<script type="text/javascript">
-var options = {
-	latitude: $Latitude,
-	longitude: $Longitude,
-	zoom: $Zoom,
-	maptype: '$MapType',
-	domid: '$DomID',
-	allowfullscreen: $AllowFullScreen
-}
-registerShortcodeMap(options);
-
-</script>
