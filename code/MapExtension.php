@@ -141,10 +141,14 @@ class MapExtension extends DataExtension implements Mappable {
 			setAdditionalCSSClasses('fullWidthMap')->
 			setShowInlineMapDivStyle(true);
 
+		$autozoom = false;
+
 		// add any KML map layers
 		if (Object::has_extension($this->owner->ClassName, 'MapLayerExtension')) {
 		  foreach($this->owner->MapLayers() as $layer) {
 			$map->addKML($layer->KmlFile()->getAbsoluteURL());
+			// we have a layer, so turn on autozoom
+			$autozoom = true;
 		  }
 			$map->setEnableAutomaticCenterZoom(true);
 		}
@@ -162,17 +166,17 @@ class MapExtension extends DataExtension implements Mappable {
 							$poi->CachedMapPinURL = $layericon->getAbsoluteURL();
 						}
 						$map->addMarkerAsObject($poi);
+
+						// we have a point of interest, so turn on auto zoom
+						$autozoom = true;
 					}
 				}
 			}
 			$map->setClusterer(true);
-			$map->setEnableAutomaticCenterZoom(true);
 		}
 
-		$map->setZoom(10);
-		$map->setAdditionalCSSClasses('fullWidthMap');
+		$map->setEnableAutomaticCenterZoom($autozoom);
 		$map->setShowInlineMapDivStyle(true);
-		$map->setClusterer(true);
 
 		return $map;
 	}
