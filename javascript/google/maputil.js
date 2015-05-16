@@ -1,3 +1,19 @@
+// FIXME - make non global
+var infoWindows = [];
+
+
+function loadGoogleMapsScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://maps.googleapis.com/maps/api/js?' +
+      '&sensor=false&callback=loadedGoogleMapsAPI&hl=en';
+  document.body.appendChild(script);
+}
+window.addEventListener ?
+        window.addEventListener("load",loadGoogleMapsScript,false) :
+window.attachEvent && window.attachEvent("onload",loadGoogleMapsScript);
+
+
 /**
  * Create a google map pin from data provided
  * @param  {GoogleMap} map             Instance of a google map
@@ -37,7 +53,7 @@ function createMarker(map, lat, lng, html, category, icon, useClusterer, enableW
 		infoWindow.open(map, this);
 	});
 
-	gmarkers[mapId].push(marker);
+	//FIXME gmarkers[mapId].push(marker);
 
 	if (defaultHideMarker) {
 		marker.hide();
@@ -187,32 +203,39 @@ function convertMapType(mapTypeName) {
  * After the Google Maps API has been loaded init the relevant Google maps
  */
 function loadShortCodeStreetView() {
-	for (var i = 0; i < shortcodeStreetview.length; i++) {
-		view = shortcodeStreetview[i];
-		var location = new google.maps.LatLng(view.latitude, view.longitude);
 
-		var mapOptions = {
-		  center: location,
-		  zoom: view.zoom
-		};
+	var svs = $('div[data-streetview]');
 
-		var map = new google.maps.Map(
-    		document.getElementById(view.domid), mapOptions);
+	svs.each(function(index) {
+		var svnode = $(this);
+		var svnodeid = svnode.attr('id');
+		var lat = parseFloat(svnode.attr('data-latitude'));
+		var lon = parseFloat(svnode.attr('data-longitude'));
+		var zoom = parseInt(svnode.attr('data-zoom'));
+		var heading = parseFloat(svnode.attr('data-heading'));
+		var pitch = parseFloat(svnode.attr('data-pitch'));
+
+		var location = new google.maps.LatLng(lat,lon);
 
 		  var panoramaOptions = {
 		    position: location,
 		    pov: {
-		      heading: view.heading,
-		      pitch: view.pitch
+		      heading: heading,
+		      pitch: pitch
 		    },
-		    zoom: view.zoom
+		    zoom: zoom
 		  };
-		  var domNode = document.getElementById(view.domid);
+
+
+		  var domNode = document.getElementById(svnodeid);
 		  var pano = new google.maps.StreetViewPanorama(
 		      domNode,
 		      panoramaOptions);
 		  pano.setVisible(true);
-	}
+	});
+
+
+
 
 }
 
@@ -221,26 +244,36 @@ function loadShortCodeStreetView() {
  * After the Google Maps API has been loaded init the relevant Google maps
  */
 function loadShortCodeMaps() {
-	for (var i = 0; i < shortcodeMaps.length; i++) {
-		map = shortcodeMaps[i];
 
-		// deal with map type
-		var maptype = convertMapType(map.maptype);
+	var scms = $('div[data-shortcode-map]');
+
+	scms.each(function(index) {
+		var scmnode = $(this);
+		var scmnodeid = scmnode.attr('id');
+		var maptype = convertMapType(scmnode.attr('data-maptype'));
+		var lat = parseFloat(scmnode.attr('data-latitude'));
+		var lng = parseFloat(scmnode.attr('data-longitude'));
+		var zoom = parseInt(scmnode.attr('data-zoom'));
+		var allowfullscreen = parseInt(scmnode.attr('data-allowfullscreen'));
 
 		// Google Maps API has already been loaded, so init Google Map
 		var mapOptions = {
-			center: { lat: map.latitude, lng: map.longitude},
-			zoom: map.zoom,
+			center: { lat:lat, lng: lng},
+			zoom: zoom,
 			mapTypeId: maptype
 		};
-		var gmap = new google.maps.Map(document.getElementById(map.domid),
+
+
+
+		var gmap = new google.maps.Map(document.getElementById(scmnodeid),
 			mapOptions);
-		if (map.allowfullscreen == 1) {
+		if (allowfullscreen == 1) {
 			gmap.controls[google.maps.ControlPosition.TOP_RIGHT].push(
 				FullScreenControl(gmap, "Full Screen", "Original Size")
 			);
 		}
-	}
+	});
+
 
 }
 
@@ -253,61 +286,69 @@ function loadedGoogleMapsAPI() {
 	loadShortCodeMaps();
 	loadShortCodeStreetView();
 
-	for (var i = 1; i <= mappableMapCtr; i++) {
-		var mapdomid = 'google_map_' + i;
-		var map_info = mappableMaps[mapdomid];
-		var map = new google.maps.Map(document.getElementById(map_info.googleMapID));
+	var maps = $('div[data-map]');
+
+	maps.each(function(index) {
+		var mapnode = $(this);
+		mapdomid = mapnode.attr('id');
+		var map = new google.maps.Map(document.getElementById(mapdomid));
 
 		// initialise geocoder
 		geocoder = new google.maps.Geocoder();
 
 		// default of [] renders google maps as per normal
-		if (map_info.jsonMapStyles) {
-			map.setOptions({styles: map_info.jsonMapStyles});
+		if (mapnode.data('jsonMapStyles')) {
+			map.setOptions({styles: map.data('jsonMapStyles')});
 		};
 
-		if (map_info.allowFullScreen) {
+		if (mapnode.data['data-allowfullscreen']) {
 			map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
 				FullScreenControl(map, "Full Screen", "Original Size")
 			);
 		}
 
+		var markerjson = $.parseJSON(mapnode.attr('data-mapmarkers'));
+		var useClusterer = mapnode.attr('data-useclusterer');
+		var enableAutomaticCenterZoom = mapnode.attr('data-enableautocentrezoom');
+		var defaultHideMarker = mapnode.attr('data-defaulthidemarker');
+		var markers = addAllMarkers(map, markerjson, useClusterer,
+			enableAutomaticCenterZoom, defaultHideMarker);
 
-		var markers = addAllMarkers(map, map_info.markers, map_info.useClusterer,
-			map_info.enableAutomaticCenterZoom, map_info.defaultHideMarker);
-
-		if (map_info.enableAutomaticCenterZoom) {
-			centre = map.centreCoordinates;
+		if (enableAutomaticCenterZoom == '1') {
+			centre = $.parseJSON(mapnode.attr('data-centre'));
 			map.setCenter(new google.maps.LatLng(centre.lat, centre.lng));
 
-			map_info.minLat = map.minLat;
-			map_info.maxLat = map.maxLat;
-			map_info.minLng = map.minLng;
-			map_info.maxLng = map.maxLng;
-
-			var bds = new google.maps.LatLngBounds(new google.maps.LatLng(map_info.minLat, map_info.minLng),
-				new google.maps.LatLng(map_info.maxLat, map_info.maxLng));
+			var bds = new google.maps.LatLngBounds(new google.maps.LatLng(map.minLat, map.minLng),
+				new google.maps.LatLng(map.maxLat, map.maxLng));
 			map.fitBounds(bds);
 		} else {
-			var centre = map_info.centreCoordinates;
+			centre = $.parseJSON(mapnode.attr('data-centre'));
 			map.setCenter(new google.maps.LatLng(centre.lat, centre.lng));
-			map.setZoom(map_info.zoom);
+			var zoom = parseInt(mapnode.attr('data-zoom'));
+			map.setZoom(zoom);
 		}
 
-		var googlemaptype = convertMapType(map_info.mapType);
+		var googlemaptype = convertMapType(mapnode.attr('data-maptype'));
 		map.setMapTypeId(googlemaptype);
 
-		if (map_info.useClusterer) {
-			var mcOptions = {gridSize: map_info.clustererGridSize, maxZoom: map_info.clustererMaxZoom};
+		if (useClusterer) {
+			// ensure zoom and grid size are integers by prefixing with unary plus
+			var clustererGridSize = parseInt(mapnode.attr('data-clusterergridsize'));
+			var clustererMaxZoom = parseInt(mapnode.attr('data-clusterermaxzoom'));
+			var mcOptions = {gridSize: clustererGridSize, maxZoom: clustererMaxZoom};
 			var markerCluster = new MarkerClusterer(map,markers,mcOptions);
 		}
 
-		addLines(map, map_info.lines);
-		addKmlFiles(map, map_info.kmlFiles);
+		var lines =$.parseJSON(mapnode.attr('data-lines'));
+		addLines(map, lines);
+
+		var kmlFiles =$.parseJSON(mapnode.attr('data-kmlfiles'));
+		addKmlFiles(map, kmlFiles);
 
 		var infoWindow = new google.maps.InfoWindow({
 			content: ''
 		});
 		infoWindows[mapdomid] = infoWindow;
-	}
+
+	});
 }
