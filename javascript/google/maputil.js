@@ -297,8 +297,9 @@ function loadedGoogleMapsAPI() {
 		geocoder = new google.maps.Geocoder();
 
 		// default of [] renders google maps as per normal
-		if (mapnode.data('jsonMapStyles')) {
-			map.setOptions({styles: map.data('jsonMapStyles')});
+		if (mapnode.attr('data-mapstyles')) {
+			var json=$.parseJSON(mapnode.attr('data-mapstyles'));
+			map.setOptions({styles: json});
 		};
 
 		if (mapnode.data['data-allowfullscreen']) {
