@@ -13,7 +13,6 @@ data-mapmarkers= '$MapMarkers'
 data-lines='$Lines'
 data-kmlfiles='$KmlFiles'
 data-mapstyles='$JsonMapStyles'
-data-useclusterer=$UseClusterer,
-
+data-useclusterer=$UseClusterer
 >
 </div>
