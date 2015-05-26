@@ -313,6 +313,7 @@ function loadedGoogleMapsAPI() {
 		var defaultHideMarker = mapnode.attr('data-defaulthidemarker');
 		var markers = addAllMarkers(map, markerjson, useClusterer,
 			enableAutomaticCenterZoom, defaultHideMarker);
+		var allowfullscreen = parseInt(mapnode.attr('data-allowfullscreen'));
 
 		if (enableAutomaticCenterZoom == '1') {
 			centre = $.parseJSON(mapnode.attr('data-centre'));
@@ -326,6 +327,12 @@ function loadedGoogleMapsAPI() {
 			map.setCenter(new google.maps.LatLng(centre.lat, centre.lng));
 			var zoom = parseInt(mapnode.attr('data-zoom'));
 			map.setZoom(zoom);
+		}
+
+		if (allowfullscreen == 1) {
+			map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
+				FullScreenControl(map, "Full Screen", "Original Size")
+			);
 		}
 
 		var googlemaptype = convertMapType(mapnode.attr('data-maptype'));
