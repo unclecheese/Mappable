@@ -358,5 +358,8 @@ function loadedGoogleMapsAPI() {
 		});
 		infoWindows[mapdomid] = infoWindow;
 
+		// trigger an event now that the map has been initialised
+		// Use this for example to add listeners to the map from another JS file
+		mapnode.trigger( "mapInitialised", [ map ] );
 	});
 }
