@@ -363,3 +363,40 @@ function loadedGoogleMapsAPI() {
 		mapnode.trigger( "mapInitialised", [ map ] );
 	});
 }
+
+
+
+
+function nearestPOIs() {
+
+	// normally will only be one
+	var nears = $('div[data-nearest-poi]');
+
+	nears.each(function(index) {
+		var nearnode = $(this);
+		var layerID = nearnode.attr('data-layer-id');
+
+		if(geoPosition.init()){  // Geolocation Initialisation
+            geoPosition.getCurrentPosition(success_callback,error_callback,{enableHighAccuracy:true});
+	    }else{
+	        alert('your location is not available');
+	    }
+	    //geoPositionSimulator.init();
+	});
+}
+
+
+function success_callback(p){
+	console.log(p.coords);
+        // p.latitude : latitude value
+        // p.longitude : longitude value
+        //
+        var url = window.location;
+        url = url + 'find?lat='+p.coords.latitude+'&lng='+p.coords.longitude;
+        window.location = url;
+}
+
+
+ function error_callback(p){
+ 	alert('error)');
+ };
