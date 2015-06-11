@@ -20,8 +20,6 @@ Short codes are also provided to render Google Street View and Google maps.
 * [Adding Lines to Maps](./docs/en/AddingLinesToMaps.md)
 * [Google Map Short Codes](./docs/en/GoogleMapShortCodes.md)
 * [Google Streeview Short Codes](./docs/en/GoogleStreetViewShortCodes.md)
-* [Points of Interest](./docs/en/PointsOfInterest.md)
-* [Using OpenStreetMap Data](./docs/en/OpenStreetMap.md)
 
 For more documentation about the module see the provided documentation located
 inside the docs folder.
