@@ -1,3 +1,4 @@
+<% require javascript("framework/thirdparty/jquery/jquery.js") %>
 <% if $UseCompressedAssets %>
 <% require javascript("mappable/javascript/google/mappablegoogle.min.js") %>
 <% else %>
