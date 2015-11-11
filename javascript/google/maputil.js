@@ -31,7 +31,7 @@ var primeMap;
 			marker.setIcon(image);
 		}
 
-		if (!useClusterer) {
+		if (!(useClusterer == '1')) {
 			marker.setMap(map);
 		}
 
@@ -311,7 +311,7 @@ var primeMap;
 				enableAutomaticCenterZoom, defaultHideMarker);
 			var allowfullscreen = parseInt(mapnode.attr('data-allowfullscreen'));
 
-			if (enableAutomaticCenterZoom == '1') {
+			if (enableAutomaticCenterZoom == 1) {
 				centre = $.parseJSON(mapnode.attr('data-centre'));
 				map.setCenter(new google.maps.LatLng(centre.lat, centre.lng));
 
@@ -334,7 +334,7 @@ var primeMap;
 			var googlemaptype = convertMapType(mapnode.attr('data-maptype'));
 			map.setMapTypeId(googlemaptype);
 
-			if (useClusterer) {
+			if (useClusterer == 1) {
 				// ensure zoom and grid size are integers by prefixing with unary plus
 				var clustererGridSize = parseInt(mapnode.attr('data-clusterergridsize'));
 				var clustererMaxZoom = parseInt(mapnode.attr('data-clusterermaxzoom'));
