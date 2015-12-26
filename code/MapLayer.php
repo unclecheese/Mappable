@@ -11,13 +11,4 @@ class MapLayer extends DataObject {
 		'KmlFile' => 'File'
 	);
 
-	function getCMSFields_forPopup() {
-		$fields = new FieldSet();
-
-		$fields->push(new TextField('Title'));
-		$fields->push(new FileIFrameField('KmlFile'));
-
-		return $fields;
-	}
-
 }
