@@ -23,9 +23,6 @@ class MapAPI extends ViewableData
 	/** GoogleMap ID for the HTML DIV  **/
 	protected $googleMapId = 'googlemapapi';
 
-	/** GoogleMap  Direction ID for the HTML DIV **/
-	protected $googleMapDirectionId = 'route';
-
 	/* Additional CSS classes to use when rendering the map */
 	protected $set_additional_css_classes = '';
 
@@ -34,12 +31,6 @@ class MapAPI extends ViewableData
 
 	/** Height of the gmap **/
 	protected $height = 600;
-
-	/** Icon width of the gmarker **/
-	protected $iconWidth = 20;
-
-	/** Icon height of the gmarker **/
-	protected $iconHeight = 34;
 
 	/* array of lines to be drawn on the map */
 	protected $lines = array();
@@ -75,56 +66,7 @@ class MapAPI extends ViewableData
 
 	protected $latLongCenter = null;
 
-
-
-
-	/*
-		Map styles for google maps, ignored if null
-		<pre>
-var styles = [
-			 {
-							 featureType: 'water',
-							 elementType: 'all',
-							 stylers: [
-											 { hue: '#B6C5CF' },
-											 { saturation: -54 },
-											 { lightness: 1 },
-											 { visibility: 'on' }
-							 ]
-			 },{
-							 featureType: 'landscape',
-							 elementType: 'all',
-							 stylers: [
-											 { hue: '#D9D4C8' },
-											 { saturation: -32 },
-											 { lightness: -8 },
-											 { visibility: 'on' }
-							 ]
-			 },{
-							 featureType: 'road',
-							 elementType: 'all',
-							 stylers: [
-											 { hue: '#A69D97' },
-											 { saturation: -92 },
-											 { lightness: -3 },
-											 { visibility: 'on' }
-							 ]
-			 },{
-							 featureType: 'poi',
-							 elementType: 'all',
-							 stylers: [
-											 { hue: '#E7E6DB' },
-											 { saturation: -53 },
-											 { lightness: 47 },
-											 { visibility: 'on' }
-							 ]
-			 }
-];
-		</pre>
-		*/
 	protected $jsonMapStyles = '[]';
-
-	protected $delayLoadMapFunction = false;
 
 	/**
 	 * Type of the gmap, can be:
@@ -143,14 +85,11 @@ var styles = [
 
 	protected $mapService = 'google';
 
-	/** Add the direction button to the infowindow **/
-	protected $displayDirectionFields = false;
-
 	/** Hide the marker by default **/
 	protected $defaultHideMarker = false;
 
 	/** Extra content (marker, etc...) **/
-	//protected $contentMarker = '';
+	protected $contentMarker = '';
 
 	// a list of markers, markers being associative arrays
 	protected $markers = array();
@@ -191,40 +130,15 @@ var styles = [
 	/* set this to true to render button to maximize / minimize a map */
 	protected $allowFullScreen = null;
 
-
-	protected static $include_download_javascript = false;
-
-
 	/**
 	 * Class constructor
 	 *
 	 * @param string  $googleMapKey the googleMapKey
-	 *
-	 * @return void
 	 */
 
-	public function __construct($googleMapKey='') {
+	public function __construct($googleMapKey = '') {
 		$this->googleMapKey = $googleMapKey;
 	}
-
-	/**
-	 * Set the key of the gmap
-	 *
-	 * @param string  $googleMapKey the googleMapKey
-	 *
-	 * @return void
-	 */
-
-	public function setKey($googleMapKey) {
-		$this->googleMapKey = $googleMapKey;
-		return $this;
-	}
-
-	public function setIncludeDownloadJavascript($inclusion) {
-		self::$include_download_javascript = $inclusion;
-		return $this;
-	}
-
 
 	public function setShowInlineMapDivStyle($new_show_inline_map_div_style) {
 		$this->show_inline_map_div_style = $new_show_inline_map_div_style;
@@ -242,28 +156,18 @@ var styles = [
 		return $this;
 	}
 
-
-
-	public function setDelayLoadMapFunction($newDelay) {
-		$this->delayLoadMapFunction = $newDelay;
-		return $this;
-	}
-
 	/**
 	 * Set the useClusterer parameter (optimization to display a lot of marker)
 	 *
-	 * @param boolean $useClusterer           use cluster or not
-	 * @param string  $clusterIcon            the cluster icon
-	 * @param int     $maxVisibleMarkers      max visible markers
-	 * @param int     $gridSize               grid size
-	 * @param int     $minMarkersPerClusterer minMarkersPerClusterer
-	 * @param int     $maxLinesPerInfoBox     maxLinesPerInfoBox
+	 * @param boolean $useClusterer     use cluster or not
+	 * @param int     $gridSize         grid size
+	 * @param int     $maxZoom 			max zoom to cluster at
 	 *
-	 * @return void
+	 * * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
-	public function setClusterer($useClusterer, $gridSize=50, $maxZoom=17,
-			$clustererLibraryPath='/mappable/javascript/google/markerclusterer.js') {
+	public function setClusterer($useClusterer, $gridSize = 50, $maxZoom = 17,
+		$clustererLibraryPath = '/mappable/javascript/google/markerclusterer.js') {
 		$this->useClusterer = $useClusterer;
 		$this->gridSize = $gridSize;
 		$this->maxZoom = $maxZoom;
@@ -276,24 +180,11 @@ var styles = [
 	 *
 	 * @param string  $googleMapId the google div ID
 	 *
-	 * @return void
+	 * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
 	public function setDivId($googleMapId) {
 		$this->googleMapId = $googleMapId;
-		return $this;
-	}
-
-	/**
-	 * Set the ID of the default gmap direction DIV
-	 *
-	 * @param string  $googleMapDirectionId GoogleMap  Direction ID for the HTML DIV
-	 *
-	 * @return void
-	 */
-
-	public function setDirectionDivId($googleMapDirectionId) {
-		$this->googleMapDirectionId = $googleMapDirectionId;
 		return $this;
 	}
 
@@ -304,7 +195,7 @@ var styles = [
 	 * @param int     $width  GoogleMap  width
 	 * @param int     $height GoogleMap  height
 	 *
-	 * @return void
+	 * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
 	public function setSize($width, $height) {
@@ -313,28 +204,12 @@ var styles = [
 		return $this;
 	}
 
-
-	/**
-	 * Set the size of the icon markers
-	 *
-	 * @param int     $iconWidth  GoogleMap  marker icon width
-	 * @param int     $iconHeight GoogleMap  marker icon height
-	 *
-	 * @return void
-	 */
-
-	public function setIconSize($iconWidth, $iconHeight) {
-		$this->iconWidth = $iconWidth;
-		$this->iconHeight = $iconHeight;
-		return $this;
-	}
-
 	/**
 	 * Set the lang of the gmap
 	 *
 	 * @param string  $lang GoogleMap  lang : fr,en,..
 	 *
-	 * @return void
+	 * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
 	public function setLang($lang) {
@@ -345,9 +220,9 @@ var styles = [
 	/**
 	 * Set the zoom of the gmap
 	 *
-	 * @param int     $zoom GoogleMap  zoom.
+	 * @param int $zoom GoogleMap zoom.
 	 *
-	 * @return void
+	 * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
 	public function setZoom($zoom) {
@@ -358,9 +233,9 @@ var styles = [
 	/**
 	 * Set the zoom of the infowindow
 	 *
-	 * @param int     $zoom GoogleMap  zoom.
+	 * @param int 	$infoWindowZoom GoogleMap information window zoom.
 	 *
-	 * @return void
+	 * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
 	public function setInfoWindowZoom($infoWindowZoom) {
@@ -371,9 +246,9 @@ var styles = [
 	/**
 	 * Enable the zoom on the marker when you click on it
 	 *
-	 * @param int     $zoom GoogleMap  zoom.
+	 * @param boolean $enableWindowZoom info window enabled zoom.
 	 *
-	 * @return void
+	 * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
 	public function setEnableWindowZoom($enableWindowZoom) {
@@ -384,9 +259,9 @@ var styles = [
 	/**
 	 * Enable theautomatic center/zoom at the gmap load
 	 *
-	 * @param int     $zoom GoogleMap  zoom.
+	 * @param boolean $enableAutomaticCenterZoom enable automatic centre zoom
 	 *
-	 * @return void
+	 * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
 	public function setEnableAutomaticCenterZoom($enableAutomaticCenterZoom) {
@@ -399,7 +274,7 @@ var styles = [
 	 *
 	 * @param string  $center GoogleMap  center (an address)
 	 *
-	 * @return void
+	 * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
 	public function setCenter($center) {
@@ -410,9 +285,11 @@ var styles = [
 	/**
 	 * Set the type of the gmap.  Also takes into account legacy settings
 	 *
+	 * FIXME - allow other valid settings in config for map type
+	 *
 	 * @param string  $mapType  Can be one of road,satellite,hybrid or terrain. Defaults to road
 	 *
-	 * @return void
+	 * @return MapAPI This same object, in order to enable chaining of methods
 	 */
 
 	public function setMapType($mapType) {
@@ -423,22 +300,22 @@ var styles = [
 			case 'google.maps.MapTypeId.SATELLITE':
 				$this->mapType = "satellite";
 				break;
-			case 'google.maps.MapTypeId.SATELLITE':
-				$this->mapType = "satellite";
+			case 'google.maps.MapTypeId.G_HYBRID_MAP':
+				$this->mapType = "hybrid";
 				break;
-			case 'google.maps.MapTypeId.SATELLITE':
-				$this->mapType = "satellite";
+			case 'google.maps.MapTypeId.G_PHYSICAL_MAP':
+				$this->mapType = "terrain";
 				break;
-			default:
-				$this->MapType = "road";
+			case 'google.maps.MapTypeId.ROADMAP':
+				$this->mapType = "road";
 				break;
 		}
-
 		return $this;
 	}
 
 	/*
 	Set whether or not to allow the full screen tools
+	@return MapAPI This same object, in order to enable chaining of methods
 	*/
 	public function setAllowFullScreen($allowed) {
 		$this->allowFullScreen = $allowed;
@@ -447,22 +324,23 @@ var styles = [
 
 	/**
 	* Set the center of the gmap
+	*
+	* @return MapAPI This same object, in order to enable chaining of methods
 	**/
 	public function setLatLongCenter($center) {
+		// error check, we want an associative array with lat,lng keys numeric
+
+		if (!is_array($center)) {
+			throw new InvalidArgumentException('Center must be an associative array containing lat,lng');
+		}
+
+		$keys = array_keys($center);
+		sort($keys);
+		if (implode(',', $keys) != 'lat,lng') {
+			throw new InvalidArgumentException('Keys provided must be lat, lng');
+		}
+
 		$this->latLongCenter = $center;
-		return $this;
-	}
-
-	/**
-	 * Decide whether or not to show direction controls
-	 *
-	 * @param boolean $displayDirectionFields display directions or not in the info window
-	 *
-	 * @return void
-	 */
-
-	public function setDisplayDirectionFields($displayDirectionFields) {
-		$this->displayDirectionFields = $displayDirectionFields;
 		return $this;
 	}
 
@@ -471,7 +349,7 @@ var styles = [
 	 *
 	 * @param boolean $defaultHideMarker hide all the markers on the map by default
 	 *
-	 * @return void
+	 * @return MapAPI
 	 */
 
 	public function setDefaultHideMarker($defaultHideMarker) {
@@ -516,34 +394,26 @@ var styles = [
 	 *
 	 * @param string  $address an address
 	 *
-	 * @return array array with precision, lat & lng
+	 * @return string array with precision, lat & lng
 	 */
 
 	public function geocoding($address) {
-		$encodeAddress = urlencode($address);
-		$url = "//maps.google.com/maps/geo?q=".$encodeAddress."&output=csv&key=".$this->googleMapKey;
+		$geocoder = new MappableGoogleGeocoder();
+		$locations = $geocoder->getLocations($address);
+		$result = null;
+		if (!empty($locations)) {
+			$place = $locations[0];
+			$location = $place['geometry']['location'];
+			$result = array(
+				'lat' => $location['lat'],
+				'lon' => $location['lng'],
+				'geocoded' => true
+			);
 
-		if (function_exists('curl_init')) {
-			$data = $this->getContent($url);
 		} else {
-			$data = file_get_contents($url);
+			$result = array(); // no results
 		}
-
-		$csvSplit = preg_split("/,/", $data);
-		$status = $csvSplit[0];
-
-		if (strcmp($status, "200") == 0) {
-			/*
-			For a successful geocode:
-			- $precision = $csvSplit[1
-			- $lat = $csvSplit[2]
-			- $lng = $csvSplit[3];
-			*/
-			$return = $csvSplit;
-		} else {
-			$return = null; // failure to geocode
-		}
-		return $return;
+		return $result;
 	}
 
 	/**
@@ -555,10 +425,10 @@ var styles = [
 	 * @param string  $category marker category
 	 * @param string  $icon     an icon url
 	 *
-	 * @return void
+	 * @return MapAPI
 	 */
 
-	public function addMarkerByCoords($lat, $lng, $html='', $category='', $icon='') {
+	public function addMarkerByCoords($lat, $lng, $html = '', $category = '', $icon = '') {
 		$m = array(
 			'latitude' => $lat,
 			'longitude' => $lng,
@@ -579,15 +449,13 @@ var styles = [
 	 * @param string  $category marker category
 	 * @param string  $icon     an icon url
 	 *
-	 * @return void
+	 * @return MapAPI
 	 */
 
-	public function addMarkerByAddress($address, $content='', $category='', $icon='') {
+	public function addMarkerByAddress($address, $content = '', $category = '', $icon = '') {
 		$point = $this->geocoding($address);
-		if ($point!==null) {
-			$this->addMarkerByCoords($point[2], $point[3], $content, $category, $icon);
-		} else {
-			// throw new Exception('Adress not found : '.$address);
+		if ($point !== null) {
+			$this->addMarkerByCoords($point['lat'], $point['lon'], $content, $category, $icon);
 		}
 		return $this;
 	}
@@ -595,14 +463,14 @@ var styles = [
 	/**
 	 * Add marker by an array of coord
 	 *
-	 * @param string  $coordtab an array of lat,lng,content
+	 * @param array  $coordtab an array of lat,lng,content
 	 * @param string  $category marker category
 	 * @param string  $icon     an icon url
 	 *
-	 * @return void
+	 * @return MapAPI
 	 */
 
-	public function addArrayMarkerByCoords($coordtab, $category='', $icon='') {
+	public function addArrayMarkerByCoords($coordtab, $category = '', $icon = '') {
 		foreach ($coordtab as $coord) {
 			$this->addMarkerByCoords($coord[0], $coord[1], $coord[2], $category, $icon);
 		}
@@ -620,19 +488,21 @@ var styles = [
 	public function addMarkerAsObject(ViewableData $obj, $infowindowtemplateparams = null) {
 		$extensionsImplementMappable = false;
 		$extensions = Object::get_extensions(get_class($obj));
+		if (is_array($extensions)) {
 
-		foreach ($extensions as $extension) {
-			$class = new ReflectionClass($extension);
-			if ($class->implementsInterface('Mappable')) {
-				$extensionsImplementMappable = true;
+			foreach ($extensions as $extension) {
+				$class = new ReflectionClass($extension);
+				if ($class->implementsInterface('Mappable')) {
+					$extensionsImplementMappable = true;
+				}
+
 			}
-
 		}
+
 		if ($extensionsImplementMappable ||
 			($obj instanceof Mappable) ||
 			(Object::has_extension($obj->ClassName, 'MapExtension'))
 		) {
-			//if(($obj->getMappableLatitude() > 0) || ($obj->getMappableLongitude() > 0)) {
 			$cat = $obj->hasMethod('getMappableMapCategory') ? $obj->getMappableMapCategory() : "default";
 			if ($infowindowtemplateparams !== null) {
 				foreach ($infowindowtemplateparams as $key => $value) {
@@ -667,50 +537,19 @@ var styles = [
 		);
 	}
 
-
 	public function forTemplate() {
 		$this->generate();
+		MapUtil::set_map_already_rendered(true);
 		return $this->getGoogleMap();
 	}
 
-
 	/**
-	 * Add marker by an array of address
-	 *
-	 * @param string  $coordtab an array of address
-	 * @param string  $category marker category
-	 * @param string  $icon     an icon url
-	 *
-	 * @return void
-	 */
-
-	public function addArrayMarkerByAddress($coordtab, $category='', $icon='') {
-		foreach ($coordtab as $coord) {
-			$this->addMarkerByAddress($coord[0], $coord[1], $category, $icon);
-		}
-		return $this;
-	}
-
-	/**
-	 * Set a direction between 2 addresss and set a text panel
-	 *
-	 * @param string  $from    an address
-	 * @param string  $to      an address
-	 * @param string  $idpanel id of the div panel
-	 *
-	 * @return void
-	 */
-
-	public function addDirection($from, $to, $idpanel='') {
-		$this->contentMarker .= 'addDirection("'.$from.'","'.$to.'","'.$idpanel.'");';
-	}
-
-	/**
-	 * Parse a KML file and add markers to a category
+	 * Add a KML file which will be rendered on this map.  Normally used for likes
+	 * of GPS traces from activities
 	 *
 	 * @param string  $url      url of the kml file compatible with gmap and gearth
 	 *
-	 * @return void
+	 * @return MapAPI
 	 */
 
 	public function addKML($url) {
@@ -740,7 +579,7 @@ var styles = [
 	/*
 	For php 5.3
 	*/
-	function jsonRemoveUnicodeSequences($struct) {
+	public static function jsonRemoveUnicodeSequences($struct) {
 		 return preg_replace("/\\\\u([a-f0-9]{4})/e",
 		 					"iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))",
 		 					json_encode($struct));
@@ -761,26 +600,28 @@ var styles = [
 
 		// prior to PHP version 5.4, one needs to use regex
 		if (PHP_VERSION_ID < 50400) {
-			$jsonMarkers = stripslashes($this->jsonRemoveUnicodeSequences($this->markers));
-			$linesJson = stripslashes($this->jsonRemoveUnicodeSequences($this->lines));
-			$kmlJson = stripslashes($this->jsonRemoveUnicodeSequences($this->kmlFiles));
+			$jsonMarkers = stripslashes(MapAPI::jsonRemoveUnicodeSequences($this->markers));
+			$linesJson = stripslashes(MapAPI::jsonRemoveUnicodeSequences($this->lines));
+			$kmlJson = stripslashes(MapAPI::jsonRemoveUnicodeSequences($this->kmlFiles));
 		} else {
-			$jsonMarkers = stripslashes(json_encode($this->markers,JSON_UNESCAPED_UNICODE));
-			$linesJson = stripslashes(json_encode($this->lines,JSON_UNESCAPED_UNICODE));
-			$kmlJson = stripslashes(json_encode($this->kmlFiles,JSON_UNESCAPED_UNICODE));
+			$jsonMarkers = stripslashes(json_encode($this->markers, JSON_UNESCAPED_UNICODE));
+			$linesJson = stripslashes(json_encode($this->lines, JSON_UNESCAPED_UNICODE));
+			$kmlJson = stripslashes(json_encode($this->kmlFiles, JSON_UNESCAPED_UNICODE));
 		}
 
-
-
-		 // Center of the GMap
+		 // Center of the GMap - text centre takes precedence
 		$geocodeCentre = ($this->latLongCenter) ?
 							$this->latLongCenter : $this->geocoding($this->center);
 
+		$latlngCentre = null;
 		// coordinates for centre depending on which method used
-		if ($geocodeCentre[0]=="200") { // success
-			$latlngCentre = array('lat'=>$geocodeCentre[2],'lng' => $geocodeCentre[3]);
-		} else { // Paris
-			$latlngCentre = array('lat'=>48.8792, 'lng' => 2.34778);
+		if (isset($geocodeCentre['geocoded'])) {
+			$latlngCentre = array(
+				'lat' => $geocodeCentre['lat'],
+				'lng' => $geocodeCentre['lon']
+			);
+		} else if (is_array($this->latLongCenter)) {
+			$latlngCentre = $this->latLongCenter;
 		}
 
 		$this->LatLngCentreJSON = stripslashes(json_encode($latlngCentre));
@@ -807,10 +648,6 @@ var styles = [
 			$this->defaultHideMarker = 'false';
 		}
 
-		if (!$this->MapTypeId) {
-			$this->MapTypeId = 'false';
-		}
-
 		// initialise full screen as the config value if not already set
 		if ($this->allowFullScreen === null) {
 			$this->allowFullScreen = Config::inst()->get('Mappable', 'allow_full_screen');
@@ -820,9 +657,12 @@ var styles = [
 			$this->allowFullScreen = 'false';
 		}
 
-
+		if (!$this->enableWindowZoom) {
+			$this->enableWindowZoom = 'false';
+		}
 
 		$vars = new ArrayData(array(
+
 				'JsonMapStyles' => $this->jsonMapStyles,
 				'AdditionalCssClasses' => $this->additional_css_classes,
 				'Width' => $this->width,
@@ -831,7 +671,6 @@ var styles = [
 				'InfoWindowZoom' => $this->infoWindowZoom,
 				'EnableWindowZoom' => $this->enableWindowZoom,
 				'MapMarkers' => $jsonMarkers,
-				'DelayLoadMapFunction' => $this->delayLoadMapFunction,
 				'DefaultHideMarker' => $this->defaultHideMarker,
 				'LatLngCentre' => $this->LatLngCentreJSON,
 				'EnableAutomaticCenterZoom' => $this->enableAutomaticCenterZoom,
@@ -842,7 +681,6 @@ var styles = [
 				'GoogleMapID' => $this->googleMapId,
 				'Lang'=>$this->lang,
 				'UseClusterer'=>$this->useClusterer,
-				'DownloadJS' => !(self::$include_download_javascript),
 				'ClustererLibraryPath' => $this->clustererLibraryPath,
 				'ClustererMaxZoom' => $this->maxZoom,
 				'ClustererGridSize' => $this->gridSize,
@@ -853,24 +691,20 @@ var styles = [
 			)
 		);
 
-		// JavaScript required to prime the map
-		//$javascript = $this->processTemplateJS('Map', $vars);
-		//$vars->setField('JavaScript', $javascript);
+		if (!MapUtil::get_map_already_rendered()) {
+			$vars->setField('GoogleMapKey', $this->googleMapKey);
+			$vars->setField('GoogleMapLang', $this->lang);
+		}
 
 		// HTML component of the map
 		$this->content = $this->processTemplateHTML('Map', $vars);
 	}
 
-	function processTemplateJS($templateName, $templateVariables = null) {
-		if (!$templateVariables) {
-			$templateVariables = new ArrayList();
-		}
-		$mappingService = Config::inst()->get('Mappable', 'mapping_service');
-		$result = $templateVariables->renderWith($templateName.$mappingService.'JS');
-		return $result;
-	}
-
-	function processTemplateHTML($templateName, $templateVariables = null ) {
+	/**
+	 * @param string $templateName
+	 * @param ArrayData $templateVariables
+	 */
+	public function processTemplateHTML($templateName, $templateVariables = null) {
 		if (!$templateVariables) {
 			$templateVariables = new ArrayList();
 		}
