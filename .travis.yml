@@ -1,0 +1,46 @@
+language: php
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - tidy
+
+env:
+  global:
+    - DB=MYSQL CORE_RELEASE=3.1
+    - MODULE_PATH="mappable"
+
+matrix:
+  allow_failures:
+    - php: hhvm-nightly
+  include:
+    - php: 5.6
+      env: DB=MYSQL
+    - php: 5.5
+      env: DB=MYSQL
+    - php: 5.4
+      env: DB=MYSQL
+    - php: 5.3
+      env: DB=MYSQL
+    - php: hhvm
+      env: DB=MYSQL
+      before_install:
+
+
+before_script:
+  - phpenv rehash
+  - composer self-update || true
+  - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
+  - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
+  - cd ~/builds/ss
+
+script:
+  - vendor/bin/phpunit --coverage-clover=coverage.clover -c $MODULE_PATH/phpunit.xml $MODULE_PATH/tests/
+
+after_script:
+    - mv coverage.clover ~/build/$TRAVIS_REPO_SLUG/
+    - cd ~/build/$TRAVIS_REPO_SLUG
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
