@@ -22,7 +22,7 @@ class MapMarkerSetsExtension extends DataExtension {
 		$gridConfig2->getComponentByType('GridFieldPaginator')->setItemsPerPage(100);
 
 		$gridField2 = new GridField("MapMarkerSets",
-			"MapMarkers",
+			"MapMarker Sets",
 			$this->owner->MapMarkerSets(),
 			$gridConfig2
 		);
