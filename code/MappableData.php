@@ -45,14 +45,10 @@ class MappableData extends Extension {
 		$gmap->setEnableAutomaticCenterZoom(false);
 		if ($this->owner->MapPinEdited) {
 			$gmap->setLatLongCenter(array(
-				'200',
-				'4',
-				$this->owner->getMappableLatitude(),
-				$this->owner->getMappableLongitude()
+				'lat' => $this->owner->getMappableLatitude(),
+				'lng' => $this->owner->getMappableLongitude()
 			));
 		}
-
-		MapUtil::set_map_already_rendered(true);
 		return $gmap;
 	}
 
@@ -63,34 +59,42 @@ class MappableData extends Extension {
 	 * You can use MappableData.staticmap_api_url config var to set the domain of the static map.
 	 * You can use MappableData.staticmap_default_zoom config var to set the default zoom for the static map.
 	 *
-	 * @uses Mappable::getMappableMapPin() to draw a special marker, be sure this image is public available
+	 * @uses Mappable::getMappableMapPin() to draw a special marker, be sure this image is publicly available
 	 *
-	 * @param null $width
-	 * @param null $height
+	 * @param int $width
+	 * @param int $height
 	 * @return string
 	 */
-	public function StaticMap($width = null, $height = null) {
-		$w = $width ? $width : MapUtil::$map_width;
-		$h = $height ? $height : MapUtil::$map_height;
+	public function StaticMap($width, $height, $zoom = null, $mapType = 'roadmap') {
 		$lat = $this->owner->getMappableLatitude();
 		$lng = $this->owner->getMappableLongitude();
 		$pin = $this->owner->getMappableMapPin();
+
+		// use provided zoom or set a default
+		if ($zoom == null) {
+			$zoom = Config::inst()->get('MappableData', 'staticmap_default_zoom');
+		}
+
+		//https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key=YOUR_API_KEY
+			    //maps.googleapis.com/maps/api/staticmap';
 
 		$apiurl = Config::inst()->get('MappableData', 'staticmap_api_url');
 
 		$urlparts = array(
 			'center' => "$lat,$lng",
 			'markers' => "$lat,$lng",
-			'zoom' => Config::inst()->get('MappableData', 'staticmap_default_zoom'),
-			'size' => "${w}x$h",
-			'sensor' => 'false' //@todo: make sensor param configurable
+			'zoom' => $zoom,
+			'size' => "{$width}x{$height}",
+			'sensor' => 'false', //@todo: make sensor param configurable
+			'maptype' => $mapType
 		);
 		if ($pin) {
 			$urlparts['markers'] = "icon:$pin|$lat,$lng";
 		}
 
 		$src = htmlentities($apiurl . '?' . http_build_query($urlparts));
-		return '<img src="'.$src.'" width="'.$w.'" height="'.$h.'" alt="'.$this->owner->Title.'" />';
+
+		return '<img src="'.$src.'" width="'.$width.'" height="'.$height.'" alt="'.$this->owner->Title.'" />';
 	}
 
 }
