@@ -64,4 +64,11 @@ class GoogleMapShortCodeHandler {
 		//return the template customised with the parmameters
 		return $template->process(new ArrayData($customised));
 	}
+
+	/**
+	 * This is only used for testing, otherwise the sequence of tests change the number returned
+	 */
+	public static function resetCounter() {
+		self::$gsv_ctr = 1;
+	}
 }
