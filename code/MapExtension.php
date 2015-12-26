@@ -25,6 +25,11 @@ class MapExtension extends DataExtension implements Mappable {
 		'MapPinEdited' => false
 	);
 
+	/*
+	Map editing field
+	 */
+	private $mapField = null;
+
 
 	/*
 	Add a Location tab containing the map
@@ -73,6 +78,7 @@ class MapExtension extends DataExtension implements Mappable {
 				$this->owner->ClassName,
 				Config::inst()->get('MapExtension', 'map_info_window_suffix')
 			);
+
 		$template = count($classTemplate) ? $classTemplate : $defaultTemplate;
 		return MapUtil::sanitize($this->owner->renderWith($template));
 	}
@@ -100,8 +106,8 @@ class MapExtension extends DataExtension implements Mappable {
 	public function getMappableMapPin() {
 		$result = false;
 		if ($this->owner->MapPinIconID != 0) {
-			$mappin = $this->owner->MapPinIcon();
-			$result = $mappin->getAbsoluteURL();
+			$mapPin = $this->owner->MapPinIcon();
+			$result = $mapPin->getAbsoluteURL();
 		} else {
 		  // check for a cached map pin already having been provided for the layer
 			if ($this->owner->CachedMapPinURL) {
@@ -116,18 +122,25 @@ class MapExtension extends DataExtension implements Mappable {
 		Check for non zero coordinates, on the assumption that (0,0) will never be the desired coordinates
 	*/
 	public function HasGeo() {
-		$result = ($this->owner->Lat != 0) && ($this->owner->Lon != 0);
+		$isOrigin = ($this->owner->Lat == 0) && ($this->owner->Lon == 0);
+		$result = !$isOrigin;
 		if ($this->owner->hasExtension('MapLayerExtension')) {
 			if ($this->owner->MapLayers()->count() > 0) {
 				$result = true;
 			}
 		}
 
+
+		$this->owner->extend('updateHasGeo', $result);
+		/**
+		 * FIXME - move this to PointsOfInterest module
 		if ($this->owner->hasExtension('PointsOfInterestLayerExtension')) {
 			if ($this->owner->PointsOfInterestLayers()->count() > 0) {
 				$result = true;
 			}
 		}
+		 */
+
 		return $result;
 	}
 
@@ -153,7 +166,10 @@ class MapExtension extends DataExtension implements Mappable {
 			$map->setEnableAutomaticCenterZoom(true);
 		}
 
-		// add points of interest taking into account the default icon of the layer as an override
+		$this->owner->extend('updateBasicMap', $map);
+
+		/**
+		FIXME - move to POI module
 		if (Object::has_extension($this->owner->ClassName, 'PointsOfInterestLayerExtension')) {
 			foreach($this->owner->PointsOfInterestLayers() as $layer) {
 				$layericon = $layer->DefaultIcon();
@@ -175,6 +191,8 @@ class MapExtension extends DataExtension implements Mappable {
 			$map->setClusterer(true);
 		}
 
+		**/
+
 		$map->setEnableAutomaticCenterZoom($autozoom);
 		$map->setShowInlineMapDivStyle(true);
 
@@ -192,8 +210,7 @@ class MapExtension extends DataExtension implements Mappable {
 				new TextField('Lat', 'Latitude'),
 				new TextField('Lon', 'Longitude'),
 				new TextField('ZoomLevel', 'Zoom')
-				),
-				array('Address')
+				)
 			);
 		}
 		return $this->mapField;
