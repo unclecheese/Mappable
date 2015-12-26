@@ -1,0 +1,34 @@
+Page:
+  RoadMap:
+    Title: Road Map
+    Content: Some text[GoogleMap latitude='13.7402946' longitude='100.5525439' caption="Roads in Central Bangkok" zoom="14" maptype="road"]
+  AerialMap:
+    Title: Aerial Map
+    Content: Some text[GoogleMap latitude='13.815483' longitude='100.5447213' caption="Bang Sue Train Depot, Thailand" zoom="20" maptype="aerial"]
+  HybridMap:
+    Title: Hybrid Map
+    Content: Some text[GoogleMap latitude='13.8309545' longitude='100.5577219' caption="Junction in Bangkok, Thailand" zoom="18" maptype="hybrid"]
+  TerrainMap:
+    Title: Terrain Map
+    Content: Some text[GoogleMap latitude='18.8032393' longitude='98.9166518' caption="Mountains west of Chiang Mai" zoom="14" maptype="terrain"]
+  MapWithNoLatitude:
+    Title: Map With No Latitude
+    Content: Some text[GoogleMap longitude='98.9166518' caption="Mountains west of Chiang Mai" zoom="14" maptype="terrain"]
+  MapWithNoLongitude:
+    Title: Map With No Longitude
+    Content: Some text[GoogleMap latitude='18.8032393' caption="Mountains west of Chiang Mai" zoom="14" maptype="terrain"]
+  StreetView:
+    Title: Valid StreetView
+    Content: Some text[GoogleStreetView latitude="13.811841" longitude="100.527309" heading="162.43" pitch="-10" caption="Canal south from Pracha Rat 1 Soi 28"]
+  StreetViewWithZoom:
+    Title: Valid StreetView With Zoom
+    Content: Some text[GoogleStreetView latitude="13.811841" longitude="100.527309" zoom="12" heading="162.43" pitch="-10" caption="Canal south from Pracha Rat 1 Soi 28"]
+  StreetViewNoHeading:
+    Title: StreetView with no Heading
+    Content: Some text[GoogleStreetView longitude="100.527309" latitude="13.811841" pitch="-10" caption="Canal south from Pracha Rat 1 Soi 28"]
+  StreetViewNoLatitude:
+    Title: StreetView with no Latitude
+    Content: Some text[GoogleStreetView longitude="100.527309" heading="162.43" pitch="-10" caption="Canal south from Pracha Rat 1 Soi 28"]
+  StreetViewNoLongitude:
+    Title: StreetView with no Longitude
+    Content: Some text[GoogleStreetView latitude="13.811841" heading="162.43" pitch="-10" caption="Canal south from Pracha Rat 1 Soi 28"]
