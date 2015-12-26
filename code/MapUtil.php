@@ -23,12 +23,6 @@ class MapUtil
 	 */
 	public static $map_height = '400px';
 
-    /** @var int Icon width of the gmarker **/
-    public static $iconWidth = 24;
-
-    /** @var int Icon height of the gmarker **/
-    public static $iconHeight = 24;
-
 	/**
 	 * @var int Prefix for the div ID of the map
 	 */
@@ -38,11 +32,6 @@ class MapUtil
 	 * @var boolean Automatic center/zoom for the map
 	 */
 	public static $automatic_center = true;
-
-	/**
-	 * @var boolean Show directions fields on the map
-	 */
-	public static $direction_fields = false;
 
 	/**
 	 * @var boolean Show the marker fields on the map
@@ -59,15 +48,27 @@ class MapUtil
 	 */
 	public static $center = 'Paris, France';
 
-	/* Width of the map information window */
-	public static $info_window_width = 250;
-
 	/* Signals whether at least one map has already been rendered */
 	private static $map_already_rendered = false;
 
 	/* Whether or not to allow full screen */
 	private static $allow_full_screen = null;
 
+
+	public static function reset() {
+		self::$api_key = null;
+		self::$instances = 0;
+		self::$map_width = '100%';
+		self::$map_height = '400px';
+		self::$div_id = "google_map";
+		self::$automatic_center = true;
+		self::$hide_marker = false;
+		self::$map_type = 'google.maps.MapTypeId.ROADMAP';
+		self::$center = 'Paris, France';
+		self::$map_already_rendered = false;
+		self::$allow_full_screen = null;
+		Config::inst()->update('Mappable', 'language', 'en');
+	}
 
 	/**
 	 * Set the API key for Google Maps
@@ -78,7 +79,9 @@ class MapUtil
 		self::$api_key = $key;
 	}
 
-
+	/**
+	 * @param boolean $new_map_already_rendered
+	 */
 	public static function set_map_already_rendered($new_map_already_rendered) {
 		self::$map_already_rendered = $new_map_already_rendered;
 	}
@@ -86,7 +89,6 @@ class MapUtil
 	public static function get_map_already_rendered() {
 		return self::$map_already_rendered;
 	}
-
 
 	/**
 	 * Set the default size of the map
@@ -99,62 +101,35 @@ class MapUtil
 		self::$map_height = $height;
 	}
 
-    /**
-      * Set the type of the gmap
-      *
-      * @param string $mapType (can be 'google.maps.MapTypeId.ROADMAP', 'G_SATELLITE_MAP',
-      * 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
-      *
-      * @return void
-      */
-    public function set_map_type($mapType)
-    {
-        self::$map_type = $mapType;
-    }
+	/**
+	 * FIXME - NOT USED?
+	 * Set the type of the gmap
+	 *
+	 * @param string $mapType (can be 'google.maps.MapTypeId.ROADMAP', 'G_SATELLITE_MAP',
+	 * 'G_HYBRID_MAP', 'G_PHYSICAL_MAP')
+	 *
+	 * @return void
+	 */
+	public static function set_map_type($mapType) {
+		self::$map_type = $mapType;
+	}
 
-    /**
-      * Set the with of the gmap infowindow (on marker clik)
-      *
-      * @param int $info_window_width GoogleMap info window width
-      *
-      * @return void
-      */
-    public function set_info_window_width($info_window_width)
-    {
-        self::$info_window_width = $info_window_width;
-    }
-
-    /**
-      * Set the center of the gmap (an address)
-      *
-      * @param string $center GoogleMap  center (an address)
-      *
-      * @return void
-      */
-    public function set_center($center)
-    {
-        self::$center = $center;
-    }
-
-    /**
-      * Set the size of the icon markers
-      *
-      * @param int $iconWidth GoogleMap  marker icon width
-      * @param int $iconHeight GoogleMap  marker icon height
-      *
-      * @return void
-      */
-
-    public function set_icon_size($iconWidth,$iconHeight)
-    {
-        self::$iconWidth = $iconWidth;
-        self::$iconHeight = $iconHeight;
-    }
+	/**
+	 * Set the center of the gmap (an address, using text geocoder query)
+	 *
+	 * @param string $center GoogleMap  center (an address)
+	 *
+	 * @return void
+	 */
+	public static function set_center($center)
+	{
+		self::$center = $center;
+	}
 
 	/**
 	 * Get a new GoogleMapAPI object and load it with the default settings
 	 *
-	 * @return GoogleMapAPI
+	 * @return MapAPI
 	 */
 	public static function instance()
 	{
@@ -162,11 +137,6 @@ class MapUtil
 
 		if (self::$allow_full_screen == null) {
 			self::$allow_full_screen = Config::inst()->get('Mappable', 'allow_full_screen');
-		}
-
-		// for JS
-		if (self::$allow_full_screen === false) {
-			self:$allow_full_screen = 'asdfsda';
 		}
 
 		$url = Director::absoluteBaseURL();
@@ -184,18 +154,16 @@ class MapUtil
 			$key = $key[$host];
 		}
 
-
 		$gmap = new MapAPI($key);
 		$gmap->setDivId(self::$div_id."_".self::$instances);
 		$gmap->setEnableAutomaticCenterZoom(self::$automatic_center);
-		$gmap->setDisplayDirectionFields(self::$direction_fields);
 		$gmap->setSize(self::$map_width, self::$map_height);
 		$gmap->setDefaultHideMarker(self::$hide_marker);
-        $gmap->setMapType(self::$map_type);
-        $gmap->setCenter(self::$center);
-        $gmap->setIconSize(self::$iconWidth, self::$iconHeight);
-        $gmap->setIncludeDownloadJavascript(self::$map_already_rendered);
-        $gmap->setAllowFullScreen(self::$allow_full_screen);
+		$gmap->setMapType(self::$map_type);
+		$gmap->setCenter(self::$center);
+		$gmap->setAllowFullScreen(self::$allow_full_screen);
+		$language = Config::inst()->get('Mappable', 'language');
+		$gmap->setLang($language);
 		return $gmap;
 	}
 
@@ -207,7 +175,7 @@ class MapUtil
 	 * @return string
 	 */
 	public static function sanitize($content) {
-		return addslashes(str_replace(array("\n","\r", "\t"), '' ,$content));
+		return addslashes(str_replace(array("\n", "\r", "\t"), '', $content));
 	}
 
 
@@ -216,16 +184,16 @@ class MapUtil
 	 * and places all of the items in a {@link SS_List}
 	 * e.g. {@link DataList} or {@link ArrayList} on the map
 	 *
-	 * @param SS_List $set
+	 * @param SS_List list of objects to display on a map
+	 * @param  array $infowindowtemplateparams Optional array of extra parameters to pass to the map info window
 	 * @return MapAPI
 	 */
-	public static function get_map(SS_List $list, $optionalinfowindowtemplatevalues) {
+	public static function get_map(SS_List $list, $infowindowtemplateparams) {
 		$gmap = self::instance();
-		if($list) {
+		if ($list) {
 			foreach ($list as $mappable) {
-				if (self::ChooseToAddDataobject($mappable)) {
-					$gmap->addMarkerAsObject($mappable, $optionalinfowindowtemplatevalues);
-				}
+				if (self::ChooseToAddDataobject($mappable))
+					$gmap->addMarkerAsObject($mappable, $infowindowtemplateparams);
 			}
 		}
 		return $gmap;
@@ -242,7 +210,7 @@ class MapUtil
 	private static function ChooseToAddDataobject(DataObject $do) {
 		$isMappable = $do->is_a('Mappable');
 
-		foreach($do->getExtensionInstances() as $extension) {
+		foreach ($do->getExtensionInstances() as $extension) {
 			$isMappable = $isMappable || $extension instanceof Mappable;
 		}
 
@@ -250,6 +218,6 @@ class MapUtil
 			? $do->MapPinEdited
 			: true;
 
-		return $isMappable && $filterMapPinEdited  ;
+		return $isMappable && $filterMapPinEdited;
 	}
 }
