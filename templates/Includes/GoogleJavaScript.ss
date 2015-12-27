@@ -1,8 +1,1 @@
-<% require javascript("framework/thirdparty/jquery/jquery.js") %>
-<% if $UseCompressedAssets %>
-<% require javascript("mappable/javascript/google/mappablegoogle.min.js") %>
-<% else %>
-<% require javascript("mappable/javascript/google/FullScreenControl.js") %>
-<% require javascript("mappable/javascript/google/markerclusterer.js") %>
-<% require javascript("mappable/javascript/google/maputil.js") %>
-<% end_if %>
+<% require javascript("framework/thirdparty/jquery/jquery.js") %><% if $UseCompressedAssets %><% require javascript("mappable/javascript/google/mappablegoogle.min.js") %><% else %><% require javascript("mappable/javascript/google/FullScreenControl.js") %><% require javascript("mappable/javascript/google/markerclusterer.js") %><% require javascript("mappable/javascript/google/maputil.js") %><% end_if %>
