@@ -10,7 +10,7 @@ addons:
 env:
   global:
     - DB=MYSQL CORE_RELEASE=3.1
-    - MODULE_PATH="mappable"
+    - MODULE_PATH=mappable
 
 matrix:
   allow_failures:
@@ -35,11 +35,15 @@ before_script:
   - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
   - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
   - cd ~/builds/ss
+  - composer require satooshi/php-coveralls
 
 script:
   - vendor/bin/phpunit --coverage-clover=coverage.clover -c $MODULE_PATH/phpunit.xml $MODULE_PATH/tests/
 
-after_script:
+after_success:
+    - cp coverage.clover ~/coverage.xml
+    - mkdir -p build/logs
+    - travis_retry php vendor/bin/coveralls -v --coverage_clover coverage.clover
     - mv coverage.clover ~/build/$TRAVIS_REPO_SLUG/
     - cd ~/build/$TRAVIS_REPO_SLUG
     - wget https://scrutinizer-ci.com/ocular.phar
