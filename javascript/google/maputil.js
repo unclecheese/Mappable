@@ -14,11 +14,12 @@ var primeMap;
 	 * @param  {String} icon               URL of alternative map icon, or blank for default
 	 * @param  {boolean} useClusterer      Whether or not to use clusterer
 	 * @param  {boolean} enableWindowZoom  Whether or not to enable zoom on the rendered map
+	 * @param  {boolean} infoWindowZoom    FIXME: To do
 	 * @param  {boolean} defaultHideMarker Whether or not to hide markers initially
 	 * @return {MapMarker}                 Google map pin object
 	 */
 	function createMarker(map, lat, lng, html, category, icon, useClusterer, enableWindowZoom,
-		defaultHideMarker) {
+		infoWindowZoom, defaultHideMarker) {
 
 		mapId = map.getDiv().getAttribute('id');
 
@@ -37,7 +38,7 @@ var primeMap;
 
 		google.maps.event.addListener(marker, "click", function() {
 			if (enableWindowZoom) {
-				map.setCenter(new google.maps.LatLng(lat, lng), 12); // $InfoWindowZoom);
+				map.setCenter(new google.maps.LatLng(lat, lng), infoWindowZoom);
 			}
 			var infoWindow = infoWindows[mapId];
 			infoWindow.setContent(html);
@@ -45,10 +46,13 @@ var primeMap;
 		});
 
 		//FIXME gmarkers[mapId].push(marker);
-
-		if (defaultHideMarker) {
-			marker.hide();
+		console.log(defaultHideMarker === false);
+		if (defaultHideMarker == '1') {
+			marker.setVisible(false);
+		} else {
+			marker.setVisible(true);
 		}
+
 		return marker;
 	}
 
@@ -80,7 +84,7 @@ var primeMap;
 	 * @param {boolean} defaultHideMarker Whether or not to hide markers
 	 * * @return array of Google map markers converted from the JSON data
 	 */
-	function addAllMarkers(map, markers, useClusterer, enableWindowZoom, defaultHideMarker) {
+	function addAllMarkers(map, markers, useClusterer, enableWindowZoom, infoWindowZoom, defaultHideMarker) {
 
 		// these will be altered by adding markers
 		map.minLat = 1000000;
@@ -94,7 +98,7 @@ var primeMap;
 			var markerinfo = markers[i];
 			var marker = createMarker(map, markerinfo.latitude, markerinfo.longitude, markerinfo.html,
 				markerinfo.category, markerinfo.icon, useClusterer, enableWindowZoom,
-				defaultHideMarker);
+				infoWindowZoom, defaultHideMarker);
 
 			var latitude = parseFloat(markerinfo.latitude);
 			var longitude = parseFloat(markerinfo.longitude);
@@ -306,9 +310,10 @@ var primeMap;
 			var markerjson = $.parseJSON(mapnode.attr('data-mapmarkers'));
 			var useClusterer = mapnode.attr('data-useclusterer');
 			var enableAutomaticCenterZoom = mapnode.attr('data-enableautocentrezoom');
+			var infoWindowZoom = mapnode.attr('data-infowindowzoom');
 			var defaultHideMarker = mapnode.attr('data-defaulthidemarker');
 			var markers = addAllMarkers(map, markerjson, useClusterer,
-				enableAutomaticCenterZoom, defaultHideMarker);
+				enableAutomaticCenterZoom, infoWindowZoom, defaultHideMarker);
 			var allowfullscreen = parseInt(mapnode.attr('data-allowfullscreen'));
 
 			if (enableAutomaticCenterZoom == 1) {
