@@ -2,10 +2,6 @@
 Name: mappable
 After: 'framework/*','cms/*'
 ---
-PointOfInterest:
-  extensions:
-    - MapExtension
-
 DataObject:
   extensions:
     -  MappableData
