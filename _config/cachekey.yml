@@ -1,3 +1,0 @@
-CacheKeyHelper:
-  SiteTree: ['POIMapPage']
-  DataObject: ['PointOfInterest']
