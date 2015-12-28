@@ -116,4 +116,12 @@ HTML;
 		$this->guidePoints = $newGuidePoints;
 	}
 
+	/**
+	 * Accessor to guidepoints.  For testing purposes
+	 * @return array guidepoints
+	 */
+	public function getGuidePoints() {
+		return $this->guidePoints;
+	}
+
 }
