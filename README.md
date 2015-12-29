@@ -1,9 +1,8 @@
 # Mappable
 [![Build Status](https://travis-ci.org/gordonbanderson/Mappable.svg?branch=3.1-WIP)](https://travis-ci.org/gordonbanderson/Mappable)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gordonbanderson/Mappable/badges/quality-score.png?b=3.1-WIP)](https://scrutinizer-ci.com/g/gordonbanderson/Mappable/?branch=3.1-WIP)
-[![Code Coverage](https://scrutinizer-ci.com/g/gordonbanderson/Mappable/badges/coverage.png?b=3.1-WIP)](https://scrutinizer-ci.com/g/gordonbanderson/Mappable/?branch=3.1-WIP)
 [![Build Status](https://scrutinizer-ci.com/g/gordonbanderson/Mappable/badges/build.png?b=3.1-WIP)](https://scrutinizer-ci.com/g/gordonbanderson/Mappable/build-status/3.1-WIP)
-[![Coverage Status](https://coveralls.io/repos/gordonbanderson/Mappable/badge.svg?branch=3.1-WIP&service=github)](https://coveralls.io/github/gordonbanderson/Mappable?branch=3.1-WIP)
+[![codecov.io](https://codecov.io/github/gordonbanderson/Mappable/coverage.svg?branch=3.1)](https://codecov.io/github/gordonbanderson/Mappable?branch=3.1)
 
 ## Maintainers
 
