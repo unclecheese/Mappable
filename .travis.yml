@@ -7,6 +7,9 @@ addons:
     packages:
       - tidy
 
+before_install:
+  - pip install --user codecov
+
 env:
   global:
     - DB=MYSQL CORE_RELEASE=3.1
@@ -41,10 +44,11 @@ script:
   - vendor/bin/phpunit --coverage-clover=coverage.clover -c $MODULE_PATH/phpunit.xml $MODULE_PATH/tests/
 
 after_success:
-    - cp coverage.clover ~/coverage.xml
-    - mkdir -p build/logs
-    - travis_retry php vendor/bin/coveralls -v --coverage_clover coverage.clover
-    - mv coverage.clover ~/build/$TRAVIS_REPO_SLUG/
-    - cd ~/build/$TRAVIS_REPO_SLUG
-    - wget https://scrutinizer-ci.com/ocular.phar
-    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - cp coverage.clover ~/coverage.xml
+  - mkdir -p build/logs
+  - travis_retry php vendor/bin/coveralls -v --coverage_clover coverage.clover
+  - mv coverage.clover ~/build/$TRAVIS_REPO_SLUG/
+  - cd ~/build/$TRAVIS_REPO_SLUG
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - codecov
