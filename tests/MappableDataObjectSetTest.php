@@ -1,42 +1,45 @@
 <?php
 
-class MappableDataObjectSetTest extends SapphireTest {
+class MappableDataObjectSetTest extends SapphireTest
+{
+    public function setUpOnce()
+    {
+        $this->requiredExtensions = array(
+            'Member' => array('MapExtension'),
+        );
 
-	public function setUpOnce() {
-		$this->requiredExtensions = array(
-			'Member' => array('MapExtension')
-		);
+        parent::setupOnce();
+    }
 
-		parent::setupOnce();
-	}
+    public function setUp()
+    {
+        MapUtil::reset();
+        parent::setUp();
+    }
 
-	public function setUp() {
-		MapUtil::reset();
-		parent::setUp();
-	}
+    public function testSetMarkerTemplateValues()
+    {
+        $instance1 = $this->getInstance();
+        $instance1->MapPinEdited = true;
+        $instance1->write();
 
-	public function testSetMarkerTemplateValues() {
-		$instance1 = $this->getInstance();
-		$instance1->MapPinEdited = true;
-		$instance1->write();
+        $instance2 = $this->getInstance();
+        $instance2->Lat = 7.12;
+        $instance2->Lon = 23.4;
+        $instance2->MapPinEdited = true;
+        $instance2->write();
 
-		$instance2 = $this->getInstance();
-		$instance2->Lat = 7.12;
-		$instance2->Lon = 23.4;
-		$instance2->MapPinEdited = true;
-		$instance2->write();
+        // Mappable list has MappableDataObjectSet enabled by default
+        // Items in the list are Mappable via the MapExtension
+        $mappableList = new ArrayList();
+        $mappableList->push($instance1);
+        $mappableList->push($instance2);
 
-		// Mappable list has MappableDataObjectSet enabled by default
-		// Items in the list are Mappable via the MapExtension
-		$mappableList = new ArrayList();
-		$mappableList->push($instance1);
-		$mappableList->push($instance2);
+        $vals = array('TestKey' => ' TestKeyValMDOS');
+        $mappableList->setMarkerTemplateValues($vals);
 
-		$vals = array('TestKey' => ' TestKeyValMDOS');
-		$mappableList->setMarkerTemplateValues($vals);
-
-		$html = $mappableList->getRenderableMap(300, 800, 2)->setDivId('testmap')->forTemplate()->getValue();
-		$expected = <<<HTML
+        $html = $mappableList->getRenderableMap(300, 800, 2)->setDivId('testmap')->forTemplate()->getValue();
+        $expected = <<<HTML
 
 
 <div id="testmap" data-google-map-lang="en"  style="width:300; height: 800;"
@@ -61,18 +64,17 @@ data-useclusterer=false
 </div>
 
 HTML;
-		$this->assertEquals($expected, $html);
-	}
+        $this->assertEquals($expected, $html);
+    }
 
+    private function getInstance()
+    {
+        $instance = new Member();
+        $instance->Lat = 13.8188931;
+        $instance->Lon = 100.5005558;
+        $instance->FirstName = 'Test';
+        $instance->Surname = 'User';
 
-
-	private function getInstance() {
-		$instance = new Member();
-		$instance->Lat = 13.8188931;
-		$instance->Lon = 100.5005558;
-		$instance->FirstName = 'Test';
-		$instance->Surname = 'User';
-		return $instance;
-	}
-
+        return $instance;
+    }
 }

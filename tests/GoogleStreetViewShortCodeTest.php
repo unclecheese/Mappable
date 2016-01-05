@@ -2,13 +2,14 @@
 
 class GoogleStreetViewShortCodeTest extends SapphireTest
 {
-	protected static $fixture_file = 'mappable/tests/shortcodes.yml';
+    protected static $fixture_file = 'mappable/tests/shortcodes.yml';
 
-	public function testRoadMap() {
-		GoogleStreetViewShortCodeHandler::resetCounter();
-		$page = $this->objFromFixture('Page', 'StreetView');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$expected = <<<TEXT
+    public function testRoadMap()
+    {
+        GoogleStreetViewShortCodeHandler::resetCounter();
+        $page = $this->objFromFixture('Page', 'StreetView');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $expected = <<<TEXT
 Some text
 
 <div class="streetviewcontainer">
@@ -17,35 +18,39 @@ Some text
 </div>
 
 TEXT;
-		$this->assertEquals($expected, $html);
-	}
+        $this->assertEquals($expected, $html);
+    }
 
-	public function testNoLongitude() {
-		GoogleStreetViewShortCodeHandler::resetCounter();
-		$page = $this->objFromFixture('Page', 'StreetViewNoLongitude');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$this->assertEquals('Some text', $html);
-	}
+    public function testNoLongitude()
+    {
+        GoogleStreetViewShortCodeHandler::resetCounter();
+        $page = $this->objFromFixture('Page', 'StreetViewNoLongitude');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $this->assertEquals('Some text', $html);
+    }
 
-	public function testNoLatitude() {
-		GoogleStreetViewShortCodeHandler::resetCounter();
-		$page = $this->objFromFixture('Page', 'StreetViewNoLatitude');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$this->assertEquals('Some text', $html);
-	}
+    public function testNoLatitude()
+    {
+        GoogleStreetViewShortCodeHandler::resetCounter();
+        $page = $this->objFromFixture('Page', 'StreetViewNoLatitude');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $this->assertEquals('Some text', $html);
+    }
 
-	public function testNoHeading() {
-		GoogleStreetViewShortCodeHandler::resetCounter();
-		$page = $this->objFromFixture('Page', 'StreetViewNoHeading');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$this->assertEquals('Some text', $html);
-	}
+    public function testNoHeading()
+    {
+        GoogleStreetViewShortCodeHandler::resetCounter();
+        $page = $this->objFromFixture('Page', 'StreetViewNoHeading');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $this->assertEquals('Some text', $html);
+    }
 
-	public function testZoom() {
-		GoogleStreetViewShortCodeHandler::resetCounter();
-		$page = $this->objFromFixture('Page', 'StreetViewWithZoom');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$expected = <<< TEXT
+    public function testZoom()
+    {
+        GoogleStreetViewShortCodeHandler::resetCounter();
+        $page = $this->objFromFixture('Page', 'StreetViewWithZoom');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $expected = <<< TEXT
 Some text
 
 <div class="streetviewcontainer">
@@ -54,6 +59,6 @@ Some text
 </div>
 
 TEXT;
-		$this->assertEquals($expected, $html);
-	}
+        $this->assertEquals($expected, $html);
+    }
 }

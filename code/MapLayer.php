@@ -1,14 +1,12 @@
 <?php
 
-class MapLayer extends DataObject {
+class MapLayer extends DataObject
+{
+    public static $db = array(
+        'Title' => 'Varchar(255)',
+    );
 
-	static $db = array(
-		'Title' => 'Varchar(255)'
-	);
-
-
-	static $has_one = array(
-		'KmlFile' => 'File'
-	);
-
+    public static $has_one = array(
+        'KmlFile' => 'File',
+    );
 }

@@ -1,17 +1,18 @@
 <?php
 
 /**
-* Testing YouTubeShortCodeHandler
-*/
+ * Testing YouTubeShortCodeHandler.
+ */
 class GoogleMapShortCodeTest extends SapphireTest
 {
-	protected static $fixture_file = 'mappable/tests/shortcodes.yml';
+    protected static $fixture_file = 'mappable/tests/shortcodes.yml';
 
-	public function testRoadMap() {
-		GoogleMapShortCodeHandler::resetCounter();
-		$page = $this->objFromFixture('Page', 'RoadMap');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$expected = <<<TEXT
+    public function testRoadMap()
+    {
+        GoogleMapShortCodeHandler::resetCounter();
+        $page = $this->objFromFixture('Page', 'RoadMap');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $expected = <<<TEXT
 Some text
 
 <div class="googlemapcontainer">
@@ -20,15 +21,15 @@ Some text
 </div>
 
 TEXT;
-		$this->assertEquals($expected, $html);
-	}
+        $this->assertEquals($expected, $html);
+    }
 
-
-	public function testAerialMap() {
-		GoogleMapShortCodeHandler::resetCounter();
-		$page = $this->objFromFixture('Page', 'AerialMap');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$expected = <<<TEXT
+    public function testAerialMap()
+    {
+        GoogleMapShortCodeHandler::resetCounter();
+        $page = $this->objFromFixture('Page', 'AerialMap');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $expected = <<<TEXT
 Some text
 
 <div class="googlemapcontainer">
@@ -37,15 +38,15 @@ Some text
 </div>
 
 TEXT;
-		$this->assertEquals($expected, $html);
-	}
+        $this->assertEquals($expected, $html);
+    }
 
-
-	public function testHybridMap() {
-		GoogleMapShortCodeHandler::resetCounter();
-		$page = $this->objFromFixture('Page', 'HybridMap');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$expected = <<<TEXT
+    public function testHybridMap()
+    {
+        GoogleMapShortCodeHandler::resetCounter();
+        $page = $this->objFromFixture('Page', 'HybridMap');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $expected = <<<TEXT
 Some text
 
 <div class="googlemapcontainer">
@@ -54,15 +55,15 @@ Some text
 </div>
 
 TEXT;
-		$this->assertEquals($expected, $html);
-	}
+        $this->assertEquals($expected, $html);
+    }
 
-
-	public function testTerrainmap() {
-		GoogleMapShortCodeHandler::resetCounter();
-		$page = $this->objFromFixture('Page', 'TerrainMap');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$expected = <<<TEXT
+    public function testTerrainmap()
+    {
+        GoogleMapShortCodeHandler::resetCounter();
+        $page = $this->objFromFixture('Page', 'TerrainMap');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $expected = <<<TEXT
 Some text
 
 <div class="googlemapcontainer">
@@ -71,22 +72,20 @@ Some text
 </div>
 
 TEXT;
-		$this->assertEquals($expected, $html);
-	}
+        $this->assertEquals($expected, $html);
+    }
 
+    public function testNoLongitude()
+    {
+        $page = $this->objFromFixture('Page', 'MapWithNoLongitude');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $this->assertEquals('Some text', $html);
+    }
 
-	public function testNoLongitude() {
-		$page = $this->objFromFixture('Page', 'MapWithNoLongitude');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$this->assertEquals('Some text', $html);
-	}
-
-
-	public function testNoLatitude() {
-		$page = $this->objFromFixture('Page', 'MapWithNoLatitude');
-		$html = ShortcodeParser::get_active()->parse($page->Content);
-		$this->assertEquals('Some text', $html);
-	}
-
-
+    public function testNoLatitude()
+    {
+        $page = $this->objFromFixture('Page', 'MapWithNoLatitude');
+        $html = ShortcodeParser::get_active()->parse($page->Content);
+        $this->assertEquals('Some text', $html);
+    }
 }
