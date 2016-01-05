@@ -148,15 +148,7 @@ class MapExtension extends DataExtension implements Mappable
 
         $autozoom = false;
 
-        // add any KML map layers
-        if (Object::has_extension($this->owner->ClassName, 'MapLayerExtension')) {
-            foreach ($this->owner->MapLayers() as $layer) {
-                $map->addKML($layer->KmlFile()->getAbsoluteURL());
-                // we have a layer, so turn on autozoom
-                $autozoom = true;
-            }
-            $map->setEnableAutomaticCenterZoom(true);
-        }
+
 
         $this->owner->extend('updateBasicMap', $map, $autozoom);
 
