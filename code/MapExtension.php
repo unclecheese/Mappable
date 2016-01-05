@@ -132,17 +132,7 @@ class MapExtension extends DataExtension implements Mappable
                 $result = true;
             }
         }
-
         $this->owner->extend('updateHasGeo', $result);
-        /*
-         * FIXME - move this to PointsOfInterest module
-        if ($this->owner->hasExtension('PointsOfInterestLayerExtension')) {
-            if ($this->owner->PointsOfInterestLayers()->count() > 0) {
-                $result = true;
-            }
-        }
-         */
-
         return $result;
     }
 
@@ -162,38 +152,13 @@ class MapExtension extends DataExtension implements Mappable
         if (Object::has_extension($this->owner->ClassName, 'MapLayerExtension')) {
             foreach ($this->owner->MapLayers() as $layer) {
                 $map->addKML($layer->KmlFile()->getAbsoluteURL());
-            // we have a layer, so turn on autozoom
-            $autozoom = true;
+                // we have a layer, so turn on autozoom
+                $autozoom = true;
             }
             $map->setEnableAutomaticCenterZoom(true);
         }
 
-        $this->owner->extend('updateBasicMap', $map);
-
-        /*
-        FIXME - move to POI module
-        if (Object::has_extension($this->owner->ClassName, 'PointsOfInterestLayerExtension')) {
-            foreach($this->owner->PointsOfInterestLayers() as $layer) {
-                $layericon = $layer->DefaultIcon();
-                if ($layericon->ID === 0) {
-                    $layericon = null;
-                }
-                foreach ($layer->PointsOfInterest() as $poi) {
-                    if ($poi->MapPinEdited) {
-                        if ($poi->MapPinIconID == 0 && $layericon) {
-                            $poi->CachedMapPinURL = $layericon->getAbsoluteURL();
-                        }
-                        $map->addMarkerAsObject($poi);
-
-                        // we have a point of interest, so turn on auto zoom
-                        $autozoom = true;
-                    }
-                }
-            }
-            $map->setClusterer(true);
-        }
-
-        **/
+        $this->owner->extend('updateBasicMap', $map, $autozoom);
 
         $map->setEnableAutomaticCenterZoom($autozoom);
         $map->setShowInlineMapDivStyle(true);
