@@ -21,7 +21,7 @@ Add this to extensions.yml
 ```yml
 PageWithMapAndLayers:
 	extensions:
-		['MapExtension', 'MapLayersExtension']
+		['MapExtension', 'MapLayerExtension']
 ```
 
 Execute a /dev/build to update your database with the map layers relationship.
