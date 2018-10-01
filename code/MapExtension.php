@@ -42,12 +42,15 @@ class MapExtension extends DataExtension implements Mappable
         $fields->removeByName('MapPinIcon');
         $fields->removeByName('MapPinEdited');
 
-        $fields->addFieldToTab('Root.Location',
+        $fields->addFieldToTab(
+            'Root.Location',
             $this->getMapField()
         );
 
-        $fields->addFieldToTab('Root.Location', $uf = new UploadField('MapPinIcon',
-            _t('Mappable.MAP_PIN', 'Map Pin Icon.  Leave this blank for default pin to show')));
+        $fields->addFieldToTab('Root.Location', $uf = new UploadField(
+            'MapPinIcon',
+            _t('Mappable.MAP_PIN', 'Map Pin Icon.  Leave this blank for default pin to show')
+        ));
         $uf->setFolderName('mapicons');
     }
 
@@ -166,7 +169,8 @@ class MapExtension extends DataExtension implements Mappable
     public function getMapField()
     {
         if (!isset($this->mapField)) {
-            $this->mapField = new LatLongField(array(
+            $this->mapField = new LatLongField(
+                array(
                 new TextField('Lat', 'Latitude'),
                 new TextField('Lon', 'Longitude'),
                 new TextField('ZoomLevel', 'Zoom'),

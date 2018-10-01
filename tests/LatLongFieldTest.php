@@ -4,7 +4,8 @@ class LatLongFieldTest extends SapphireTest
 {
     public function testConstructValid()
     {
-        $mapField = new LatLongField(array(
+        $mapField = new LatLongField(
+            array(
             new TextField('Lat', 'Latitude'),
             new TextField('Lon', 'Longitude'),
             new TextField('ZoomLevel', 'Zoom'),

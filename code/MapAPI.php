@@ -166,9 +166,12 @@ class MapAPI extends ViewableData
      *
      * * @return MapAPI This same object, in order to enable chaining of methods
      */
-    public function setClusterer($useClusterer, $gridSize = 50, $maxZoom = 17,
-        $clustererLibraryPath = '/mappable/javascript/google/markerclusterer.js')
-    {
+    public function setClusterer(
+        $useClusterer,
+        $gridSize = 50,
+        $maxZoom = 17,
+        $clustererLibraryPath = '/mappable/javascript/google/markerclusterer.js'
+    ) {
         $this->useClusterer = $useClusterer;
         $this->gridSize = $gridSize;
         $this->maxZoom = $maxZoom;
@@ -600,9 +603,11 @@ class MapAPI extends ViewableData
     */
     public static function jsonRemoveUnicodeSequences($struct)
     {
-        return preg_replace('/\\\\u([a-f0-9]{4})/e',
+        return preg_replace(
+            '/\\\\u([a-f0-9]{4})/e',
                             "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))",
-                            json_encode($struct));
+                            json_encode($struct)
+        );
     }
 
     /**
@@ -626,7 +631,7 @@ class MapAPI extends ViewableData
             $kmlJson = stripslashes(json_encode($this->kmlFiles, JSON_UNESCAPED_UNICODE));
         }
 
-         // Center of the GMap - text centre takes precedence
+        // Center of the GMap - text centre takes precedence
         $geocodeCentre = ($this->latLongCenter) ?
                             $this->latLongCenter : $this->geocoding($this->center);
 
@@ -678,7 +683,8 @@ class MapAPI extends ViewableData
             $this->enableWindowZoom = 'false';
         }
 
-        $vars = new ArrayData(array(
+        $vars = new ArrayData(
+            array(
 
                 'JsonMapStyles' => $this->jsonMapStyles,
                 'AdditionalCssClasses' => $this->additional_css_classes,
