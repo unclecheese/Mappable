@@ -16,11 +16,14 @@ class MapLayerExtension extends DataExtension
     {
         $gridConfig2 = GridFieldConfig_RelationEditor::create();
         $gridConfig2->getComponentByType(
-            'GridFieldAddExistingAutocompleter')->
-            setSearchFields(array('Title')
+            'GridFieldAddExistingAutocompleter'
+        )->
+            setSearchFields(
+                array('Title')
         );
         $gridConfig2->getComponentByType('GridFieldPaginator')->setItemsPerPage(100);
-        $gridField2 = new GridField('Map Layers',
+        $gridField2 = new GridField(
+            'Map Layers',
             'Map Layers:',
             $this->owner->MapLayers(),
             $gridConfig2
