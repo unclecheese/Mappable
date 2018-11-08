@@ -1,0 +1,5 @@
+en:
+  POIMapPage:
+      PLURALNAME: 'Points of Interest Pages'
+      SINGULARNAME: 'Points of Interest Page'
+      DESCRIPTION: 'Page containing layers of points of interest that can be rendered as a map'

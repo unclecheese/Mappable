@@ -1,0 +1,15 @@
+---
+Name: mappable
+After: 'framework/*','cms/*'
+---
+DataObject:
+  extensions:
+    -  MappableData
+
+DataList:
+  extensions:
+    -  MappableDataObjectSet
+
+ArrayList:
+  extensions:
+    -  MappableDataObjectSet

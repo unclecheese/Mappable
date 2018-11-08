@@ -1,0 +1,15 @@
+---
+Name: mappable
+After: 'framework/*','cms/*'
+---
+Mappable:
+  allow_full_screen: true
+  use_compressed_assets: false
+  mapping_service: 'Google'
+  #service_key: 'YOUR SERVICE KEY'
+
+  #Language to load the Map Service in
+  language: 'en'
+
+MapExtension:
+  map_info_window_suffix: '_MapInfoWindow'

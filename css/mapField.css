@@ -1,0 +1,25 @@
+.geocodedSearchResults li {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 120%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.editableMap {
+	height: 300px;
+	/* width: 90%;*/
+	float: none;
+}
+
+.editableMapWrapper {
+	display: inline-block;
+	width: 900px;
+	float: none;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.fieldholder-small {
+	display: none;
+}
